@@ -6,7 +6,8 @@
 import globalAxios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import { IResponseTemplate } from './types';
 
-export const BASE_PATH = "https://oauth.pasby.africa".replace(/\/+$/, "");
+// export const BASE_PATH = "http://127.0.0.1:6001/bankid-project/us-central1/oauth".replace(/\/+$/, "");
+export const BASE_PATH = "https://oauthn.web.app".replace(/\/+$/, "");
 
 export const DEFAULT_ERROR: IResponseTemplate = {
   status: 'failed',

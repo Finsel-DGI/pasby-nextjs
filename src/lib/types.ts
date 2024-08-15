@@ -70,10 +70,3 @@ export interface IResponseTemplate {
    */
   helper_url?: string;
 };
-
-export type AuthOptions = {
-  claims?: Array<claims>,
-  payload: string,
-  redirectState?: string,
-  action?: identificationActionType,
-}

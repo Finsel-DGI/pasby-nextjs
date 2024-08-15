@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { NextRequest, NextResponse } from "next/server";
 import { config } from "../config";
-import { sdk } from "..";
+import { sdk } from "../utils";
 
 export default async function handler(req: NextRequest | NextApiRequest, res: NextResponse | NextApiResponse) {
   const { postLogoutRedirectURL } = config;
