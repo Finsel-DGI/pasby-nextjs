@@ -1,6 +1,6 @@
 import axios from "axios";
 import { BASE_PATH, DEFAULT_ERROR } from "./base";
-import { IResponseTemplate, replyType, status } from "./types";
+import { IResponseTemplate, replyType, status } from "../types";
 
 
 export async function csrf(): Promise<string> {

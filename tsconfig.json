@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
+    "target": "es5",
     "module": "ESNext",
     "lib": [
       "DOM",
@@ -13,22 +13,18 @@
     "strict": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "noEmit": true,
-    "isolatedModules": true,
     "resolveJsonModule": true,
-    "baseUrl": "./src",
-    "paths": {
-      "*": [
-        "./*"
-      ]
-    }
+    "outDir": "./dist", // Add this if you want to compile to a specific directory
+    "declaration": true, // Generate type declaration files
+    "declarationDir": "./dist", // Place declaration files in the dist folder
+    "emitDeclarationOnly": true, // Emit only declaration files without JS
+    "isolatedModules": true
   },
   "include": [
     "src/**/*"
   ],
   "exclude": [
     "node_modules",
-    "dist",
-    "build"
+    "dist"
   ]
 }
