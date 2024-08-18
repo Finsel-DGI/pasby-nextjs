@@ -3,25 +3,24 @@
     "target": "es5",
     "module": "ESNext",
     "lib": [
-      "DOM",
-      "ESNext"
+      "dom",
+      "dom.iterable",
+      "esnext"
     ],
     "jsx": "react-jsx",
-    "moduleResolution": "Node",
+    "moduleResolution": "node",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
-    "outDir": "./dist", // Add this if you want to compile to a specific directory
-    "declaration": true, // Generate type declaration files
-    "declarationDir": "./dist", // Place declaration files in the dist folder
-    "emitDeclarationOnly": true, // Emit only declaration files without JS
+    "noEmit": true,
+    "noFallthroughCasesInSwitch": true,
     "isolatedModules": true
   },
   "include": [
-    "src/**/*"
+    "src"
   ],
   "exclude": [
     "node_modules",

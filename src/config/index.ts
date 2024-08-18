@@ -1,4 +1,4 @@
-import { removeTrailingSlash } from "../lib/commons";
+import { removeTrailingSlash } from "../lib/common";
 
 const isDebugMode = process.env.PASBY_DEBUG_MODE === 'true';
 

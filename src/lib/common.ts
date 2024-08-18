@@ -1,4 +1,12 @@
 
+
+/**
+ *
+ * @export
+ */
+export const DUMMY_BASE_URL = 'https://example.com'
+
+
 /**
  *
  * @export
@@ -42,4 +50,15 @@ export function generateRandomAlphaNumeric(length: number): string {
     result += characters.charAt(Math.floor(Math.random() * charactersLength));
   }
   return result;
+}
+
+
+export function isBrowser() {
+  return typeof window !== "undefined"
+}
+
+export function unixTimestampToMaxAge(expirationUnixTimestamp: number) {
+  const currentUnixTimestamp = Math.floor(Date.now() / 1000);
+  const maxAge = expirationUnixTimestamp - currentUnixTimestamp;
+  return maxAge > 0 ? maxAge : 0; // Ensure max-age is not negative
 }

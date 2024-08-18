@@ -1,11 +1,16 @@
-import { strEnum } from "./lib/commons";
+import { strEnum } from "./lib/common";
 
 export interface AuthState {
-  login?: () => void;
-  logout?: () => void;
   isAuthenticated: boolean;
   isLoading: boolean;
   user?: User;
+}
+
+
+export type AuthenticationParams = {
+  claims?: Array<claims>,
+  payload: string,
+  action: identificationActionType,
 }
 
 export interface User {

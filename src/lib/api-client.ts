@@ -2,15 +2,6 @@ import axios from "axios";
 import { BASE_PATH, DEFAULT_ERROR } from "./base";
 import { IResponseTemplate, replyType, status } from "../types";
 
-
-export async function csrf(): Promise<string> {
-  const response = await api('surfer').request('GET', {});
-  if (response.data && response.data.csrfToken) {
-    return response.data.csrfToken as string;
-  }
-  return '';
-}
-
 /**
  * Represents an API request function that sends HTTP requests to a specified path.
  * @param path - The path to which the HTTP request will be sent.

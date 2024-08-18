@@ -1,43 +1,74 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import axios from 'axios';
 import { setCookie, deleteCookie } from 'cookies-next';
+import { AuthenticationParams } from '../types';
+import FlowClient from '../client';
+import { CHALLENGE_KEY, SESSION_KEY } from '../lib/base';
+import { unixTimestampToMaxAge } from '../lib/common';
+import { config } from '../config';
 
-export const loginHandler = async (req: NextApiRequest, res: NextApiResponse) => {
+export const loginHandler = async (_req: NextApiRequest, res: NextApiResponse, options?: AuthenticationParams) => {
   // Logic for redirecting to Pasby OAuth2 interface
-  const response = await axios.post('https://oauthn.web.app/api/v1/oidc/kipindi', {
-    pkce: req.body.pkce,
-  });
-  const { link } = response.data.data;
-  res.redirect(link);
+  try {
+    const link = await FlowClient.login(options);
+    res.redirect(link);
+  } catch (e) {
+    res.status(400).send({error: (e as Error).message});
+  }
 };
 
 export const logoutHandler = async (req: NextApiRequest, res: NextApiResponse) => {
+  const { postLogoutRedirectURL } = config;
+  if (!postLogoutRedirectURL) {
+    return res.status(400).
+      send({ error: "The environment variable 'PASBY_POST_LOGOUT_REDIRECT' is required. Set it in your .env file" });
+  }
   // Clear cookies or token and redirect to logout page
-  deleteCookie('access_token', { req, res });
-  deleteCookie('pkce_challenge', { req, res });
-  res.redirect('/login');
+  deleteCookie(SESSION_KEY, { req, res });
+  deleteCookie(CHALLENGE_KEY, { req, res });
+  res.redirect(postLogoutRedirectURL);
 };
 
 export const callbackHandler = async (req: NextApiRequest, res: NextApiResponse) => {
+  const { clientID, consumerKey, consumer, postLogoutRedirectURL, postLoginFallbackURL, host } = config;
+
+  if (!clientID) {
+    return res.status(400).
+      send({ error: "The environment variable 'PASBY_CLIENT_ID' is required. Set it in your .env file" });
+  } if (!consumerKey) {
+    return res.status(400).
+      send({ error: "The environment variable 'PASBY_CONSUMER_KEY' is required. Set it in your .env file" });
+  } if (!consumer) {
+    return res.status(400).
+      send({ error: "The environment variable 'PASBY_CONSUMER' is required. Set it in your .env file" });
+  } if (!postLogoutRedirectURL) {
+    return res.status(400).
+      send({ error: "The environment variable 'PASBY_POST_LOGOUT_REDIRECT' is required. Set it in your .env file" });
+  } if (!postLoginFallbackURL) {
+    return res.status(400).
+      send({ error: "The environment variable 'PASBY_POST_LOGIN_FALLBACK' is required. Set it in your .env file" });
+  } if (!host) {
+    return res.status(400).
+      send({ error: "The environment variable 'PASBY_POST_LOGIN_FALLBACK' is required. Set it in your .env file" });
+  }
+
   const { handshake, flow } = req.query;
 
   if (flow !== 'confirmed') {
     return res.status(400).json({ error: 'Authentication failed' });
+  }if (!handshake) {
+    return res.status(400).json({ error: 'Invalid pasby callback url' });
   }
 
-  const response = await axios.post(
-    'https://oauthn.web.app/api/v1/oidc/kupeanai',
-    { verifier: req.body.verifier },
-    { headers: { authorization: `Shake ${handshake}` } }
-  );
+  const response = await FlowClient.callback(handshake as string);
 
-  const { access, challenge } = response.data.data;
+  const { access, challenge, exp } = response;
 
   // Set cookies for access token and PKCE challenge
-  setCookie('access_token', access, { req, res, httpOnly: true, secure: true });
-  setCookie('pkce_challenge', challenge, { req, res, httpOnly: true, secure: true });
+  setCookie(SESSION_KEY, access, { req, res, httpOnly: true, secure: true, maxAge: unixTimestampToMaxAge(exp) });
+  setCookie(CHALLENGE_KEY, challenge, { req, res, httpOnly: true, secure: true });
 
-  res.redirect('/dashboard');
+  res.redirect(postLoginFallbackURL);
 };
 
 export const resourceHandler = async (req: NextApiRequest, res: NextApiResponse) => {

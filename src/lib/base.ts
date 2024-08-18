@@ -9,6 +9,10 @@ import { IResponseTemplate } from '../types';
 // export const BASE_PATH = "http://127.0.0.1:6001/bankid-project/us-central1/oauth".replace(/\/+$/, "");
 export const BASE_PATH = "https://oauthn.web.app".replace(/\/+$/, "");
 
+export const SESSION_KEY = 'pni';
+export const CHALLENGE_KEY = 'code-verifier';
+const CSRF_KEY = 'pcsrf-token';
+
 export const DEFAULT_ERROR: IResponseTemplate = {
   status: 'failed',
   reason: 'Connection is improper and thus has been interrupted',
