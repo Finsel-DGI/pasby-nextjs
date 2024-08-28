@@ -1,4 +1,4 @@
-import { claims } from "../types";
+import { claims, identificationActionType } from "../types";
 
 /**
  * 
@@ -17,7 +17,7 @@ export interface FlowAuthorizationRequest {
    * @type {string}
    * @memberof FlowAuthorizationRequest
    */
-  'action': 'login' | 'signup' | 'link';
+  'action': typeof identificationActionType;
   /**
    * 
    * @type {Array<claims>}

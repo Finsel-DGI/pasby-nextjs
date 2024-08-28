@@ -62,3 +62,12 @@ export function unixTimestampToMaxAge(expirationUnixTimestamp: number) {
   const maxAge = expirationUnixTimestamp - currentUnixTimestamp;
   return maxAge > 0 ? maxAge : 0; // Ensure max-age is not negative
 }
+
+/**
+ * custom delay function
+ * @param ms time
+ * @returns {Promise<void>}
+ */
+export async function delay(ms: number) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}

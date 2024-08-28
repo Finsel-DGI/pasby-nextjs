@@ -10,7 +10,7 @@ export interface AuthState {
 export type AuthenticationParams = {
   claims?: Array<claims>,
   payload: string,
-  action: identificationActionType,
+  action: actions,
 }
 
 export interface User {
@@ -90,7 +90,13 @@ export type replyType = 'api_error' | 'param_error' | 'db_error' |
 
 export type claims = keyof typeof Claims;
 
-export type identificationActionType = 'login' | 'signup' | 'link';
+export type actions = keyof typeof identificationActionType;
+
+export const identificationActionType = {
+  login: 'login',
+  signup: 'signup',
+  link: 'link'
+} as const;
 
 const Claims = strEnum([
   'bio.birthplace',
