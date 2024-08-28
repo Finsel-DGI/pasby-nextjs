@@ -3,11 +3,10 @@
   "version": "1.0.0",
   "description": "The Nextjs helper SDK provides pasby-eID authentication for African nationals using your service.",
   "files": [
-    "dist/**/*"
+    "dist/**/*",
+    "src/**/*"
   ],
-  "main": "dist/index.ts",
-  "module": "dist/index.mjs",
-  "types": "dist/index.d.ts",
+  "main": "src/index.ts",
   "scripts": {
     "build": "rollup -c --bundleConfigAsCjs"
   },

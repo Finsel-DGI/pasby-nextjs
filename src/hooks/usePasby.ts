@@ -11,8 +11,12 @@ interface PasbyState {
 export const usePasby = (options?: AuthenticationParams): PasbyState => {
 
   const login = async () => {
-    const url = await FlowClient.login(options);
-    redirect(url);
+    try {
+      const url = await FlowClient.login(options);
+      redirect(url);
+    } catch (e) {
+      console.log('Error -- ', e);
+    }
   };
 
   const logout = async () => {

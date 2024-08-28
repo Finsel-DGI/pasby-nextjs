@@ -1,3 +1,5 @@
+'use client'
+
 import { useState, useEffect } from 'react';
 import { AuthState, User } from '../types';
 import { getCookie } from 'cookies-next';
