@@ -1,8 +1,3 @@
-# pasby next.js
----
-The pasby next.js SDK for Next.js.
+# pasby-auth-nextjs
 
-
-### Documentation
----
-Please refer to the pasby[ NextJS SDK document]().
+Next.js targeted auth sdk for the use of pasby as an authentication provider.

@@ -1,30 +1,16 @@
-'use client'
+import { redirect } from "next/navigation";
+import { AuthenticationParams } from "../sdk";
 
-import { useState, useEffect } from 'react';
-import { AuthState, User } from '../types';
-import { getCookie } from 'cookies-next';
-import { SESSION_KEY } from '../lib/base';
-import { getUser } from '../sever/handler';
+// interface LoginState {
+//   login: () => Promise<void>;
+// }
 
-export const useAuth = (): AuthState => {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [user, setUser] = useState<User | undefined>();
+export const useAuth = (params: AuthenticationParams) => {
 
-  useEffect(() => {
-    const token = getCookie(SESSION_KEY);
-    if (token) {
-      setIsAuthenticated(true);
-    }
-    const fetchUser = async () => {
-      const response = await getUser();
-      if (response) {
-        setUser(response);
-      }
-      setIsLoading(false);
-    };
-    fetchUser();
-  }, []);
+  const login = async () => {
+    // const url = await loginWithPasby(params);
+    // redirect(url);
+  }
 
-  return { isAuthenticated, isLoading, user };
-};
+  return {login}
+}

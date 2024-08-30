@@ -1,51 +1,50 @@
 {
-  "name": "@finsel-dgi/pasby-nextjs",
+  "name": "pasby-auth-nextjs",
   "version": "1.0.0",
-  "description": "The Nextjs helper SDK provides pasby-eID authentication for African nationals using your service.",
-  "files": [
-    "dist/**/*",
-    "src/**/*"
-  ],
-  "main": "dist/index.ts",
-  "module": "dist/index.mjs",
+  "description": "Next.js authentication with pasby",
+  "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "type": "module",
   "scripts": {
-    "build": "rollup -c --bundleConfigAsCjs"
+    "build": "rollup -c"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Finsel-DGI/pasby-nextjs.git"
   },
-  "keywords": [],
-  "author": {
-    "name": "Finsel DGI",
-    "email": "team@pasby.africa",
-    "url": "https://pasby.africa"
-  },
+  "keywords": [
+    "typescript",
+    "react",
+    "react hooks",
+    "pasby",
+    "nextjs",
+    "auth",
+    "pasby",
+    "hook"
+  ],
+  "author": "cjackmay",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/Finsel-DGI/pasby-nextjs/issues"
   },
   "homepage": "https://github.com/Finsel-DGI/pasby-nextjs#readme",
-  "dependencies": {
-    "axios": "^1.7.3",
-    "clsx": "^1.2.1",
-    "cookies-next": "^4.2.1",
-    "next": "^14.2.5"
+  "peerDependencies": {
+    "react": "^18.3.1",
+    "axios": "^1.7.5",
+    "next": "^14.2.7"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^26.0.1",
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^15.2.3",
-    "@rollup/plugin-terser": "^0.4.4",
     "@rollup/plugin-typescript": "^11.1.6",
-    "@types/node": "^22.2.0",
-    "@types/react": "^18.3.3",
-    "react": "^18.3.1",
-    "rollup": "^4.20.0",
-    "rollup-plugin-dts": "^6.1.1",
-    "rollup-plugin-peer-deps-external": "^2.2.4",
-    "tslib": "^2.6.3",
+    "@types/node": "^22.5.1",
+    "@types/react": "^18.3.4",
+    "rollup": "^4.21.1",
+    "tslib": "^2.7.0",
     "typescript": "^5.5.4"
   }
 }

@@ -1,6 +1,12 @@
 import axios from "axios";
-import { BASE_PATH, DEFAULT_ERROR } from "./base";
-import { IResponseTemplate, replyType, status } from "../types";
+import { IResponseTemplate, BASE_PATH, status, replyType, DEFAULT_ERROR } from "./base";
+
+export type HTTP_METHOD = 'POST' | 'GET';
+
+export type Request = {
+  body?: Record<string, unknown>,
+  headers?: Record<string, unknown>,
+}
 
 /**
  * Represents an API request function that sends HTTP requests to a specified path.
@@ -14,21 +20,17 @@ const api = (path: string) => ({
    * @param options - An object containing optional request parameters like body and headers.
    * @returns A Promise that resolves to the response data or an error object.
    */
-  request: async (method: 'POST' | 'GET',
-    options: {
-      body?: Record<string, unknown>,
-      headers?: Record<string, unknown>,
-    }): Promise<IResponseTemplate> => {
+  request: async (method: HTTP_METHOD, param: Request): Promise<IResponseTemplate> => {
     try {
       const url = `${BASE_PATH}/api/${path}`;
 
       console.log(`API url -- ${url}`);
 
       const axiosOptions = {
-        headers: options.headers
-          ? JSON.parse(JSON.stringify(options.headers))
+        headers: param.headers
+          ? JSON.parse(JSON.stringify(param.headers))
           : { 'Accept': 'application/json' },
-        ...(method === 'POST' && { data: options.body }),
+        ...(method === 'POST' && { data: param.body }),
       };
 
       const response = await axios.request<IResponseTemplate>({
@@ -39,7 +41,7 @@ const api = (path: string) => ({
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
-        console.log(`Blup error response --- ${JSON.stringify(error.response.data)}`);
+        console.error(`Axios error --- ${JSON.stringify(error.response.data)}`);
         const errorResponse: { status: string, type: string, reason: string, label: string } = error.response.data;
         return {
           status: errorResponse.status as status,
