@@ -1,5 +1,4 @@
-import { redirect } from "next/navigation";
-import { AuthenticationParams } from "../sdk";
+import { AuthenticationParams } from "../sdk/auth.types";
 
 // interface LoginState {
 //   login: () => Promise<void>;

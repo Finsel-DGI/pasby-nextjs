@@ -1,8 +1,8 @@
 import flowClient from "./handle";
-import { AuthenticationParams } from "../sdk";
 import { config } from "../config";
 import { envMissing } from "../sdk/strings";
 import { NextRequest, NextResponse } from "next/server";
+import { AuthenticationParams } from "../sdk/auth.types";
 
 export async function loginWithPasby(_req: NextRequest, options: AuthenticationParams) {
   return await flowClient().begin(options);

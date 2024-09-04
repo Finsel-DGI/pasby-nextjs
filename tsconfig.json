@@ -2,6 +2,7 @@
   "compilerOptions": {
     "outDir": "dist",
     "jsx": "react",
+    "moduleResolution": "node",
     "lib": ["dom", "esnext"],
     "skipDefaultLibCheck": false,
     "allowSyntheticDefaultImports": true,
@@ -9,6 +10,7 @@
     "esModuleInterop": true,
   },
   "include": ["src"],
+  "outDir": "dist/types",
   "exclude": [
     "node_modules",
     "dist",

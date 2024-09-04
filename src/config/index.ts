@@ -15,6 +15,9 @@ const PASBY_CONSUMER = process.env.PASBY_CONSUMER;
 const PASBY_POST_LOGOUT_REDIRECT = removeTrailingSlash(
   process.env.PASBY_POST_LOGOUT_REDIRECT
 );
+const PASBY_REDIRECT_URI = removeTrailingSlash(
+  process.env.PASBY_REDIRECT_URI
+);
 const PASBY_POST_LOGIN_FALLBACK = removeTrailingSlash(
   process.env.PASBY_POST_LOGIN_FALLBACK
 );
@@ -32,12 +35,8 @@ export const config = {
   postLogoutRedirectURL: PASBY_POST_LOGOUT_REDIRECT,
   postLoginFallbackURL: PASBY_POST_LOGIN_FALLBACK,
   codeChallengeMethod: 'S256',
+  redirectUri: PASBY_REDIRECT_URI,
   redirectRoutes: {
     callback: `${PASBY_AUTH_API_PATH}/callback`
-  },
-  issuerRoutes: {
-    logout: '/logout',
-    identify: '/identify',
-    token: '/token',
   },
 }

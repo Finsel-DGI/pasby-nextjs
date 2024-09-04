@@ -1,11 +1,11 @@
 import { cookies } from "next/headers";
 import { config } from "../config";
-import { AuthenticationParams } from "../sdk";
 import api, { HTTP_METHOD, Request } from "../sdk/api-client";
 import { CHALLENGE_KEY, SESSION_KEY } from "../sdk/base";
 import { pkceChallenge } from "../sdk/pkce";
 import { envMissing } from "../sdk/strings";
 import { unixTimestampToMaxAge } from "../sdk/common";
+import { AuthenticationParams } from "../sdk/auth.types";
 
 const callback = async (path: string, method: HTTP_METHOD, options: Request): Promise<Record<string, unknown>> => {
   const response = await api(path).request(method, options);
@@ -36,7 +36,6 @@ const flowClient = () => {
           'x-access-secret': secret,
         }
       });
-
       cookies().set(CHALLENGE_KEY, challenge.verifier, { secure: true });
       return `${link as string}${redirectState ? `state=${redirectState}` : ''}`;
     },

@@ -8,12 +8,8 @@ export declare const config: {
     postLogoutRedirectURL: string;
     postLoginFallbackURL: string;
     codeChallengeMethod: string;
+    redirectUri: string;
     redirectRoutes: {
         callback: string;
-    };
-    issuerRoutes: {
-        logout: string;
-        identify: string;
-        token: string;
     };
 };

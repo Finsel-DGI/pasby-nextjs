@@ -1,15 +1,28 @@
 {
-  "name": "pasby-auth-nextjs",
+  "name": "@finsel-dgi/pasby-auth-nextjs",
   "version": "1.0.0",
   "description": "Next.js authentication with pasby",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./server": {
+      "import": "./dist/server/index.js",
+      "require": "./dist/server/cjs/index.js",
+      "types": "./dist/types/server/index.d.ts"
+    }
+  },
   "files": [
     "dist"
   ],
   "type": "module",
   "scripts": {
-    "build": "rollup -c"
+    "build": "npm run rm && rollup -c",
+    "rm": "rm -rf dist"
   },
   "repository": {
     "type": "git",
@@ -22,7 +35,6 @@
     "pasby",
     "nextjs",
     "auth",
-    "pasby",
     "hook"
   ],
   "author": "cjackmay",
@@ -32,11 +44,12 @@
   },
   "homepage": "https://github.com/Finsel-DGI/pasby-nextjs#readme",
   "peerDependencies": {
-    "react": "^18.3.1",
-    "axios": "^1.7.5",
-    "next": "^14.2.7"
+    "next": "^12.2.5 || ^13 || ^14",
+    "react": "^18.1.0",
+    "react-dom": "^18.1.0"
   },
   "devDependencies": {
+    "@rollup/plugin-babel": "^6.0.4",
     "@rollup/plugin-commonjs": "^26.0.1",
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^15.2.3",
@@ -46,5 +59,10 @@
     "rollup": "^4.21.1",
     "tslib": "^2.7.0",
     "typescript": "^5.5.4"
+  },
+  "dependencies": {
+    "clsx": "^2.1.1",
+    "axios": "^1.7.5",
+    "cookies-next": "^4.2.1"
   }
 }

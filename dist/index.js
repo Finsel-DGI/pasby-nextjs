@@ -1,4 +1,6 @@
-import require$$0 from 'react';
+import * as React from 'react';
+import React__default, { createContext, useState, useEffect, useContext } from 'react';
+import clsx from 'clsx';
 import axios from 'axios';
 
 /******************************************************************************
@@ -28,6 +30,18 @@ var __assign = function() {
     };
     return __assign.apply(this, arguments);
 };
+
+function __rest(s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+}
 
 function __awaiter(thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -72,1439 +86,600 @@ typeof SuppressedError === "function" ? SuppressedError : function (error, suppr
     return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
 };
 
-// interface LoginState {
-//   login: () => Promise<void>;
-// }
-var useAuth = function (params) {
-    var login = function () { return __awaiter(void 0, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            return [2 /*return*/];
-        });
-    }); };
-    return { login: login };
-};
+var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
-var headers$2 = {exports: {}};
+var lib = {};
 
-var requestCookies = {};
+var cookie = {};
 
-var cookies$1 = {};
-
-var __defProp = Object.defineProperty;
-var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-var __getOwnPropNames = Object.getOwnPropertyNames;
-var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __export = (target, all) => {
-  for (var name in all)
-    __defProp(target, name, { get: all[name], enumerable: true });
-};
-var __copyProps = (to, from, except, desc) => {
-  if (from && typeof from === "object" || typeof from === "function") {
-    for (let key of __getOwnPropNames(from))
-      if (!__hasOwnProp.call(to, key) && key !== except)
-        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
-  }
-  return to;
-};
-var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
-
-// src/index.ts
-var src_exports = {};
-__export(src_exports, {
-  RequestCookies: () => RequestCookies,
-  ResponseCookies: () => ResponseCookies,
-  parseCookie: () => parseCookie,
-  parseSetCookie: () => parseSetCookie,
-  stringifyCookie: () => stringifyCookie
-});
-var cookies = __toCommonJS(src_exports);
-
-// src/serialize.ts
-function stringifyCookie(c) {
-  var _a;
-  const attrs = [
-    "path" in c && c.path && `Path=${c.path}`,
-    "expires" in c && (c.expires || c.expires === 0) && `Expires=${(typeof c.expires === "number" ? new Date(c.expires) : c.expires).toUTCString()}`,
-    "maxAge" in c && typeof c.maxAge === "number" && `Max-Age=${c.maxAge}`,
-    "domain" in c && c.domain && `Domain=${c.domain}`,
-    "secure" in c && c.secure && "Secure",
-    "httpOnly" in c && c.httpOnly && "HttpOnly",
-    "sameSite" in c && c.sameSite && `SameSite=${c.sameSite}`,
-    "partitioned" in c && c.partitioned && "Partitioned",
-    "priority" in c && c.priority && `Priority=${c.priority}`
-  ].filter(Boolean);
-  const stringified = `${c.name}=${encodeURIComponent((_a = c.value) != null ? _a : "")}`;
-  return attrs.length === 0 ? stringified : `${stringified}; ${attrs.join("; ")}`;
-}
-function parseCookie(cookie) {
-  const map = /* @__PURE__ */ new Map();
-  for (const pair of cookie.split(/; */)) {
-    if (!pair)
-      continue;
-    const splitAt = pair.indexOf("=");
-    if (splitAt === -1) {
-      map.set(pair, "true");
-      continue;
-    }
-    const [key, value] = [pair.slice(0, splitAt), pair.slice(splitAt + 1)];
-    try {
-      map.set(key, decodeURIComponent(value != null ? value : "true"));
-    } catch {
-    }
-  }
-  return map;
-}
-function parseSetCookie(setCookie) {
-  if (!setCookie) {
-    return void 0;
-  }
-  const [[name, value], ...attributes] = parseCookie(setCookie);
-  const {
-    domain,
-    expires,
-    httponly,
-    maxage,
-    path,
-    samesite,
-    secure,
-    partitioned,
-    priority
-  } = Object.fromEntries(
-    attributes.map(([key, value2]) => [key.toLowerCase(), value2])
-  );
-  const cookie = {
-    name,
-    value: decodeURIComponent(value),
-    domain,
-    ...expires && { expires: new Date(expires) },
-    ...httponly && { httpOnly: true },
-    ...typeof maxage === "string" && { maxAge: Number(maxage) },
-    path,
-    ...samesite && { sameSite: parseSameSite(samesite) },
-    ...secure && { secure: true },
-    ...priority && { priority: parsePriority(priority) },
-    ...partitioned && { partitioned: true }
-  };
-  return compact(cookie);
-}
-function compact(t) {
-  const newT = {};
-  for (const key in t) {
-    if (t[key]) {
-      newT[key] = t[key];
-    }
-  }
-  return newT;
-}
-var SAME_SITE = ["strict", "lax", "none"];
-function parseSameSite(string) {
-  string = string.toLowerCase();
-  return SAME_SITE.includes(string) ? string : void 0;
-}
-var PRIORITY = ["low", "medium", "high"];
-function parsePriority(string) {
-  string = string.toLowerCase();
-  return PRIORITY.includes(string) ? string : void 0;
-}
-function splitCookiesString(cookiesString) {
-  if (!cookiesString)
-    return [];
-  var cookiesStrings = [];
-  var pos = 0;
-  var start;
-  var ch;
-  var lastComma;
-  var nextStart;
-  var cookiesSeparatorFound;
-  function skipWhitespace() {
-    while (pos < cookiesString.length && /\s/.test(cookiesString.charAt(pos))) {
-      pos += 1;
-    }
-    return pos < cookiesString.length;
-  }
-  function notSpecialChar() {
-    ch = cookiesString.charAt(pos);
-    return ch !== "=" && ch !== ";" && ch !== ",";
-  }
-  while (pos < cookiesString.length) {
-    start = pos;
-    cookiesSeparatorFound = false;
-    while (skipWhitespace()) {
-      ch = cookiesString.charAt(pos);
-      if (ch === ",") {
-        lastComma = pos;
-        pos += 1;
-        skipWhitespace();
-        nextStart = pos;
-        while (pos < cookiesString.length && notSpecialChar()) {
-          pos += 1;
-        }
-        if (pos < cookiesString.length && cookiesString.charAt(pos) === "=") {
-          cookiesSeparatorFound = true;
-          pos = nextStart;
-          cookiesStrings.push(cookiesString.substring(start, lastComma));
-          start = pos;
-        } else {
-          pos = lastComma + 1;
-        }
-      } else {
-        pos += 1;
-      }
-    }
-    if (!cookiesSeparatorFound || pos >= cookiesString.length) {
-      cookiesStrings.push(cookiesString.substring(start, cookiesString.length));
-    }
-  }
-  return cookiesStrings;
-}
-
-// src/request-cookies.ts
-var RequestCookies = class {
-  constructor(requestHeaders) {
-    /** @internal */
-    this._parsed = /* @__PURE__ */ new Map();
-    this._headers = requestHeaders;
-    const header = requestHeaders.get("cookie");
-    if (header) {
-      const parsed = parseCookie(header);
-      for (const [name, value] of parsed) {
-        this._parsed.set(name, { name, value });
-      }
-    }
-  }
-  [Symbol.iterator]() {
-    return this._parsed[Symbol.iterator]();
-  }
-  /**
-   * The amount of cookies received from the client
-   */
-  get size() {
-    return this._parsed.size;
-  }
-  get(...args) {
-    const name = typeof args[0] === "string" ? args[0] : args[0].name;
-    return this._parsed.get(name);
-  }
-  getAll(...args) {
-    var _a;
-    const all = Array.from(this._parsed);
-    if (!args.length) {
-      return all.map(([_, value]) => value);
-    }
-    const name = typeof args[0] === "string" ? args[0] : (_a = args[0]) == null ? void 0 : _a.name;
-    return all.filter(([n]) => n === name).map(([_, value]) => value);
-  }
-  has(name) {
-    return this._parsed.has(name);
-  }
-  set(...args) {
-    const [name, value] = args.length === 1 ? [args[0].name, args[0].value] : args;
-    const map = this._parsed;
-    map.set(name, { name, value });
-    this._headers.set(
-      "cookie",
-      Array.from(map).map(([_, value2]) => stringifyCookie(value2)).join("; ")
-    );
-    return this;
-  }
-  /**
-   * Delete the cookies matching the passed name or names in the request.
-   */
-  delete(names) {
-    const map = this._parsed;
-    const result = !Array.isArray(names) ? map.delete(names) : names.map((name) => map.delete(name));
-    this._headers.set(
-      "cookie",
-      Array.from(map).map(([_, value]) => stringifyCookie(value)).join("; ")
-    );
-    return result;
-  }
-  /**
-   * Delete all the cookies in the cookies in the request.
-   */
-  clear() {
-    this.delete(Array.from(this._parsed.keys()));
-    return this;
-  }
-  /**
-   * Format the cookies in the request as a string for logging
-   */
-  [Symbol.for("edge-runtime.inspect.custom")]() {
-    return `RequestCookies ${JSON.stringify(Object.fromEntries(this._parsed))}`;
-  }
-  toString() {
-    return [...this._parsed.values()].map((v) => `${v.name}=${encodeURIComponent(v.value)}`).join("; ");
-  }
-};
-
-// src/response-cookies.ts
-var ResponseCookies = class {
-  constructor(responseHeaders) {
-    /** @internal */
-    this._parsed = /* @__PURE__ */ new Map();
-    var _a, _b, _c;
-    this._headers = responseHeaders;
-    const setCookie = (_c = (_b = (_a = responseHeaders.getSetCookie) == null ? void 0 : _a.call(responseHeaders)) != null ? _b : responseHeaders.get("set-cookie")) != null ? _c : [];
-    const cookieStrings = Array.isArray(setCookie) ? setCookie : splitCookiesString(setCookie);
-    for (const cookieString of cookieStrings) {
-      const parsed = parseSetCookie(cookieString);
-      if (parsed)
-        this._parsed.set(parsed.name, parsed);
-    }
-  }
-  /**
-   * {@link https://wicg.github.io/cookie-store/#CookieStore-get CookieStore#get} without the Promise.
-   */
-  get(...args) {
-    const key = typeof args[0] === "string" ? args[0] : args[0].name;
-    return this._parsed.get(key);
-  }
-  /**
-   * {@link https://wicg.github.io/cookie-store/#CookieStore-getAll CookieStore#getAll} without the Promise.
-   */
-  getAll(...args) {
-    var _a;
-    const all = Array.from(this._parsed.values());
-    if (!args.length) {
-      return all;
-    }
-    const key = typeof args[0] === "string" ? args[0] : (_a = args[0]) == null ? void 0 : _a.name;
-    return all.filter((c) => c.name === key);
-  }
-  has(name) {
-    return this._parsed.has(name);
-  }
-  /**
-   * {@link https://wicg.github.io/cookie-store/#CookieStore-set CookieStore#set} without the Promise.
-   */
-  set(...args) {
-    const [name, value, cookie] = args.length === 1 ? [args[0].name, args[0].value, args[0]] : args;
-    const map = this._parsed;
-    map.set(name, normalizeCookie({ name, value, ...cookie }));
-    replace(map, this._headers);
-    return this;
-  }
-  /**
-   * {@link https://wicg.github.io/cookie-store/#CookieStore-delete CookieStore#delete} without the Promise.
-   */
-  delete(...args) {
-    const [name, path, domain] = typeof args[0] === "string" ? [args[0]] : [args[0].name, args[0].path, args[0].domain];
-    return this.set({ name, path, domain, value: "", expires: /* @__PURE__ */ new Date(0) });
-  }
-  [Symbol.for("edge-runtime.inspect.custom")]() {
-    return `ResponseCookies ${JSON.stringify(Object.fromEntries(this._parsed))}`;
-  }
-  toString() {
-    return [...this._parsed.values()].map(stringifyCookie).join("; ");
-  }
-};
-function replace(bag, headers) {
-  headers.delete("set-cookie");
-  for (const [, value] of bag) {
-    const serialized = stringifyCookie(value);
-    headers.append("set-cookie", serialized);
-  }
-}
-function normalizeCookie(cookie = { name: "", value: "" }) {
-  if (typeof cookie.expires === "number") {
-    cookie.expires = new Date(cookie.expires);
-  }
-  if (cookie.maxAge) {
-    cookie.expires = new Date(Date.now() + cookie.maxAge * 1e3);
-  }
-  if (cookie.path === null || cookie.path === void 0) {
-    cookie.path = "/";
-  }
-  return cookie;
-}
-
-(function (exports) {
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	function _export(target, all) {
-	    for(var name in all)Object.defineProperty(target, name, {
-	        enumerable: true,
-	        get: all[name]
-	    });
-	}
-	_export(exports, {
-	    RequestCookies: function() {
-	        return _cookies.RequestCookies;
-	    },
-	    ResponseCookies: function() {
-	        return _cookies.ResponseCookies;
-	    }
-	});
-	const _cookies = cookies;
-
-	
-} (cookies$1));
-
-var reflect = {};
-
-(function (exports) {
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	Object.defineProperty(exports, "ReflectAdapter", {
-	    enumerable: true,
-	    get: function() {
-	        return ReflectAdapter;
-	    }
-	});
-	class ReflectAdapter {
-	    static get(target, prop, receiver) {
-	        const value = Reflect.get(target, prop, receiver);
-	        if (typeof value === "function") {
-	            return value.bind(target);
-	        }
-	        return value;
-	    }
-	    static set(target, prop, value, receiver) {
-	        return Reflect.set(target, prop, value, receiver);
-	    }
-	    static has(target, prop) {
-	        return Reflect.has(target, prop);
-	    }
-	    static deleteProperty(target, prop) {
-	        return Reflect.deleteProperty(target, prop);
-	    }
-	}
-
-	
-} (reflect));
-
-var staticGenerationAsyncStorage_external = {exports: {}};
-
-var staticGenerationAsyncStorageInstance = {exports: {}};
-
-var asyncLocalStorage = {exports: {}};
-
-(function (module, exports) {
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	Object.defineProperty(exports, "createAsyncLocalStorage", {
-	    enumerable: true,
-	    get: function() {
-	        return createAsyncLocalStorage;
-	    }
-	});
-	const sharedAsyncLocalStorageNotAvailableError = new Error("Invariant: AsyncLocalStorage accessed in runtime where it is not available");
-	class FakeAsyncLocalStorage {
-	    disable() {
-	        throw sharedAsyncLocalStorageNotAvailableError;
-	    }
-	    getStore() {
-	        // This fake implementation of AsyncLocalStorage always returns `undefined`.
-	        return undefined;
-	    }
-	    run() {
-	        throw sharedAsyncLocalStorageNotAvailableError;
-	    }
-	    exit() {
-	        throw sharedAsyncLocalStorageNotAvailableError;
-	    }
-	    enterWith() {
-	        throw sharedAsyncLocalStorageNotAvailableError;
-	    }
-	}
-	const maybeGlobalAsyncLocalStorage = globalThis.AsyncLocalStorage;
-	function createAsyncLocalStorage() {
-	    if (maybeGlobalAsyncLocalStorage) {
-	        return new maybeGlobalAsyncLocalStorage();
-	    }
-	    return new FakeAsyncLocalStorage();
-	}
-
-	if ((typeof exports.default === 'function' || (typeof exports.default === 'object' && exports.default !== null)) && typeof exports.default.__esModule === 'undefined') {
-	  Object.defineProperty(exports.default, '__esModule', { value: true });
-	  Object.assign(exports.default, exports);
-	  module.exports = exports.default;
-	}
-
-	
-} (asyncLocalStorage, asyncLocalStorage.exports));
-
-var asyncLocalStorageExports = asyncLocalStorage.exports;
-
-(function (module, exports) {
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	Object.defineProperty(exports, "staticGenerationAsyncStorage", {
-	    enumerable: true,
-	    get: function() {
-	        return staticGenerationAsyncStorage;
-	    }
-	});
-	const _asynclocalstorage = asyncLocalStorageExports;
-	const staticGenerationAsyncStorage = (0, _asynclocalstorage.createAsyncLocalStorage)();
-
-	if ((typeof exports.default === 'function' || (typeof exports.default === 'object' && exports.default !== null)) && typeof exports.default.__esModule === 'undefined') {
-	  Object.defineProperty(exports.default, '__esModule', { value: true });
-	  Object.assign(exports.default, exports);
-	  module.exports = exports.default;
-	}
-
-	
-} (staticGenerationAsyncStorageInstance, staticGenerationAsyncStorageInstance.exports));
-
-var staticGenerationAsyncStorageInstanceExports = staticGenerationAsyncStorageInstance.exports;
-
-(function (module, exports) {
-	"TURBOPACK { transition: next-shared }";
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	Object.defineProperty(exports, "staticGenerationAsyncStorage", {
-	    enumerable: true,
-	    get: function() {
-	        return _staticgenerationasyncstorageinstance.staticGenerationAsyncStorage;
-	    }
-	});
-	const _staticgenerationasyncstorageinstance = staticGenerationAsyncStorageInstanceExports;
-
-	if ((typeof exports.default === 'function' || (typeof exports.default === 'object' && exports.default !== null)) && typeof exports.default.__esModule === 'undefined') {
-	  Object.defineProperty(exports.default, '__esModule', { value: true });
-	  Object.assign(exports.default, exports);
-	  module.exports = exports.default;
-	}
-
-	
-} (staticGenerationAsyncStorage_external, staticGenerationAsyncStorage_external.exports));
-
-var staticGenerationAsyncStorage_externalExports = staticGenerationAsyncStorage_external.exports;
-
-(function (exports) {
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	function _export(target, all) {
-	    for(var name in all)Object.defineProperty(target, name, {
-	        enumerable: true,
-	        get: all[name]
-	    });
-	}
-	_export(exports, {
-	    MutableRequestCookiesAdapter: function() {
-	        return MutableRequestCookiesAdapter;
-	    },
-	    ReadonlyRequestCookiesError: function() {
-	        return ReadonlyRequestCookiesError;
-	    },
-	    RequestCookiesAdapter: function() {
-	        return RequestCookiesAdapter;
-	    },
-	    appendMutableCookies: function() {
-	        return appendMutableCookies;
-	    },
-	    getModifiedCookieValues: function() {
-	        return getModifiedCookieValues;
-	    }
-	});
-	const _cookies = cookies$1;
-	const _reflect = reflect;
-	const _staticgenerationasyncstorageexternal = staticGenerationAsyncStorage_externalExports;
-	class ReadonlyRequestCookiesError extends Error {
-	    constructor(){
-	        super("Cookies can only be modified in a Server Action or Route Handler. Read more: https://nextjs.org/docs/app/api-reference/functions/cookies#cookiessetname-value-options");
-	    }
-	    static callable() {
-	        throw new ReadonlyRequestCookiesError();
-	    }
-	}
-	class RequestCookiesAdapter {
-	    static seal(cookies) {
-	        return new Proxy(cookies, {
-	            get (target, prop, receiver) {
-	                switch(prop){
-	                    case "clear":
-	                    case "delete":
-	                    case "set":
-	                        return ReadonlyRequestCookiesError.callable;
-	                    default:
-	                        return _reflect.ReflectAdapter.get(target, prop, receiver);
-	                }
-	            }
-	        });
-	    }
-	}
-	const SYMBOL_MODIFY_COOKIE_VALUES = Symbol.for("next.mutated.cookies");
-	function getModifiedCookieValues(cookies) {
-	    const modified = cookies[SYMBOL_MODIFY_COOKIE_VALUES];
-	    if (!modified || !Array.isArray(modified) || modified.length === 0) {
-	        return [];
-	    }
-	    return modified;
-	}
-	function appendMutableCookies(headers, mutableCookies) {
-	    const modifiedCookieValues = getModifiedCookieValues(mutableCookies);
-	    if (modifiedCookieValues.length === 0) {
-	        return false;
-	    }
-	    // Return a new response that extends the response with
-	    // the modified cookies as fallbacks. `res` cookies
-	    // will still take precedence.
-	    const resCookies = new _cookies.ResponseCookies(headers);
-	    const returnedCookies = resCookies.getAll();
-	    // Set the modified cookies as fallbacks.
-	    for (const cookie of modifiedCookieValues){
-	        resCookies.set(cookie);
-	    }
-	    // Set the original cookies as the final values.
-	    for (const cookie of returnedCookies){
-	        resCookies.set(cookie);
-	    }
-	    return true;
-	}
-	class MutableRequestCookiesAdapter {
-	    static wrap(cookies, onUpdateCookies) {
-	        const responseCookies = new _cookies.ResponseCookies(new Headers());
-	        for (const cookie of cookies.getAll()){
-	            responseCookies.set(cookie);
-	        }
-	        let modifiedValues = [];
-	        const modifiedCookies = new Set();
-	        const updateResponseCookies = ()=>{
-	            // TODO-APP: change method of getting staticGenerationAsyncStore
-	            const staticGenerationAsyncStore = _staticgenerationasyncstorageexternal.staticGenerationAsyncStorage.getStore();
-	            if (staticGenerationAsyncStore) {
-	                staticGenerationAsyncStore.pathWasRevalidated = true;
-	            }
-	            const allCookies = responseCookies.getAll();
-	            modifiedValues = allCookies.filter((c)=>modifiedCookies.has(c.name));
-	            if (onUpdateCookies) {
-	                const serializedCookies = [];
-	                for (const cookie of modifiedValues){
-	                    const tempCookies = new _cookies.ResponseCookies(new Headers());
-	                    tempCookies.set(cookie);
-	                    serializedCookies.push(tempCookies.toString());
-	                }
-	                onUpdateCookies(serializedCookies);
-	            }
-	        };
-	        return new Proxy(responseCookies, {
-	            get (target, prop, receiver) {
-	                switch(prop){
-	                    // A special symbol to get the modified cookie values
-	                    case SYMBOL_MODIFY_COOKIE_VALUES:
-	                        return modifiedValues;
-	                    // TODO: Throw error if trying to set a cookie after the response
-	                    // headers have been set.
-	                    case "delete":
-	                        return function(...args) {
-	                            modifiedCookies.add(typeof args[0] === "string" ? args[0] : args[0].name);
-	                            try {
-	                                target.delete(...args);
-	                            } finally{
-	                                updateResponseCookies();
-	                            }
-	                        };
-	                    case "set":
-	                        return function(...args) {
-	                            modifiedCookies.add(typeof args[0] === "string" ? args[0] : args[0].name);
-	                            try {
-	                                return target.set(...args);
-	                            } finally{
-	                                updateResponseCookies();
-	                            }
-	                        };
-	                    default:
-	                        return _reflect.ReflectAdapter.get(target, prop, receiver);
-	                }
-	            }
-	        });
-	    }
-	}
-
-	
-} (requestCookies));
-
-var headers$1 = {};
-
-(function (exports) {
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	function _export(target, all) {
-	    for(var name in all)Object.defineProperty(target, name, {
-	        enumerable: true,
-	        get: all[name]
-	    });
-	}
-	_export(exports, {
-	    HeadersAdapter: function() {
-	        return HeadersAdapter;
-	    },
-	    ReadonlyHeadersError: function() {
-	        return ReadonlyHeadersError;
-	    }
-	});
-	const _reflect = reflect;
-	class ReadonlyHeadersError extends Error {
-	    constructor(){
-	        super("Headers cannot be modified. Read more: https://nextjs.org/docs/app/api-reference/functions/headers");
-	    }
-	    static callable() {
-	        throw new ReadonlyHeadersError();
-	    }
-	}
-	class HeadersAdapter extends Headers {
-	    constructor(headers){
-	        // We've already overridden the methods that would be called, so we're just
-	        // calling the super constructor to ensure that the instanceof check works.
-	        super();
-	        this.headers = new Proxy(headers, {
-	            get (target, prop, receiver) {
-	                // Because this is just an object, we expect that all "get" operations
-	                // are for properties. If it's a "get" for a symbol, we'll just return
-	                // the symbol.
-	                if (typeof prop === "symbol") {
-	                    return _reflect.ReflectAdapter.get(target, prop, receiver);
-	                }
-	                const lowercased = prop.toLowerCase();
-	                // Let's find the original casing of the key. This assumes that there is
-	                // no mixed case keys (e.g. "Content-Type" and "content-type") in the
-	                // headers object.
-	                const original = Object.keys(headers).find((o)=>o.toLowerCase() === lowercased);
-	                // If the original casing doesn't exist, return undefined.
-	                if (typeof original === "undefined") return;
-	                // If the original casing exists, return the value.
-	                return _reflect.ReflectAdapter.get(target, original, receiver);
-	            },
-	            set (target, prop, value, receiver) {
-	                if (typeof prop === "symbol") {
-	                    return _reflect.ReflectAdapter.set(target, prop, value, receiver);
-	                }
-	                const lowercased = prop.toLowerCase();
-	                // Let's find the original casing of the key. This assumes that there is
-	                // no mixed case keys (e.g. "Content-Type" and "content-type") in the
-	                // headers object.
-	                const original = Object.keys(headers).find((o)=>o.toLowerCase() === lowercased);
-	                // If the original casing doesn't exist, use the prop as the key.
-	                return _reflect.ReflectAdapter.set(target, original ?? prop, value, receiver);
-	            },
-	            has (target, prop) {
-	                if (typeof prop === "symbol") return _reflect.ReflectAdapter.has(target, prop);
-	                const lowercased = prop.toLowerCase();
-	                // Let's find the original casing of the key. This assumes that there is
-	                // no mixed case keys (e.g. "Content-Type" and "content-type") in the
-	                // headers object.
-	                const original = Object.keys(headers).find((o)=>o.toLowerCase() === lowercased);
-	                // If the original casing doesn't exist, return false.
-	                if (typeof original === "undefined") return false;
-	                // If the original casing exists, return true.
-	                return _reflect.ReflectAdapter.has(target, original);
-	            },
-	            deleteProperty (target, prop) {
-	                if (typeof prop === "symbol") return _reflect.ReflectAdapter.deleteProperty(target, prop);
-	                const lowercased = prop.toLowerCase();
-	                // Let's find the original casing of the key. This assumes that there is
-	                // no mixed case keys (e.g. "Content-Type" and "content-type") in the
-	                // headers object.
-	                const original = Object.keys(headers).find((o)=>o.toLowerCase() === lowercased);
-	                // If the original casing doesn't exist, return true.
-	                if (typeof original === "undefined") return true;
-	                // If the original casing exists, delete the property.
-	                return _reflect.ReflectAdapter.deleteProperty(target, original);
-	            }
-	        });
-	    }
-	    /**
-	   * Seals a Headers instance to prevent modification by throwing an error when
-	   * any mutating method is called.
-	   */ static seal(headers) {
-	        return new Proxy(headers, {
-	            get (target, prop, receiver) {
-	                switch(prop){
-	                    case "append":
-	                    case "delete":
-	                    case "set":
-	                        return ReadonlyHeadersError.callable;
-	                    default:
-	                        return _reflect.ReflectAdapter.get(target, prop, receiver);
-	                }
-	            }
-	        });
-	    }
-	    /**
-	   * Merges a header value into a string. This stores multiple values as an
-	   * array, so we need to merge them into a string.
-	   *
-	   * @param value a header value
-	   * @returns a merged header value (a string)
-	   */ merge(value) {
-	        if (Array.isArray(value)) return value.join(", ");
-	        return value;
-	    }
-	    /**
-	   * Creates a Headers instance from a plain object or a Headers instance.
-	   *
-	   * @param headers a plain object or a Headers instance
-	   * @returns a headers instance
-	   */ static from(headers) {
-	        if (headers instanceof Headers) return headers;
-	        return new HeadersAdapter(headers);
-	    }
-	    append(name, value) {
-	        const existing = this.headers[name];
-	        if (typeof existing === "string") {
-	            this.headers[name] = [
-	                existing,
-	                value
-	            ];
-	        } else if (Array.isArray(existing)) {
-	            existing.push(value);
-	        } else {
-	            this.headers[name] = value;
-	        }
-	    }
-	    delete(name) {
-	        delete this.headers[name];
-	    }
-	    get(name) {
-	        const value = this.headers[name];
-	        if (typeof value !== "undefined") return this.merge(value);
-	        return null;
-	    }
-	    has(name) {
-	        return typeof this.headers[name] !== "undefined";
-	    }
-	    set(name, value) {
-	        this.headers[name] = value;
-	    }
-	    forEach(callbackfn, thisArg) {
-	        for (const [name, value] of this.entries()){
-	            callbackfn.call(thisArg, value, name, this);
-	        }
-	    }
-	    *entries() {
-	        for (const key of Object.keys(this.headers)){
-	            const name = key.toLowerCase();
-	            // We assert here that this is a string because we got it from the
-	            // Object.keys() call above.
-	            const value = this.get(name);
-	            yield [
-	                name,
-	                value
-	            ];
-	        }
-	    }
-	    *keys() {
-	        for (const key of Object.keys(this.headers)){
-	            const name = key.toLowerCase();
-	            yield name;
-	        }
-	    }
-	    *values() {
-	        for (const key of Object.keys(this.headers)){
-	            // We assert here that this is a string because we got it from the
-	            // Object.keys() call above.
-	            const value = this.get(key);
-	            yield value;
-	        }
-	    }
-	    [Symbol.iterator]() {
-	        return this.entries();
-	    }
-	}
-
-	
-} (headers$1));
-
-var actionAsyncStorage_external = {exports: {}};
-
-var actionAsyncStorageInstance = {exports: {}};
-
-(function (module, exports) {
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	Object.defineProperty(exports, "actionAsyncStorage", {
-	    enumerable: true,
-	    get: function() {
-	        return actionAsyncStorage;
-	    }
-	});
-	const _asynclocalstorage = asyncLocalStorageExports;
-	const actionAsyncStorage = (0, _asynclocalstorage.createAsyncLocalStorage)();
-
-	if ((typeof exports.default === 'function' || (typeof exports.default === 'object' && exports.default !== null)) && typeof exports.default.__esModule === 'undefined') {
-	  Object.defineProperty(exports.default, '__esModule', { value: true });
-	  Object.assign(exports.default, exports);
-	  module.exports = exports.default;
-	}
-
-	
-} (actionAsyncStorageInstance, actionAsyncStorageInstance.exports));
-
-var actionAsyncStorageInstanceExports = actionAsyncStorageInstance.exports;
-
-(function (module, exports) {
-	"TURBOPACK { transition: next-shared }";
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	Object.defineProperty(exports, "actionAsyncStorage", {
-	    enumerable: true,
-	    get: function() {
-	        return _actionasyncstorageinstance.actionAsyncStorage;
-	    }
-	});
-	const _actionasyncstorageinstance = actionAsyncStorageInstanceExports;
-
-	if ((typeof exports.default === 'function' || (typeof exports.default === 'object' && exports.default !== null)) && typeof exports.default.__esModule === 'undefined') {
-	  Object.defineProperty(exports.default, '__esModule', { value: true });
-	  Object.assign(exports.default, exports);
-	  module.exports = exports.default;
-	}
-
-	
-} (actionAsyncStorage_external, actionAsyncStorage_external.exports));
-
-var actionAsyncStorage_externalExports = actionAsyncStorage_external.exports;
-
-var draftMode = {exports: {}};
-
-var dynamicRendering = {};
-
-var hooksServerContext = {exports: {}};
-
-(function (module, exports) {
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	function _export(target, all) {
-	    for(var name in all)Object.defineProperty(target, name, {
-	        enumerable: true,
-	        get: all[name]
-	    });
-	}
-	_export(exports, {
-	    DynamicServerError: function() {
-	        return DynamicServerError;
-	    },
-	    isDynamicServerError: function() {
-	        return isDynamicServerError;
-	    }
-	});
-	const DYNAMIC_ERROR_CODE = "DYNAMIC_SERVER_USAGE";
-	class DynamicServerError extends Error {
-	    constructor(description){
-	        super("Dynamic server usage: " + description);
-	        this.description = description;
-	        this.digest = DYNAMIC_ERROR_CODE;
-	    }
-	}
-	function isDynamicServerError(err) {
-	    if (typeof err !== "object" || err === null || !("digest" in err) || typeof err.digest !== "string") {
-	        return false;
-	    }
-	    return err.digest === DYNAMIC_ERROR_CODE;
-	}
-
-	if ((typeof exports.default === 'function' || (typeof exports.default === 'object' && exports.default !== null)) && typeof exports.default.__esModule === 'undefined') {
-	  Object.defineProperty(exports.default, '__esModule', { value: true });
-	  Object.assign(exports.default, exports);
-	  module.exports = exports.default;
-	}
-
-	
-} (hooksServerContext, hooksServerContext.exports));
-
-var hooksServerContextExports = hooksServerContext.exports;
-
-var staticGenerationBailout = {exports: {}};
-
-(function (module, exports) {
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	function _export(target, all) {
-	    for(var name in all)Object.defineProperty(target, name, {
-	        enumerable: true,
-	        get: all[name]
-	    });
-	}
-	_export(exports, {
-	    StaticGenBailoutError: function() {
-	        return StaticGenBailoutError;
-	    },
-	    isStaticGenBailoutError: function() {
-	        return isStaticGenBailoutError;
-	    }
-	});
-	const NEXT_STATIC_GEN_BAILOUT = "NEXT_STATIC_GEN_BAILOUT";
-	class StaticGenBailoutError extends Error {
-	    constructor(...args){
-	        super(...args);
-	        this.code = NEXT_STATIC_GEN_BAILOUT;
-	    }
-	}
-	function isStaticGenBailoutError(error) {
-	    if (typeof error !== "object" || error === null || !("code" in error)) {
-	        return false;
-	    }
-	    return error.code === NEXT_STATIC_GEN_BAILOUT;
-	}
-
-	if ((typeof exports.default === 'function' || (typeof exports.default === 'object' && exports.default !== null)) && typeof exports.default.__esModule === 'undefined') {
-	  Object.defineProperty(exports.default, '__esModule', { value: true });
-	  Object.assign(exports.default, exports);
-	  module.exports = exports.default;
-	}
-
-	
-} (staticGenerationBailout, staticGenerationBailout.exports));
-
-var staticGenerationBailoutExports = staticGenerationBailout.exports;
-
-var url = {};
-
-(function (exports) {
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	function _export(target, all) {
-	    for(var name in all)Object.defineProperty(target, name, {
-	        enumerable: true,
-	        get: all[name]
-	    });
-	}
-	_export(exports, {
-	    getPathname: function() {
-	        return getPathname;
-	    },
-	    isFullStringUrl: function() {
-	        return isFullStringUrl;
-	    },
-	    parseUrl: function() {
-	        return parseUrl;
-	    }
-	});
-	const DUMMY_ORIGIN = "http://n";
-	function getUrlWithoutHost(url) {
-	    return new URL(url, DUMMY_ORIGIN);
-	}
-	function getPathname(url) {
-	    return getUrlWithoutHost(url).pathname;
-	}
-	function isFullStringUrl(url) {
-	    return /https?:\/\//.test(url);
-	}
-	function parseUrl(url) {
-	    let parsed = undefined;
-	    try {
-	        parsed = new URL(url, DUMMY_ORIGIN);
-	    } catch  {}
-	    return parsed;
-	}
-
-	
-} (url));
-
-/**
- * The functions provided by this module are used to communicate certain properties
- * about the currently running code so that Next.js can make decisions on how to handle
- * the current execution in different rendering modes such as pre-rendering, resuming, and SSR.
- *
- * Today Next.js treats all code as potentially static. Certain APIs may only make sense when dynamically rendering.
- * Traditionally this meant deopting the entire render to dynamic however with PPR we can now deopt parts
- * of a React tree as dynamic while still keeping other parts static. There are really two different kinds of
- * Dynamic indications.
- *
- * The first is simply an intention to be dynamic. unstable_noStore is an example of this where
- * the currently executing code simply declares that the current scope is dynamic but if you use it
- * inside unstable_cache it can still be cached. This type of indication can be removed if we ever
- * make the default dynamic to begin with because the only way you would ever be static is inside
- * a cache scope which this indication does not affect.
- *
- * The second is an indication that a dynamic data source was read. This is a stronger form of dynamic
- * because it means that it is inappropriate to cache this at all. using a dynamic data source inside
- * unstable_cache should error. If you want to use some dynamic data inside unstable_cache you should
- * read that data outside the cache and pass it in as an argument to the cached function.
+/*!
+ * cookie
+ * Copyright(c) 2012-2014 Roman Shtylman
+ * Copyright(c) 2015 Douglas Christopher Wilson
+ * MIT Licensed
  */
 
+/**
+ * Module exports.
+ * @public
+ */
+
+cookie.parse = parse;
+cookie.serialize = serialize;
+
+/**
+ * Module variables.
+ * @private
+ */
+
+var __toString = Object.prototype.toString;
+
+/**
+ * RegExp to match field-content in RFC 7230 sec 3.2
+ *
+ * field-content = field-vchar [ 1*( SP / HTAB ) field-vchar ]
+ * field-vchar   = VCHAR / obs-text
+ * obs-text      = %x80-FF
+ */
+
+var fieldContentRegExp = /^[\u0009\u0020-\u007e\u0080-\u00ff]+$/;
+
+/**
+ * Parse a cookie header.
+ *
+ * Parse the given cookie header string into an object
+ * The object has the various cookies as keys(names) => values
+ *
+ * @param {string} str
+ * @param {object} [options]
+ * @return {object}
+ * @public
+ */
+
+function parse(str, options) {
+  if (typeof str !== 'string') {
+    throw new TypeError('argument str must be a string');
+  }
+
+  var obj = {};
+  var opt = options || {};
+  var dec = opt.decode || decode;
+
+  var index = 0;
+  while (index < str.length) {
+    var eqIdx = str.indexOf('=', index);
+
+    // no more cookie pairs
+    if (eqIdx === -1) {
+      break
+    }
+
+    var endIdx = str.indexOf(';', index);
+
+    if (endIdx === -1) {
+      endIdx = str.length;
+    } else if (endIdx < eqIdx) {
+      // backtrack on prior semicolon
+      index = str.lastIndexOf(';', eqIdx - 1) + 1;
+      continue
+    }
+
+    var key = str.slice(index, eqIdx).trim();
+
+    // only assign once
+    if (undefined === obj[key]) {
+      var val = str.slice(eqIdx + 1, endIdx).trim();
+
+      // quoted values
+      if (val.charCodeAt(0) === 0x22) {
+        val = val.slice(1, -1);
+      }
+
+      obj[key] = tryDecode(val, dec);
+    }
+
+    index = endIdx + 1;
+  }
+
+  return obj;
+}
+
+/**
+ * Serialize data into a cookie header.
+ *
+ * Serialize the a name value pair into a cookie string suitable for
+ * http headers. An optional options object specified cookie parameters.
+ *
+ * serialize('foo', 'bar', { httpOnly: true })
+ *   => "foo=bar; httpOnly"
+ *
+ * @param {string} name
+ * @param {string} val
+ * @param {object} [options]
+ * @return {string}
+ * @public
+ */
+
+function serialize(name, val, options) {
+  var opt = options || {};
+  var enc = opt.encode || encode;
+
+  if (typeof enc !== 'function') {
+    throw new TypeError('option encode is invalid');
+  }
+
+  if (!fieldContentRegExp.test(name)) {
+    throw new TypeError('argument name is invalid');
+  }
+
+  var value = enc(val);
+
+  if (value && !fieldContentRegExp.test(value)) {
+    throw new TypeError('argument val is invalid');
+  }
+
+  var str = name + '=' + value;
+
+  if (null != opt.maxAge) {
+    var maxAge = opt.maxAge - 0;
+
+    if (isNaN(maxAge) || !isFinite(maxAge)) {
+      throw new TypeError('option maxAge is invalid')
+    }
+
+    str += '; Max-Age=' + Math.floor(maxAge);
+  }
+
+  if (opt.domain) {
+    if (!fieldContentRegExp.test(opt.domain)) {
+      throw new TypeError('option domain is invalid');
+    }
+
+    str += '; Domain=' + opt.domain;
+  }
+
+  if (opt.path) {
+    if (!fieldContentRegExp.test(opt.path)) {
+      throw new TypeError('option path is invalid');
+    }
+
+    str += '; Path=' + opt.path;
+  }
+
+  if (opt.expires) {
+    var expires = opt.expires;
+
+    if (!isDate(expires) || isNaN(expires.valueOf())) {
+      throw new TypeError('option expires is invalid');
+    }
+
+    str += '; Expires=' + expires.toUTCString();
+  }
+
+  if (opt.httpOnly) {
+    str += '; HttpOnly';
+  }
+
+  if (opt.secure) {
+    str += '; Secure';
+  }
+
+  if (opt.partitioned) {
+    str += '; Partitioned';
+  }
+
+  if (opt.priority) {
+    var priority = typeof opt.priority === 'string'
+      ? opt.priority.toLowerCase()
+      : opt.priority;
+
+    switch (priority) {
+      case 'low':
+        str += '; Priority=Low';
+        break
+      case 'medium':
+        str += '; Priority=Medium';
+        break
+      case 'high':
+        str += '; Priority=High';
+        break
+      default:
+        throw new TypeError('option priority is invalid')
+    }
+  }
+
+  if (opt.sameSite) {
+    var sameSite = typeof opt.sameSite === 'string'
+      ? opt.sameSite.toLowerCase() : opt.sameSite;
+
+    switch (sameSite) {
+      case true:
+        str += '; SameSite=Strict';
+        break;
+      case 'lax':
+        str += '; SameSite=Lax';
+        break;
+      case 'strict':
+        str += '; SameSite=Strict';
+        break;
+      case 'none':
+        str += '; SameSite=None';
+        break;
+      default:
+        throw new TypeError('option sameSite is invalid');
+    }
+  }
+
+  return str;
+}
+
+/**
+ * URL-decode string value. Optimized to skip native call when no %.
+ *
+ * @param {string} str
+ * @returns {string}
+ */
+
+function decode (str) {
+  return str.indexOf('%') !== -1
+    ? decodeURIComponent(str)
+    : str
+}
+
+/**
+ * URL-encode value.
+ *
+ * @param {string} val
+ * @returns {string}
+ */
+
+function encode (val) {
+  return encodeURIComponent(val)
+}
+
+/**
+ * Determine if value is a Date.
+ *
+ * @param {*} val
+ * @private
+ */
+
+function isDate (val) {
+  return __toString.call(val) === '[object Date]' ||
+    val instanceof Date
+}
+
+/**
+ * Try decoding a string using a decoding function.
+ *
+ * @param {string} str
+ * @param {function} decode
+ * @private
+ */
+
+function tryDecode(str, decode) {
+  try {
+    return decode(str);
+  } catch (e) {
+    return str;
+  }
+}
+
 (function (exports) {
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	function _export(target, all) {
-	    for(var name in all)Object.defineProperty(target, name, {
-	        enumerable: true,
-	        get: all[name]
-	    });
-	}
-	_export(exports, {
-	    Postpone: function() {
-	        return Postpone;
-	    },
-	    createPostponedAbortSignal: function() {
-	        return createPostponedAbortSignal;
-	    },
-	    createPrerenderState: function() {
-	        return createPrerenderState;
-	    },
-	    formatDynamicAPIAccesses: function() {
-	        return formatDynamicAPIAccesses;
-	    },
-	    markCurrentScopeAsDynamic: function() {
-	        return markCurrentScopeAsDynamic;
-	    },
-	    trackDynamicDataAccessed: function() {
-	        return trackDynamicDataAccessed;
-	    },
-	    trackDynamicFetch: function() {
-	        return trackDynamicFetch;
-	    },
-	    usedDynamicAPIs: function() {
-	        return usedDynamicAPIs;
-	    }
-	});
-	const _react = /*#__PURE__*/ _interop_require_default(require$$0);
-	const _hooksservercontext = hooksServerContextExports;
-	const _staticgenerationbailout = staticGenerationBailoutExports;
-	const _url = url;
-	function _interop_require_default(obj) {
-	    return obj && obj.__esModule ? obj : {
-	        default: obj
-	    };
-	}
-	const hasPostpone = typeof _react.default.unstable_postpone === "function";
-	function createPrerenderState(isDebugSkeleton) {
-	    return {
-	        isDebugSkeleton,
-	        dynamicAccesses: []
-	    };
-	}
-	function markCurrentScopeAsDynamic(store, expression) {
-	    const pathname = (0, _url.getPathname)(store.urlPathname);
-	    if (store.isUnstableCacheCallback) {
-	        // inside cache scopes marking a scope as dynamic has no effect because the outer cache scope
-	        // creates a cache boundary. This is subtly different from reading a dynamic data source which is
-	        // forbidden inside a cache scope.
-	        return;
-	    } else if (store.dynamicShouldError) {
-	        throw new _staticgenerationbailout.StaticGenBailoutError(`Route ${pathname} with \`dynamic = "error"\` couldn't be rendered statically because it used \`${expression}\`. See more info here: https://nextjs.org/docs/app/building-your-application/rendering/static-and-dynamic#dynamic-rendering`);
-	    } else if (// We are in a prerender (PPR enabled, during build)
-	    store.prerenderState) {
-	        // We track that we had a dynamic scope that postponed.
-	        // This will be used by the renderer to decide whether
-	        // the prerender requires a resume
-	        postponeWithTracking(store.prerenderState, expression, pathname);
-	    } else {
-	        store.revalidate = 0;
-	        if (store.isStaticGeneration) {
-	            // We aren't prerendering but we are generating a static page. We need to bail out of static generation
-	            const err = new _hooksservercontext.DynamicServerError(`Route ${pathname} couldn't be rendered statically because it used ${expression}. See more info here: https://nextjs.org/docs/messages/dynamic-server-error`);
-	            store.dynamicUsageDescription = expression;
-	            store.dynamicUsageStack = err.stack;
-	            throw err;
+	var __assign = (commonjsGlobal && commonjsGlobal.__assign) || function () {
+	    __assign = Object.assign || function(t) {
+	        for (var s, i = 1, n = arguments.length; i < n; i++) {
+	            s = arguments[i];
+	            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+	                t[p] = s[p];
 	        }
-	    }
-	}
-	function trackDynamicDataAccessed(store, expression) {
-	    const pathname = (0, _url.getPathname)(store.urlPathname);
-	    if (store.isUnstableCacheCallback) {
-	        throw new Error(`Route ${pathname} used "${expression}" inside a function cached with "unstable_cache(...)". Accessing Dynamic data sources inside a cache scope is not supported. If you need this data inside a cached function use "${expression}" outside of the cached function and pass the required dynamic data in as an argument. See more info here: https://nextjs.org/docs/app/api-reference/functions/unstable_cache`);
-	    } else if (store.dynamicShouldError) {
-	        throw new _staticgenerationbailout.StaticGenBailoutError(`Route ${pathname} with \`dynamic = "error"\` couldn't be rendered statically because it used \`${expression}\`. See more info here: https://nextjs.org/docs/app/building-your-application/rendering/static-and-dynamic#dynamic-rendering`);
-	    } else if (// We are in a prerender (PPR enabled, during build)
-	    store.prerenderState) {
-	        // We track that we had a dynamic scope that postponed.
-	        // This will be used by the renderer to decide whether
-	        // the prerender requires a resume
-	        postponeWithTracking(store.prerenderState, expression, pathname);
-	    } else {
-	        store.revalidate = 0;
-	        if (store.isStaticGeneration) {
-	            // We aren't prerendering but we are generating a static page. We need to bail out of static generation
-	            const err = new _hooksservercontext.DynamicServerError(`Route ${pathname} couldn't be rendered statically because it used \`${expression}\`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error`);
-	            store.dynamicUsageDescription = expression;
-	            store.dynamicUsageStack = err.stack;
-	            throw err;
+	        return t;
+	    };
+	    return __assign.apply(this, arguments);
+	};
+	var __rest = (commonjsGlobal && commonjsGlobal.__rest) || function (s, e) {
+	    var t = {};
+	    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+	        t[p] = s[p];
+	    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+	        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+	            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+	                t[p[i]] = s[p[i]];
 	        }
-	    }
-	}
-	function Postpone({ reason, prerenderState, pathname }) {
-	    postponeWithTracking(prerenderState, reason, pathname);
-	}
-	function trackDynamicFetch(store, expression) {
-	    if (store.prerenderState) {
-	        postponeWithTracking(store.prerenderState, expression, store.urlPathname);
-	    }
-	}
-	function postponeWithTracking(prerenderState, expression, pathname) {
-	    assertPostpone();
-	    const reason = `Route ${pathname} needs to bail out of prerendering at this point because it used ${expression}. ` + `React throws this special object to indicate where. It should not be caught by ` + `your own try/catch. Learn more: https://nextjs.org/docs/messages/ppr-caught-error`;
-	    prerenderState.dynamicAccesses.push({
-	        // When we aren't debugging, we don't need to create another error for the
-	        // stack trace.
-	        stack: prerenderState.isDebugSkeleton ? new Error().stack : undefined,
-	        expression
+	    return t;
+	};
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.hasCookie = exports.deleteCookie = exports.setCookie = exports.getCookie = exports.getCookies = void 0;
+	var cookie_1 = cookie;
+	var isClientSide = function () { return typeof window !== 'undefined'; };
+	var isCookiesFromAppRouter = function (cookieStore) {
+	    if (!cookieStore)
+	        return false;
+	    return ('getAll' in cookieStore &&
+	        'set' in cookieStore &&
+	        typeof cookieStore.getAll === 'function' &&
+	        typeof cookieStore.set === 'function');
+	};
+	var isContextFromAppRouter = function (context) {
+	    return ((!!(context === null || context === void 0 ? void 0 : context.req) && 'cookies' in context.req && isCookiesFromAppRouter(context === null || context === void 0 ? void 0 : context.req.cookies)) ||
+	        (!!(context === null || context === void 0 ? void 0 : context.res) && 'cookies' in context.res && isCookiesFromAppRouter(context === null || context === void 0 ? void 0 : context.res.cookies)) ||
+	        (!!(context === null || context === void 0 ? void 0 : context.cookies) && isCookiesFromAppRouter(context.cookies())));
+	};
+	var transformAppRouterCookies = function (cookies) {
+	    var _cookies = {};
+	    cookies.getAll().forEach(function (_a) {
+	        var name = _a.name, value = _a.value;
+	        _cookies[name] = value;
 	    });
-	    _react.default.unstable_postpone(reason);
-	}
-	function usedDynamicAPIs(prerenderState) {
-	    return prerenderState.dynamicAccesses.length > 0;
-	}
-	function formatDynamicAPIAccesses(prerenderState) {
-	    return prerenderState.dynamicAccesses.filter((access)=>typeof access.stack === "string" && access.stack.length > 0).map(({ expression, stack })=>{
-	        stack = stack.split("\n")// Remove the "Error: " prefix from the first line of the stack trace as
-	        // well as the first 4 lines of the stack trace which is the distance
-	        // from the user code and the `new Error().stack` call.
-	        .slice(4).filter((line)=>{
-	            // Exclude Next.js internals from the stack trace.
-	            if (line.includes("node_modules/next/")) {
-	                return false;
-	            }
-	            // Exclude anonymous functions from the stack trace.
-	            if (line.includes(" (<anonymous>)")) {
-	                return false;
-	            }
-	            // Exclude Node.js internals from the stack trace.
-	            if (line.includes(" (node:")) {
-	                return false;
-	            }
-	            return true;
-	        }).join("\n");
-	        return `Dynamic API Usage Debug - ${expression}:\n${stack}`;
-	    });
-	}
-	function assertPostpone() {
-	    if (!hasPostpone) {
-	        throw new Error(`Invariant: React.unstable_postpone is not defined. This suggests the wrong version of React was loaded. This is a bug in Next.js`);
-	    }
-	}
-	function createPostponedAbortSignal(reason) {
-	    assertPostpone();
-	    const controller = new AbortController();
-	    // We get our hands on a postpone instance by calling postpone and catching the throw
+	    return _cookies;
+	};
+	var stringify = function (value) {
 	    try {
-	        _react.default.unstable_postpone(reason);
-	    } catch (x) {
-	        controller.abort(x);
-	    }
-	    return controller.signal;
-	}
-
-	
-} (dynamicRendering));
-
-(function (module, exports) {
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	Object.defineProperty(exports, "DraftMode", {
-	    enumerable: true,
-	    get: function() {
-	        return DraftMode;
-	    }
-	});
-	const _staticgenerationasyncstorageexternal = staticGenerationAsyncStorage_externalExports;
-	const _dynamicrendering = dynamicRendering;
-	class DraftMode {
-	    get isEnabled() {
-	        return this._provider.isEnabled;
-	    }
-	    enable() {
-	        const store = _staticgenerationasyncstorageexternal.staticGenerationAsyncStorage.getStore();
-	        if (store) {
-	            // We we have a store we want to track dynamic data access to ensure we
-	            // don't statically generate routes that manipulate draft mode.
-	            (0, _dynamicrendering.trackDynamicDataAccessed)(store, "draftMode().enable()");
+	        if (typeof value === 'string') {
+	            return value;
 	        }
-	        return this._provider.enable();
+	        var stringifiedValue = JSON.stringify(value);
+	        return stringifiedValue;
 	    }
-	    disable() {
-	        const store = _staticgenerationasyncstorageexternal.staticGenerationAsyncStorage.getStore();
-	        if (store) {
-	            // We we have a store we want to track dynamic data access to ensure we
-	            // don't statically generate routes that manipulate draft mode.
-	            (0, _dynamicrendering.trackDynamicDataAccessed)(store, "draftMode().disable()");
+	    catch (e) {
+	        return value;
+	    }
+	};
+	var decode = function (str) {
+	    if (!str)
+	        return str;
+	    return str.replace(/(%[0-9A-Z]{2})+/g, decodeURIComponent);
+	};
+	var getCookies = function (options) {
+	    if (isContextFromAppRouter(options)) {
+	        if (options === null || options === void 0 ? void 0 : options.req) {
+	            return transformAppRouterCookies(options.req.cookies);
 	        }
-	        return this._provider.disable();
-	    }
-	    constructor(provider){
-	        this._provider = provider;
-	    }
-	}
-
-	if ((typeof exports.default === 'function' || (typeof exports.default === 'object' && exports.default !== null)) && typeof exports.default.__esModule === 'undefined') {
-	  Object.defineProperty(exports.default, '__esModule', { value: true });
-	  Object.assign(exports.default, exports);
-	  module.exports = exports.default;
-	}
-
-	
-} (draftMode, draftMode.exports));
-
-var draftModeExports = draftMode.exports;
-
-var requestAsyncStorage_external = {exports: {}};
-
-var requestAsyncStorageInstance = {exports: {}};
-
-(function (module, exports) {
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	Object.defineProperty(exports, "requestAsyncStorage", {
-	    enumerable: true,
-	    get: function() {
-	        return requestAsyncStorage;
-	    }
-	});
-	const _asynclocalstorage = asyncLocalStorageExports;
-	const requestAsyncStorage = (0, _asynclocalstorage.createAsyncLocalStorage)();
-
-	if ((typeof exports.default === 'function' || (typeof exports.default === 'object' && exports.default !== null)) && typeof exports.default.__esModule === 'undefined') {
-	  Object.defineProperty(exports.default, '__esModule', { value: true });
-	  Object.assign(exports.default, exports);
-	  module.exports = exports.default;
-	}
-
-	
-} (requestAsyncStorageInstance, requestAsyncStorageInstance.exports));
-
-var requestAsyncStorageInstanceExports = requestAsyncStorageInstance.exports;
-
-(function (module, exports) {
-	"TURBOPACK { transition: next-shared }";
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	function _export(target, all) {
-	    for(var name in all)Object.defineProperty(target, name, {
-	        enumerable: true,
-	        get: all[name]
-	    });
-	}
-	_export(exports, {
-	    getExpectedRequestStore: function() {
-	        return getExpectedRequestStore;
-	    },
-	    requestAsyncStorage: function() {
-	        return _requestasyncstorageinstance.requestAsyncStorage;
-	    }
-	});
-	const _requestasyncstorageinstance = requestAsyncStorageInstanceExports;
-	function getExpectedRequestStore(callingExpression) {
-	    const store = _requestasyncstorageinstance.requestAsyncStorage.getStore();
-	    if (store) return store;
-	    throw new Error("`" + callingExpression + "` was called outside a request scope. Read more: https://nextjs.org/docs/messages/next-dynamic-api-wrong-context");
-	}
-
-	if ((typeof exports.default === 'function' || (typeof exports.default === 'object' && exports.default !== null)) && typeof exports.default.__esModule === 'undefined') {
-	  Object.defineProperty(exports.default, '__esModule', { value: true });
-	  Object.assign(exports.default, exports);
-	  module.exports = exports.default;
-	}
-
-	
-} (requestAsyncStorage_external, requestAsyncStorage_external.exports));
-
-var requestAsyncStorage_externalExports = requestAsyncStorage_external.exports;
-
-(function (module, exports) {
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	function _export(target, all) {
-	    for(var name in all)Object.defineProperty(target, name, {
-	        enumerable: true,
-	        get: all[name]
-	    });
-	}
-	_export(exports, {
-	    cookies: function() {
-	        return cookies;
-	    },
-	    draftMode: function() {
-	        return draftMode;
-	    },
-	    headers: function() {
-	        return headers;
-	    }
-	});
-	const _requestcookies = requestCookies;
-	const _headers = headers$1;
-	const _cookies = cookies$1;
-	const _actionasyncstorageexternal = actionAsyncStorage_externalExports;
-	const _draftmode = draftModeExports;
-	const _dynamicrendering = dynamicRendering;
-	const _staticgenerationasyncstorageexternal = staticGenerationAsyncStorage_externalExports;
-	const _requestasyncstorageexternal = requestAsyncStorage_externalExports;
-	function headers() {
-	    const callingExpression = "headers";
-	    const staticGenerationStore = _staticgenerationasyncstorageexternal.staticGenerationAsyncStorage.getStore();
-	    if (staticGenerationStore) {
-	        if (staticGenerationStore.forceStatic) {
-	            // When we are forcing static we don't mark this as a Dynamic read and we return an empty headers object
-	            return _headers.HeadersAdapter.seal(new Headers({}));
-	        } else {
-	            // We will return a real headers object below so we mark this call as reading from a dynamic data source
-	            (0, _dynamicrendering.trackDynamicDataAccessed)(staticGenerationStore, callingExpression);
+	        if (options === null || options === void 0 ? void 0 : options.cookies) {
+	            return transformAppRouterCookies(options.cookies());
 	        }
 	    }
-	    return (0, _requestasyncstorageexternal.getExpectedRequestStore)(callingExpression).headers;
-	}
-	function cookies() {
-	    const callingExpression = "cookies";
-	    const staticGenerationStore = _staticgenerationasyncstorageexternal.staticGenerationAsyncStorage.getStore();
-	    if (staticGenerationStore) {
-	        if (staticGenerationStore.forceStatic) {
-	            // When we are forcing static we don't mark this as a Dynamic read and we return an empty cookies object
-	            return _requestcookies.RequestCookiesAdapter.seal(new _cookies.RequestCookies(new Headers({})));
-	        } else {
-	            // We will return a real headers object below so we mark this call as reading from a dynamic data source
-	            (0, _dynamicrendering.trackDynamicDataAccessed)(staticGenerationStore, callingExpression);
+	    var req;
+	    // DefaultOptions['req] can be casted here because is narrowed by using the fn: isContextFromAppRouter
+	    if (options)
+	        req = options.req;
+	    if (!isClientSide()) {
+	        // if cookie-parser is used in project get cookies from ctx.req.cookies
+	        // if cookie-parser isn't used in project get cookies from ctx.req.headers.cookie
+	        if (req && req.cookies)
+	            return req.cookies;
+	        if (req && req.headers.cookie)
+	            return (0, cookie_1.parse)(req.headers.cookie);
+	        return {};
+	    }
+	    var _cookies = {};
+	    var documentCookies = document.cookie ? document.cookie.split('; ') : [];
+	    for (var i = 0, len = documentCookies.length; i < len; i++) {
+	        var cookieParts = documentCookies[i].split('=');
+	        var _cookie = cookieParts.slice(1).join('=');
+	        var name_1 = cookieParts[0];
+	        _cookies[name_1] = _cookie;
+	    }
+	    return _cookies;
+	};
+	exports.getCookies = getCookies;
+	var getCookie = function (key, options) {
+	    var _cookies = (0, exports.getCookies)(options);
+	    var value = _cookies[key];
+	    if (value === undefined)
+	        return undefined;
+	    return decode(value);
+	};
+	exports.getCookie = getCookie;
+	var setCookie = function (key, data, options) {
+	    if (isContextFromAppRouter(options)) {
+	        var req = options.req, res = options.res, cookiesFn = options.cookies, restOptions = __rest(options, ["req", "res", "cookies"]);
+	        var payload = __assign({ name: key, value: stringify(data) }, restOptions);
+	        if (req) {
+	            req.cookies.set(payload);
+	        }
+	        if (res) {
+	            res.cookies.set(payload);
+	        }
+	        if (cookiesFn) {
+	            cookiesFn().set(payload);
+	        }
+	        return;
+	    }
+	    var _cookieOptions;
+	    var _req;
+	    var _res;
+	    if (options) {
+	        // DefaultOptions can be casted here because the AppRouterMiddlewareOptions is narrowed using the fn: isContextFromAppRouter
+	        var _a = options, req = _a.req, res = _a.res, _options = __rest(_a, ["req", "res"]);
+	        _req = req;
+	        _res = res;
+	        _cookieOptions = _options;
+	    }
+	    var cookieStr = (0, cookie_1.serialize)(key, stringify(data), __assign({ path: '/' }, _cookieOptions));
+	    if (!isClientSide()) {
+	        if (_res && _req) {
+	            var currentCookies = _res.getHeader('Set-Cookie');
+	            if (!Array.isArray(currentCookies)) {
+	                currentCookies = !currentCookies ? [] : [String(currentCookies)];
+	            }
+	            _res.setHeader('Set-Cookie', currentCookies.concat(cookieStr));
+	            if (_req && _req.cookies) {
+	                var _cookies = _req.cookies;
+	                data === '' ? delete _cookies[key] : (_cookies[key] = stringify(data));
+	            }
+	            if (_req && _req.headers && _req.headers.cookie) {
+	                var _cookies = (0, cookie_1.parse)(_req.headers.cookie);
+	                data === '' ? delete _cookies[key] : (_cookies[key] = stringify(data));
+	                _req.headers.cookie = Object.entries(_cookies).reduce(function (accum, item) {
+	                    return accum.concat("".concat(item[0], "=").concat(item[1], ";"));
+	                }, '');
+	            }
 	        }
 	    }
-	    const requestStore = (0, _requestasyncstorageexternal.getExpectedRequestStore)(callingExpression);
-	    const asyncActionStore = _actionasyncstorageexternal.actionAsyncStorage.getStore();
-	    if ((asyncActionStore == null ? void 0 : asyncActionStore.isAction) || (asyncActionStore == null ? void 0 : asyncActionStore.isAppRoute)) {
-	        // We can't conditionally return different types here based on the context.
-	        // To avoid confusion, we always return the readonly type here.
-	        return requestStore.mutableCookies;
+	    else {
+	        document.cookie = cookieStr;
 	    }
-	    return requestStore.cookies;
-	}
-	function draftMode() {
-	    const callingExpression = "draftMode";
-	    const requestStore = (0, _requestasyncstorageexternal.getExpectedRequestStore)(callingExpression);
-	    return new _draftmode.DraftMode(requestStore.draftMode);
-	}
+	};
+	exports.setCookie = setCookie;
+	var deleteCookie = function (key, options) {
+	    return (0, exports.setCookie)(key, '', __assign(__assign({}, options), { maxAge: -1 }));
+	};
+	exports.deleteCookie = deleteCookie;
+	var hasCookie = function (key, options) {
+	    if (!key)
+	        return false;
+	    var cookie = (0, exports.getCookies)(options);
+	    return cookie.hasOwnProperty(key);
+	};
+	exports.hasCookie = hasCookie; 
+} (lib));
 
-	if ((typeof exports.default === 'function' || (typeof exports.default === 'object' && exports.default !== null)) && typeof exports.default.__esModule === 'undefined') {
-	  Object.defineProperty(exports.default, '__esModule', { value: true });
-	  Object.assign(exports.default, exports);
-	  module.exports = exports.default;
-	}
+var SESSION_KEY = 'pni';
+var CHALLENGE_KEY = 'pakce';
 
-	
-} (headers$2, headers$2.exports));
+var BASE_PATH = "https://oauthn.web.app/".replace(/\/+$/, "");
+var LOGIN_PATH = "".concat(BASE_PATH, "/api/v1/oidc/kipindi");
+var HANDSHAKE_PATH = "".concat(BASE_PATH, "/api/v1/oidc/kupeana");
 
-var headersExports = headers$2.exports;
+function unixTimestampToMaxAge(expirationUnixTimestamp) {
+    var currentUnixTimestamp = Math.floor(Date.now() / 1000);
+    var maxAge = expirationUnixTimestamp - currentUnixTimestamp;
+    return maxAge > 0 ? maxAge : 0;
+}
 
-var headers = headersExports;
+var callback$1 = function (verifier, clientId) { return __awaiter(void 0, void 0, void 0, function () {
+    var params, code, response, data;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                params = new URLSearchParams(window.location.search);
+                code = params.get('handshake');
+                if (!code)
+                    return [2 /*return*/, undefined];
+                return [4 /*yield*/, fetch(HANDSHAKE_PATH, {
+                        method: 'POST',
+                        headers: {
+                            'authorization': "Shake ".concat(code),
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            client_id: clientId,
+                            verifier: verifier,
+                        }),
+                    })];
+            case 1:
+                response = _a.sent();
+                return [4 /*yield*/, response.json()];
+            case 2:
+                data = _a.sent();
+                if (!data.data)
+                    return [2 /*return*/];
+                lib.setCookie(SESSION_KEY, data.data.access, { maxAge: unixTimestampToMaxAge(data.data.exp), secure: true });
+                return [2 /*return*/];
+        }
+    });
+}); };
+
+var AuthContext = createContext(undefined);
+var PasbyProvider = function (_a) {
+    var children = _a.children, clientId = _a.clientId, loginFallback = _a.loginFallback, logoutPath = _a.logoutPath, callbackPath = _a.callbackPath;
+    var _b = useState(false), isAuthenticated = _b[0], setIsAuthenticated = _b[1];
+    var _c = useState(), error = _c[0], setError = _c[1];
+    useEffect(function () {
+        var token = lib.getCookie(SESSION_KEY);
+        if (token) {
+            setIsAuthenticated(true);
+        }
+    }, []);
+    var handleCallback = function () { return __awaiter(void 0, void 0, void 0, function () {
+        var verifier;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    verifier = lib.getCookie(CHALLENGE_KEY);
+                    if (!verifier) {
+                        setError("No code verifier found for PKCE");
+                        return [2 /*return*/];
+                    }
+                    return [4 /*yield*/, callback$1(verifier, clientId).then(function (c) {
+                            if (!c)
+                                return;
+                            setIsAuthenticated(true);
+                            window.location.href = loginFallback;
+                        })];
+                case 1:
+                    _a.sent();
+                    return [2 /*return*/];
+            }
+        });
+    }); };
+    var logout = function () {
+        lib.deleteCookie(SESSION_KEY);
+        setIsAuthenticated(false);
+        window.location.href = "".concat(window.location.host, "/").concat(logoutPath);
+    };
+    useEffect(function () {
+        if (window.location.pathname === callbackPath) {
+            handleCallback();
+        }
+    }, []);
+    return (React__default.createElement(AuthContext.Provider, { value: { isAuthenticated: isAuthenticated, logout: logout, error: error } }, children));
+};
+var usePasby = function () {
+    var context = useContext(AuthContext);
+    if (!context) {
+        throw new Error('usePasby must be used within a PasbyProvider');
+    }
+    return context;
+};
+
+function LoginWithPasby(_a) {
+    var background = _a.background, logoBgk = _a.logoBgk, logoTextColor = _a.logoTextColor, textColor = _a.textColor, props = __rest(_a, ["background", "logoBgk", "logoTextColor", "textColor"]);
+    return (React.createElement("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: 252, height: 56, fill: "none" }, props),
+        React.createElement("rect", { width: 252, height: 56, fill: background !== null && background !== void 0 ? background : "#DD3E3E", rx: 8 }),
+        React.createElement("path", { fill: logoBgk !== null && logoBgk !== void 0 ? logoBgk : "#fff", d: "M35.818 42.907a13.71 13.71 0 0 1-6.125-10.203l-.636-6.935a13.7 13.7 0 0 1 4.175-11.15l5.022-4.804a13.76 13.76 0 0 1 11.344-3.692l6.904.927a13.744 13.744 0 0 1 9.955 6.544l3.59 5.978a13.69 13.69 0 0 1 1.084 11.847l-2.437 6.513a13.73 13.73 0 0 1-8.614 8.24l-6.614 2.152a13.767 13.767 0 0 1-11.82-1.586l-5.828-3.83Z" }),
+        React.createElement("path", { fill: logoTextColor !== null && logoTextColor !== void 0 ? logoTextColor : "#DD3E3E", d: "M43.9 18.756c.54 0 1.028.128 1.467.385.446.25.794.606 1.046 1.068.252.455.378.987.378 1.597 0 .609-.126 1.145-.378 1.607-.252.455-.6.811-1.046 1.068-.439.25-.928.375-1.467.375-.68 0-1.747.55-1.747 1.23v.057c0 .42-.341.76-.762.76h-.08a.84.84 0 0 1-.84-.839v-6.419c0-.442.36-.801.803-.801h.625c.098 0 .178.08.178.178 0 .168.228.256.364.156.382-.282.868-.422 1.46-.422Zm-.291 4.69c.431 0 .784-.147 1.057-.44.28-.301.42-.701.42-1.2 0-.5-.14-.896-.42-1.19-.273-.3-.626-.451-1.057-.451-.431 0-.787.15-1.068.451-.273.294-.41.69-.41 1.19 0 .499.137.899.41 1.2.28.293.637.44 1.068.44ZM52.964 18.844a.84.84 0 0 1 .841.84v4.282c0 .443-.36.802-.803.802h-.625a.179.179 0 0 1-.179-.179c0-.168-.227-.256-.363-.155-.38.281-.863.422-1.449.422a2.994 2.994 0 0 1-1.488-.375 2.665 2.665 0 0 1-1.035-1.068c-.252-.462-.378-.998-.378-1.607 0-.61.126-1.146.378-1.608a2.666 2.666 0 0 1 1.035-1.068c.446-.25.942-.374 1.488-.374.56 0 1.026.135 1.4.407.129.093.337.01.337-.148 0-.095.077-.171.171-.171h.67Zm-2.286 4.602a1.4 1.4 0 0 0 1.056-.44c.28-.301.421-.701.421-1.2 0-.5-.14-.896-.42-1.19a1.383 1.383 0 0 0-1.057-.451c-.432 0-.788.15-1.068.451-.28.294-.42.69-.42 1.19 0 .499.14.899.42 1.2.28.293.636.44 1.068.44ZM57.315 24.856c-.482 0-.953-.06-1.413-.177a5 5 0 0 1-.595-.198c-.305-.126-.405-.483-.27-.783.172-.375.642-.512 1.032-.372a3.984 3.984 0 0 0 1.311.23c.711 0 1.067-.18 1.067-.54 0-.168-.097-.29-.29-.363-.195-.073-.493-.135-.896-.187a8.486 8.486 0 0 1-1.176-.253 1.855 1.855 0 0 1-.808-.507c-.223-.242-.335-.587-.335-1.035 0-.374.105-.704.313-.99.216-.294.525-.522.927-.683.41-.162.892-.242 1.446-.242.41 0 .816.047 1.218.143.168.036.323.078.466.126.326.11.44.483.297.795-.166.362-.609.495-.99.379a3.377 3.377 0 0 0-.991-.144c-.36 0-.63.051-.81.154-.179.103-.269.235-.269.396 0 .184.097.312.291.386.194.073.504.143.928.209.474.08.863.169 1.165.264.302.088.564.254.787.496.223.242.334.58.334 1.013 0 .367-.108.694-.323.98-.216.286-.532.51-.95.671-.41.155-.898.232-1.466.232ZM56.644 34.716a3.816 3.816 0 0 1 .08.072 1.287 1.287 0 0 1 .364.902v.04c-.002.102-.01.198-.034.297l-.004.02a1.276 1.276 0 0 1-.246.51l-.013.017a1.27 1.27 0 0 1-.816.44c-.161.014-.323.011-.481-.027l-.021-.005a1.222 1.222 0 0 1-.751-.54 1.422 1.422 0 0 1-.177-1.024l.018-.066.006-.022c.1-.337.33-.613.63-.782a1.288 1.288 0 0 1 1.445.168Zm-1.684.612c-.019.014-.034.035-.032.058a.08.08 0 0 0 .048.067.131.131 0 0 0 .052.006h.041l.037-.002h.037l.064-.002c.015 0 .026.011.026.026l-.001.243v.125l-.001.121v.111l-.001.037a.127.127 0 0 0 .01.04c.01.024.035.043.061.041a.085.085 0 0 0 .057-.027c.015-.02.018-.045.018-.07v-.162l-.001-.121a50.43 50.43 0 0 1-.001-.341c0-.013.01-.023.023-.023l.104.003.037.001h.035l.032.001c.03-.003.03-.003.053-.03a.255.255 0 0 0 .011-.016c.015-.025.005-.06-.016-.08a.123.123 0 0 0-.084-.027h-.138a12.76 12.76 0 0 0-.2 0 8.278 8.278 0 0 0-.127 0h-.068c-.015 0-.03 0-.045.005a.103.103 0 0 0-.031.016Zm.885-.004a.098.098 0 0 0-.04.068c-.003.023-.002.047-.003.072v.621a.204.204 0 0 0 .013.065.089.089 0 0 0 .027.036c.02.015.046.013.067.001a.084.084 0 0 0 .043-.062.432.432 0 0 0 .004-.058v-.03l.001-.034v-.034l.002-.108.002-.074.002-.094a.03.03 0 0 1 .053-.018l.015.02c.032.041.064.084.095.127.01.014.02.03.035.04.022.013.052.008.076-.003a.122.122 0 0 0 .04-.038l.022-.028.025-.032.03-.038.058-.076.019-.024c.004-.006.013-.002.013.005l.003.209v.078l.002.112v.035a49.031 49.031 0 0 1 .001.042.112.112 0 0 0 .01.053c.012.024.036.044.063.042a.087.087 0 0 0 .056-.027c.015-.02.017-.045.018-.07v-.291a31.282 31.282 0 0 1 0-.243v-.161a.223.223 0 0 0-.005-.035c-.006-.029-.027-.054-.056-.058a.083.083 0 0 0-.049.01.127.127 0 0 0-.04.035l-.02.026-.105.136-.006.008a.145.145 0 0 1-.23.005l-.019-.023a6.52 6.52 0 0 1-.132-.167c-.025-.024-.061-.039-.09-.02ZM43.9 29.491c.54 0 1.028.129 1.467.386.446.25.794.605 1.046 1.068.252.455.378.987.378 1.596 0 .61-.126 1.146-.378 1.608-.252.455-.6.811-1.046 1.068-.439.25-.928.375-1.467.375-.59 0-1.077-.141-1.46-.423-.135-.1-.362-.012-.362.156 0 .099-.08.178-.18.178h-.624a.803.803 0 0 1-.803-.801v-6.53a.84.84 0 0 1 .84-.839h.05c.437 0 .792.354.792.791v.137c0 .68 1.066 1.23 1.747 1.23Zm-.291 4.691c.431 0 .784-.147 1.057-.44.28-.301.42-.701.42-1.2 0-.5-.14-.896-.42-1.19-.273-.3-.626-.451-1.057-.451-.431 0-.787.15-1.068.451-.273.294-.41.69-.41 1.19 0 .499.137.899.41 1.2.28.293.637.44 1.068.44ZM52.92 29.58a.84.84 0 0 1 .842.839v4.094c0 1.086-.27 1.893-.809 2.422-.539.529-1.323.793-2.35.793-.547 0-1.065-.07-1.554-.21a3.912 3.912 0 0 1-.743-.295c-.291-.154-.362-.52-.205-.81.206-.378.716-.472 1.117-.313a3.358 3.358 0 0 0 1.244.24c.56 0 .97-.132 1.23-.396.258-.264.388-.668.388-1.211 0-.073-.09-.11-.145-.063-.183.155-.39.279-.621.371a2.54 2.54 0 0 1-.95.176c-.761 0-1.365-.22-1.811-.66-.446-.448-.669-1.116-.669-2.005V30.42a.84.84 0 0 1 1.683 0v1.88c0 .962.392 1.443 1.175 1.443.403 0 .727-.132.971-.397.244-.271.367-.671.367-1.2V30.42a.84.84 0 0 1 .84-.84Z" }),
+        React.createElement("path", { fill: textColor !== null && textColor !== void 0 ? textColor : "#fff", d: "M86.977 24.2a1 1 0 0 1 1-1h.772a1 1 0 0 1 1 1v5.602a1 1 0 0 0 1 1h2.676a1 1 0 0 1 1 1V32a1 1 0 0 1-1 1h-5.448a1 1 0 0 1-1-1v-7.8ZM99.176 33.126c-.812 0-1.544-.168-2.198-.504a3.854 3.854 0 0 1-1.54-1.4c-.364-.597-.546-1.274-.546-2.03 0-.747.182-1.419.546-2.016a3.777 3.777 0 0 1 1.526-1.386c.654-.336 1.39-.504 2.212-.504.822 0 1.559.168 2.212.504a3.663 3.663 0 0 1 1.526 1.386c.364.588.546 1.26.546 2.016s-.182 1.433-.546 2.03a3.757 3.757 0 0 1-1.526 1.4c-.653.336-1.39.504-2.212.504Zm0-2.114c.467 0 .849-.159 1.148-.476.299-.327.448-.774.448-1.344 0-.56-.149-.998-.448-1.316-.299-.317-.681-.476-1.148-.476-.466 0-.85.159-1.148.476-.299.317-.448.756-.448 1.316 0 .57.15 1.017.448 1.344.299.317.681.476 1.148.476ZM111.854 25.412a1 1 0 0 1 1 1v5.202c0 1.41-.382 2.464-1.148 3.164-.765.71-1.866 1.064-3.304 1.064a8.416 8.416 0 0 1-2.1-.252 5.721 5.721 0 0 1-.913-.315c-.454-.203-.583-.755-.354-1.196.293-.563 1.049-.721 1.653-.529.025.009.051.016.076.024.476.15.943.224 1.4.224.7 0 1.214-.154 1.54-.462.327-.308.49-.765.49-1.372 0-.086-.11-.129-.173-.07-.504.476-1.198.714-2.081.714-.672 0-1.292-.15-1.862-.448a3.534 3.534 0 0 1-1.358-1.288c-.336-.56-.504-1.204-.504-1.932 0-.719.168-1.353.504-1.904.336-.56.789-.99 1.358-1.288a3.853 3.853 0 0 1 1.862-.462c.784 0 1.416.183 1.896.55.174.133.484.02.484-.198 0-.125.101-.226.226-.226h1.308Zm-3.284 5.082c.476 0 .868-.145 1.176-.434.318-.29.476-.662.476-1.12 0-.457-.154-.826-.462-1.106-.308-.29-.704-.434-1.19-.434-.485 0-.886.145-1.204.434-.308.28-.462.649-.462 1.106 0 .457.159.83.476 1.12.318.29.714.434 1.19.434ZM118.638 26.412a1 1 0 0 1 1-1h.66a1 1 0 0 1 1 1V32a1 1 0 0 1-1 1h-.66a1 1 0 0 1-1-1v-5.588Zm1.33-1.84c-.486 0-.878-.135-1.176-.406a1.304 1.304 0 0 1-.448-1.008c0-.401.149-.737.448-1.008.298-.27.69-.406 1.176-.406.485 0 .877.13 1.176.392.298.252.448.579.448.98 0 .42-.15.77-.448 1.05-.299.27-.691.406-1.176.406ZM127.968 25.286c.943 0 1.699.28 2.268.84.579.56.868 1.405.868 2.534V32a1 1 0 0 1-1 1h-.66a1 1 0 0 1-1-1v-2.906c0-1.036-.415-1.554-1.246-1.554-.457 0-.826.15-1.106.448-.27.299-.406.747-.406 1.344V32a1 1 0 0 1-1 1h-.66a1 1 0 0 1-1-1v-5.588a1 1 0 0 1 1-1h1.296c.132 0 .238.107.238.238 0 .214.272.33.449.21a3.518 3.518 0 0 1 1.959-.574ZM148.225 25.412a1 1 0 0 1 1 1v3.186c0 1.13-.327 2.002-.98 2.618-.644.607-1.554.91-2.73.91-.609 0-1.137-.098-1.583-.295-.556-.245-1.285-.24-1.842.005-.44.193-.965.29-1.573.29-1.186 0-2.1-.303-2.744-.91-.635-.616-.952-1.489-.952-2.618v-3.186a1 1 0 0 1 1-1h.66a1 1 0 0 1 1 1v3.004c0 .532.088.924.266 1.176.177.243.452.364.826.364.373 0 .653-.126.84-.378.186-.252.28-.64.28-1.162v-3.004a1 1 0 0 1 1-1h.66a1 1 0 0 1 1 1v3.004c0 .523.093.91.28 1.162.186.252.466.378.84.378.373 0 .648-.121.826-.364.177-.252.266-.644.266-1.176v-3.004a1 1 0 0 1 1-1h.66ZM150.89 26.412a1 1 0 0 1 1-1h.66a1 1 0 0 1 1 1V32a1 1 0 0 1-1 1h-.66a1 1 0 0 1-1-1v-5.588Zm1.33-1.84c-.486 0-.878-.135-1.176-.406a1.304 1.304 0 0 1-.448-1.008c0-.401.149-.737.448-1.008.298-.27.69-.406 1.176-.406.485 0 .877.13 1.176.392.298.252.448.579.448.98 0 .42-.15.77-.448 1.05-.299.27-.691.406-1.176.406ZM159.913 31.98c.147.417-.017.887-.442 1.001a4.454 4.454 0 0 1-1.155.145c-.989 0-1.75-.242-2.282-.728-.522-.485-.784-1.209-.784-2.17v-5.51a1 1 0 0 1 1-1h.673c.545 0 .987.442.987.987v.126c0 .476.386.861.861.861a.86.86 0 0 1 .861.861v.266a.86.86 0 0 1-.861.861.861.861 0 0 0-.861.861v1.66c0 .28.07.494.21.643.14.15.332.224.574.224.435 0 .954.163 1.099.572l.12.34ZM166.127 25.286c.942 0 1.698.28 2.268.84.578.56.868 1.405.868 2.534V32a1 1 0 0 1-1 1h-.66a1 1 0 0 1-1-1v-2.906c0-1.036-.416-1.554-1.246-1.554-.458 0-.826.15-1.106.448-.271.299-.406.747-.406 1.344V32a1 1 0 0 1-1 1h-.66a1 1 0 0 1-1-1v-8.388a1 1 0 0 1 1-1h.66a1 1 0 0 1 1 1v1.298c0 .457.592.74 1.022.586.392-.14.812-.21 1.26-.21ZM179.781 25.286c.69 0 1.316.163 1.876.49a3.403 3.403 0 0 1 1.344 1.372c.336.588.504 1.274.504 2.058 0 .784-.168 1.475-.504 2.072a3.522 3.522 0 0 1-1.344 1.372 3.739 3.739 0 0 1-1.876.476c-.851 0-2.114.675-2.114 1.526v.08a.984.984 0 0 1-.984.984h-.676a1 1 0 0 1-1-1v-8.304a1 1 0 0 1 1-1h1.332c.111 0 .202.09.202.202 0 .189.252.288.405.178.467-.337 1.079-.506 1.835-.506Zm-.56 5.726c.466 0 .849-.159 1.148-.476.298-.327.448-.77.448-1.33s-.15-.998-.448-1.316c-.299-.326-.682-.49-1.148-.49-.467 0-.85.164-1.148.49-.299.317-.448.756-.448 1.316s.149 1.003.448 1.33c.298.317.681.476 1.148.476ZM191.763 25.412a1 1 0 0 1 1 1V32a1 1 0 0 1-1 1h-1.332a.202.202 0 0 1-.202-.202c0-.188-.252-.288-.405-.178-.467.338-1.079.506-1.835.506-.69 0-1.32-.158-1.89-.476a3.621 3.621 0 0 1-1.344-1.386c-.326-.597-.49-1.288-.49-2.072s.164-1.47.49-2.058a3.52 3.52 0 0 1 1.344-1.372 3.82 3.82 0 0 1 1.89-.476c.704 0 1.29.161 1.757.484.141.097.357.004.357-.167 0-.105.086-.19.191-.19h1.469Zm-3.214 5.6c.467 0 .85-.159 1.148-.476.299-.327.448-.774.448-1.344 0-.56-.149-.998-.448-1.316-.298-.317-.681-.476-1.148-.476-.466 0-.849.159-1.148.476-.298.317-.448.756-.448 1.316 0 .57.15 1.017.448 1.344.299.317.682.476 1.148.476ZM197.234 33.126c-.635 0-1.26-.07-1.876-.21a6.913 6.913 0 0 1-.716-.212c-.46-.165-.623-.694-.427-1.141.241-.55.92-.758 1.492-.58a5.702 5.702 0 0 0 1.611.24c.429 0 .732-.043.91-.127.186-.093.28-.224.28-.392s-.112-.285-.336-.35c-.215-.075-.56-.145-1.036-.21a10.494 10.494 0 0 1-1.554-.294 2.39 2.39 0 0 1-1.092-.672c-.308-.326-.462-.784-.462-1.372 0-.485.144-.915.434-1.288.289-.383.709-.681 1.26-.896.56-.224 1.227-.336 2.002-.336.55 0 1.096.056 1.638.168.188.04.366.084.533.134.486.147.668.696.463 1.16-.234.53-.874.733-1.434.582a4.542 4.542 0 0 0-1.186-.154c-.42 0-.728.052-.924.154-.196.094-.294.22-.294.378 0 .178.107.304.322.378.214.066.569.136 1.064.21.625.094 1.143.2 1.554.322.41.122.765.346 1.064.672.308.318.462.765.462 1.344 0 .476-.145.905-.434 1.288-.29.373-.719.668-1.288.882-.56.215-1.237.322-2.03.322ZM206.906 25.286c.69 0 1.316.159 1.876.476a3.403 3.403 0 0 1 1.344 1.372c.336.588.504 1.274.504 2.058 0 .784-.168 1.475-.504 2.072a3.497 3.497 0 0 1-1.344 1.386 3.739 3.739 0 0 1-1.876.476c-.756 0-1.368-.168-1.835-.506-.153-.11-.405-.01-.405.178a.202.202 0 0 1-.202.202h-1.332a1 1 0 0 1-1-1v-8.388a1 1 0 0 1 1-1h.66a1 1 0 0 1 1 1v.14c0 .849 1.265 1.534 2.114 1.534Zm-.56 5.726c.466 0 .849-.159 1.148-.476.298-.327.448-.774.448-1.344 0-.56-.15-.998-.448-1.316-.299-.317-.682-.476-1.148-.476-.467 0-.85.159-1.148.476-.299.317-.448.756-.448 1.316 0 .57.149 1.017.448 1.344.298.317.681.476 1.148.476ZM218.846 25.412a1 1 0 0 1 1 1v5.202c0 1.41-.378 2.464-1.134 3.164-.746.71-1.824 1.064-3.234 1.064a8.187 8.187 0 0 1-2.072-.252 5.524 5.524 0 0 1-.887-.314c-.446-.204-.57-.75-.344-1.186.294-.566 1.058-.72 1.665-.525l.028.01c.458.148.91.223 1.358.223.672 0 1.167-.154 1.484-.462.318-.308.476-.765.476-1.372 0-.063-.076-.096-.125-.055-.547.466-1.214.7-2.003.7-.98 0-1.764-.29-2.352-.869-.578-.578-.868-1.446-.868-2.604v-2.724a1 1 0 0 1 1-1h.66a1 1 0 0 1 1 1v2.29c0 .579.108.999.322 1.26.215.262.528.392.938.392.42 0 .761-.15 1.022-.448.271-.298.406-.746.406-1.344v-2.15a1 1 0 0 1 1-1h.66Z" })));
+}
+function IdentifyWithPasby(_a) {
+    var background = _a.background, logoBgk = _a.logoBgk, logoTextColor = _a.logoTextColor, textColor = _a.textColor, props = __rest(_a, ["background", "logoBgk", "logoTextColor", "textColor"]);
+    return (React.createElement("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: 252, height: 56, fill: "none" }, props),
+        React.createElement("rect", { width: 252, height: 56, fill: background !== null && background !== void 0 ? background : "#DD3E3E", rx: 8 }),
+        React.createElement("path", { fill: logoBgk !== null && logoBgk !== void 0 ? logoBgk : "#fff", d: "M35.818 42.907a13.71 13.71 0 0 1-6.125-10.203l-.636-6.935a13.7 13.7 0 0 1 4.175-11.15l5.022-4.804a13.76 13.76 0 0 1 11.344-3.692l6.904.927a13.744 13.744 0 0 1 9.956 6.544l3.588 5.978a13.69 13.69 0 0 1 1.085 11.847l-2.437 6.513a13.73 13.73 0 0 1-8.614 8.24l-6.614 2.152a13.767 13.767 0 0 1-11.82-1.586z" }),
+        React.createElement("path", { fill: logoTextColor !== null && logoTextColor !== void 0 ? logoTextColor : "#DD3E3E", d: "M43.9 18.756c.54 0 1.028.128 1.467.385.446.25.794.606 1.046 1.068.252.455.378.987.378 1.597s-.126 1.145-.378 1.607c-.252.455-.6.811-1.046 1.068-.439.25-.928.375-1.467.375-.68 0-1.747.55-1.747 1.23v.057c0 .42-.341.76-.762.76h-.08a.84.84 0 0 1-.84-.839v-6.419c0-.442.36-.801.803-.801h.625c.098 0 .179.08.179.178 0 .168.227.256.363.156.382-.282.868-.422 1.46-.422zm-.291 4.69c.431 0 .784-.147 1.057-.44.28-.301.42-.701.42-1.2 0-.5-.14-.896-.42-1.19-.273-.3-.626-.451-1.057-.451s-.787.15-1.068.451c-.273.294-.41.69-.41 1.19 0 .499.137.899.41 1.2.28.293.637.44 1.068.44zM52.964 18.844a.84.84 0 0 1 .841.84v4.282c0 .443-.36.802-.803.802h-.625a.179.179 0 0 1-.179-.179c0-.168-.227-.256-.363-.155-.38.281-.863.422-1.449.422a2.994 2.994 0 0 1-1.488-.375 2.665 2.665 0 0 1-1.035-1.068c-.252-.462-.378-.998-.378-1.607s.126-1.146.378-1.608a2.666 2.666 0 0 1 1.035-1.068c.446-.25.942-.375 1.488-.375.56 0 1.026.136 1.4.408.129.093.337.01.337-.148 0-.095.077-.171.171-.171zm-2.286 4.602a1.4 1.4 0 0 0 1.057-.44c.28-.301.42-.701.42-1.2 0-.5-.14-.896-.42-1.19a1.383 1.383 0 0 0-1.057-.451c-.432 0-.788.15-1.068.451-.28.294-.42.69-.42 1.19 0 .499.14.899.42 1.2.28.293.636.44 1.068.44zM57.315 24.856c-.482 0-.953-.06-1.413-.177a5 5 0 0 1-.595-.198c-.305-.126-.405-.483-.27-.783.172-.375.643-.512 1.032-.372a3.984 3.984 0 0 0 1.311.23c.711 0 1.067-.18 1.067-.54 0-.168-.097-.29-.29-.363s-.493-.135-.896-.187a8.486 8.486 0 0 1-1.176-.253 1.855 1.855 0 0 1-.808-.506c-.223-.243-.335-.588-.335-1.036 0-.374.104-.704.313-.99.216-.294.525-.522.927-.683.41-.162.892-.242 1.446-.242.41 0 .816.047 1.218.143.168.036.323.078.466.126.326.11.44.483.297.795-.166.362-.609.496-.99.379a3.377 3.377 0 0 0-.991-.144c-.36 0-.63.051-.81.154-.179.103-.269.235-.269.396 0 .184.097.312.291.386.194.073.504.143.928.209.474.08.863.169 1.165.264.302.088.564.254.787.496.223.242.334.58.334 1.013 0 .367-.108.694-.323.98-.216.286-.532.51-.95.671-.41.155-.898.232-1.466.232zM56.644 34.716a3.816 3.816 0 0 1 .08.072 1.287 1.287 0 0 1 .364.902v.04c-.002.102-.01.198-.033.297l-.005.02a1.276 1.276 0 0 1-.246.51l-.012.017a1.27 1.27 0 0 1-.817.44c-.161.014-.323.011-.481-.027l-.021-.005a1.222 1.222 0 0 1-.751-.54 1.422 1.422 0 0 1-.177-1.024l.018-.066.007-.022c.099-.337.329-.613.63-.782a1.288 1.288 0 0 1 1.444.168zm-1.684.612c-.019.014-.034.035-.032.058a.08.08 0 0 0 .048.067.131.131 0 0 0 .052.006h.041l.037-.002h.037l.064-.002c.015 0 .026.011.026.026l-.001.243v.125l-.001.121v.111l-.001.037a.127.127 0 0 0 .01.04c.01.024.035.043.061.041a.085.085 0 0 0 .057-.027c.015-.02.018-.045.018-.07v-.163l-.001-.12v-.123l-.001-.218c0-.013.01-.023.023-.023l.104.003.037.001h.035l.032.001c.03-.003.03-.003.052-.03a.255.255 0 0 0 .012-.016c.015-.025.005-.06-.016-.08a.123.123 0 0 0-.084-.027h-.138a12.76 12.76 0 0 0-.2 0 8.278 8.278 0 0 0-.127 0h-.068c-.015 0-.03 0-.045.005a.103.103 0 0 0-.031.016zm.885-.004a.098.098 0 0 0-.04.068c-.003.023-.002.047-.003.072v.621a.204.204 0 0 0 .013.065.089.089 0 0 0 .027.036c.02.015.046.013.067.001a.084.084 0 0 0 .043-.062.432.432 0 0 0 .004-.058v-.03l.001-.034v-.034l.002-.108.002-.074.001-.094a.03.03 0 0 1 .054-.018l.015.02c.032.041.064.084.095.127.01.014.02.03.035.04.022.013.052.008.076-.003a.122.122 0 0 0 .04-.038l.022-.028.025-.032.03-.038.058-.076.019-.024c.004-.006.013-.002.013.005l.003.209v.078l.002.112v.035a49.031 49.031 0 0 1 .001.042.112.112 0 0 0 .01.053c.012.024.036.044.063.042a.087.087 0 0 0 .056-.027c.015-.02.017-.045.018-.07v-.291a31.282 31.282 0 0 1 0-.243v-.161a.223.223 0 0 0-.005-.035c-.006-.029-.027-.054-.056-.058a.083.083 0 0 0-.049.01.127.127 0 0 0-.04.035l-.02.026-.105.136-.006.008a.145.145 0 0 1-.23.005 6.74 6.74 0 0 1-.151-.19c-.025-.024-.061-.039-.09-.02zM43.9 29.491c.54 0 1.028.129 1.467.386.446.25.794.605 1.046 1.068.252.455.378.987.378 1.597s-.126 1.145-.378 1.607c-.252.455-.6.811-1.046 1.068-.439.25-.928.375-1.467.375-.59 0-1.077-.141-1.46-.423-.135-.1-.362-.012-.362.156 0 .099-.08.178-.18.178h-.624a.803.803 0 0 1-.803-.801v-6.53a.84.84 0 0 1 .84-.839h.05c.437 0 .792.354.792.791v.137c0 .68 1.066 1.23 1.747 1.23zm-.291 4.691c.431 0 .784-.147 1.057-.44.28-.301.42-.701.42-1.2s-.14-.896-.42-1.19c-.273-.3-.626-.451-1.057-.451s-.787.15-1.068.451c-.273.294-.41.69-.41 1.19s.137.899.41 1.2c.28.293.637.44 1.068.44zM52.92 29.58a.84.84 0 0 1 .842.839v4.093c0 1.087-.27 1.894-.809 2.423-.539.528-1.323.793-2.35.793-.547 0-1.065-.07-1.554-.21a3.912 3.912 0 0 1-.743-.295c-.291-.154-.362-.52-.205-.81.206-.378.716-.472 1.117-.313a3.358 3.358 0 0 0 1.244.24c.56 0 .97-.132 1.23-.396.258-.264.388-.668.388-1.211 0-.073-.09-.11-.145-.063-.183.155-.39.279-.621.371a2.54 2.54 0 0 1-.95.176c-.761 0-1.365-.22-1.811-.66-.446-.448-.669-1.116-.669-2.004v-2.134a.84.84 0 0 1 1.683 0v1.88c0 .962.392 1.443 1.175 1.443.403 0 .727-.132.971-.397.244-.271.367-.671.367-1.2V30.42a.84.84 0 0 1 .84-.84z" }),
+        React.createElement("g", { fill: textColor !== null && textColor !== void 0 ? textColor : "#fff" },
+            React.createElement("path", { d: "M89.675 25.342a.791.791 0 0 0-.791.791v3.934c0 .437.354.791.79.791.437 0 .792.354.792.791V32a1 1 0 0 1-1 1h-3.95a1 1 0 0 1-1-1v-.344c0-.44.357-.798.798-.798s.798-.357.798-.798v-3.92c0-.44-.358-.798-.798-.798s-.798-.357-.798-.798V24.2a1 1 0 0 1 1-1h3.95a1 1 0 0 1 1 1v.351a.79.79 0 0 1-.791.791zM98.902 22.612a1 1 0 0 1 1 1V32a1 1 0 0 1-1 1H97.57a.202.202 0 0 1-.202-.202c0-.188-.252-.288-.404-.177-.466.337-1.073.505-1.822.505-.69 0-1.32-.158-1.89-.476a3.59 3.59 0 0 1-1.358-1.386c-.327-.597-.49-1.288-.49-2.072s.163-1.47.49-2.058a3.491 3.491 0 0 1 1.358-1.372c.57-.317 1.2-.476 1.89-.476.83 0 2.1-.693 2.1-1.523v-.166c0-.544.44-.985.985-.985zm-3.2 8.4a1.49 1.49 0 0 0 1.134-.476c.299-.326.448-.774.448-1.344 0-.56-.15-.998-.448-1.316-.29-.317-.667-.476-1.134-.476-.467 0-.85.159-1.148.476-.299.318-.448.756-.448 1.316 0 .57.15 1.018.448 1.344.299.318.681.476 1.148.476zM105.673 31.096c.364 0 .677-.051.938-.154.499-.189 1.101-.2 1.469.186l.1.105c.356.374.375.976-.059 1.255-.661.426-1.504.638-2.532.638-.886 0-1.666-.168-2.338-.504s-1.194-.802-1.568-1.4c-.364-.597-.546-1.274-.546-2.03 0-.746.182-1.414.546-2.002a3.804 3.804 0 0 1 1.498-1.4c.644-.336 1.363-.504 2.156-.504.738 0 1.41.154 2.016.462a3.487 3.487 0 0 1 1.47 1.33c.233.37.392.787.476 1.25.085.472-.271.887-.742.977l-3.333.638c-.644.123-.94.864-.313 1.053.223.067.477.1.762.1zm-.322-3.92c-.457 0-.83.145-1.12.434l-.027.027c-.46.471.172 1.067.818.94l.874-.17c.497-.097.805-.643.393-.937a1.518 1.518 0 0 0-.938-.294zM115.538 25.286c.942 0 1.698.28 2.268.84.578.56.868 1.405.868 2.534V32a1 1 0 0 1-1 1h-.66a1 1 0 0 1-1-1v-2.906c0-1.036-.416-1.554-1.246-1.554-.458 0-.826.15-1.106.448-.271.299-.406.747-.406 1.344V32a1 1 0 0 1-1 1h-.66a1 1 0 0 1-1-1v-5.588a1 1 0 0 1 1-1h1.296c.131 0 .238.107.238.238 0 .214.272.33.448.21.189-.13.394-.236.616-.322.41-.168.858-.252 1.344-.252zM124.978 31.98c.147.416-.016.887-.442 1.001a4.457 4.457 0 0 1-1.154.145c-.99 0-1.75-.243-2.282-.728-.523-.485-.784-1.209-.784-2.17v-5.51a1 1 0 0 1 1-1h.673c.545 0 .987.442.987.987v.126a.86.86 0 0 0 .861.861c.475 0 .861.386.861.861v.266a.861.861 0 0 1-.861.861.86.86 0 0 0-.861.861v1.66c0 .28.07.494.21.643.14.15.331.224.574.224.434 0 .953.163 1.098.572zM126.25 26.412a1 1 0 0 1 1-1h.66a1 1 0 0 1 1 1V32a1 1 0 0 1-1 1h-.66a1 1 0 0 1-1-1zm1.33-1.84c-.485 0-.877-.135-1.176-.406a1.304 1.304 0 0 1-.448-1.008c0-.401.149-.737.448-1.008.299-.27.691-.406 1.176-.406s.877.13 1.176.392c.299.252.448.579.448.98 0 .42-.149.77-.448 1.05-.299.27-.691.406-1.176.406zM133.229 25.524c0 .093.075.168.168.168h.735c.498 0 .903.404.903.903v.217c0 .48-.389.868-.868.868a.868.868 0 0 0-.868.868V32a1 1 0 0 1-1 1h-.66a1 1 0 0 1-1-1v-6.504c0-.924.275-1.657.826-2.198.56-.541 1.339-.812 2.338-.812.336 0 .662.033.98.098l.049.01c.453.1.626.593.473 1.03l-.119.339c-.144.412-.639.567-1.075.567-.28 0-.5.084-.658.252-.15.168-.224.415-.224.742zM142.992 25.412a1 1 0 0 1 1 1v5.202c0 1.41-.378 2.464-1.134 3.164-.747.71-1.825 1.064-3.234 1.064a8.18 8.18 0 0 1-2.072-.252 5.524 5.524 0 0 1-.887-.314c-.447-.204-.57-.75-.344-1.186.294-.566 1.057-.72 1.665-.525a4.353 4.353 0 0 0 1.386.233c.672 0 1.166-.154 1.484-.462.317-.308.476-.765.476-1.372 0-.063-.077-.097-.125-.055-.547.466-1.215.7-2.003.7-.98 0-1.764-.29-2.352-.869-.579-.579-.868-1.447-.868-2.604v-2.724a1 1 0 0 1 1-1h.66a1 1 0 0 1 1 1v2.29c0 .579.107.999.322 1.26.214.261.527.392.938.392.42 0 .76-.15 1.022-.448.27-.299.406-.747.406-1.344v-2.15a1 1 0 0 1 1-1zM161.155 25.412a1 1 0 0 1 1 1v3.186c0 1.13-.326 2.002-.98 2.618-.644.607-1.554.91-2.73.91-.609 0-1.136-.098-1.583-.295-.555-.245-1.285-.24-1.841.005-.44.193-.965.29-1.574.29-1.185 0-2.1-.303-2.744-.91-.634-.616-.952-1.488-.952-2.618v-3.186a1 1 0 0 1 1-1h.66a1 1 0 0 1 1 1v3.004c0 .532.089.924.266 1.176.178.243.453.364.826.364.374 0 .654-.126.84-.378.187-.252.28-.64.28-1.162v-3.004a1 1 0 0 1 1-1h.66a1 1 0 0 1 1 1v3.004c0 .523.094.91.28 1.162.187.252.467.378.84.378.374 0 .649-.121.826-.364.178-.252.266-.644.266-1.176v-3.004a1 1 0 0 1 1-1zM163.82 26.412a1 1 0 0 1 1-1h.66a1 1 0 0 1 1 1V32a1 1 0 0 1-1 1h-.66a1 1 0 0 1-1-1zm1.33-1.84c-.485 0-.877-.135-1.176-.406a1.307 1.307 0 0 1-.448-1.008c0-.401.15-.737.448-1.008.299-.27.691-.406 1.176-.406.486 0 .878.13 1.176.392.299.252.448.579.448.98 0 .42-.149.77-.448 1.05-.298.27-.69.406-1.176.406zM172.844 31.98c.147.416-.017.887-.443 1.001a4.45 4.45 0 0 1-1.154.145c-.989 0-1.75-.243-2.282-.728-.523-.485-.784-1.209-.784-2.17v-5.51a1 1 0 0 1 1-1h.673c.545 0 .987.442.987.987v.126c0 .476.386.861.861.861a.86.86 0 0 1 .861.861v.266a.86.86 0 0 1-.861.861.861.861 0 0 0-.861.861v1.66c0 .28.07.494.21.643.14.15.331.224.574.224.434 0 .954.163 1.098.572zM179.057 25.286c.943 0 1.699.28 2.268.84.579.56.868 1.405.868 2.534V32a1 1 0 0 1-1 1h-.66a1 1 0 0 1-1-1v-2.906c0-1.036-.415-1.554-1.246-1.554-.457 0-.826.15-1.106.448-.27.299-.406.747-.406 1.344V32a1 1 0 0 1-1 1h-.66a1 1 0 0 1-1-1v-8.388a1 1 0 0 1 1-1h.66a1 1 0 0 1 1 1v1.298c0 .457.593.74 1.022.586.392-.14.812-.21 1.26-.21zM192.712 25.286c.69 0 1.316.163 1.876.49a3.403 3.403 0 0 1 1.344 1.372c.336.588.504 1.274.504 2.058s-.168 1.475-.504 2.072a3.522 3.522 0 0 1-1.344 1.372 3.739 3.739 0 0 1-1.876.476c-.851 0-2.114.675-2.114 1.526v.08a.984.984 0 0 1-.984.984h-.676a1 1 0 0 1-1-1v-8.304a1 1 0 0 1 1-1h1.332c.111 0 .202.09.202.202 0 .189.251.288.404.178.468-.337 1.079-.506 1.836-.506zm-.56 5.726c.466 0 .849-.159 1.148-.476.298-.327.448-.77.448-1.33s-.15-.999-.448-1.316c-.299-.327-.682-.49-1.148-.49-.467 0-.85.164-1.148.49-.299.317-.448.756-.448 1.316s.149 1.003.448 1.33c.298.317.681.476 1.148.476zM204.694 25.412a1 1 0 0 1 1 1V32a1 1 0 0 1-1 1h-1.332a.202.202 0 0 1-.202-.202c0-.188-.252-.288-.405-.178-.467.338-1.079.506-1.835.506a3.813 3.813 0 0 1-1.89-.476 3.621 3.621 0 0 1-1.344-1.386c-.327-.597-.49-1.288-.49-2.072s.163-1.47.49-2.058a3.52 3.52 0 0 1 1.344-1.372 3.814 3.814 0 0 1 1.89-.476c.704 0 1.289.161 1.757.484.141.097.357.004.357-.167a.19.19 0 0 1 .191-.19zm-3.214 5.6c.467 0 .849-.159 1.148-.476.299-.327.448-.775.448-1.344 0-.56-.149-.999-.448-1.316-.299-.317-.681-.476-1.148-.476s-.849.159-1.148.476c-.299.317-.448.756-.448 1.316 0 .57.149 1.017.448 1.344.299.317.681.476 1.148.476zM210.164 33.126c-.634 0-1.26-.07-1.876-.21a6.987 6.987 0 0 1-.716-.212c-.459-.165-.622-.694-.426-1.141.241-.55.919-.758 1.492-.58a5.708 5.708 0 0 0 1.61.24c.43 0 .733-.043.91-.127.187-.093.28-.224.28-.392s-.112-.285-.336-.35c-.214-.075-.56-.145-1.036-.21a10.545 10.545 0 0 1-1.554-.294 2.39 2.39 0 0 1-1.092-.672c-.308-.327-.462-.784-.462-1.372 0-.485.145-.915.434-1.288.29-.383.71-.681 1.26-.896.56-.224 1.228-.336 2.002-.336a8.06 8.06 0 0 1 1.638.168c.189.04.367.084.534.134.486.147.668.696.463 1.16-.235.53-.875.733-1.435.582a4.537 4.537 0 0 0-1.186-.154c-.42 0-.728.051-.924.154-.196.093-.294.22-.294.378 0 .177.108.303.322.378.215.065.57.135 1.064.21.626.093 1.144.2 1.554.322.411.121.766.345 1.064.672.308.317.462.765.462 1.344 0 .476-.144.905-.434 1.288-.289.373-.718.667-1.288.882-.56.215-1.236.322-2.03.322zM219.837 25.286c.69 0 1.316.159 1.876.476a3.403 3.403 0 0 1 1.344 1.372c.336.588.504 1.274.504 2.058s-.168 1.475-.504 2.072a3.497 3.497 0 0 1-1.344 1.386 3.739 3.739 0 0 1-1.876.476c-.757 0-1.368-.168-1.836-.506-.153-.11-.404-.01-.404.178a.202.202 0 0 1-.202.202h-1.332a1 1 0 0 1-1-1v-8.388a1 1 0 0 1 1-1h.66a1 1 0 0 1 1 1v.14c0 .849 1.265 1.534 2.114 1.534zm-.56 5.726c.466 0 .849-.159 1.148-.476.298-.327.448-.775.448-1.344 0-.56-.15-.999-.448-1.316-.299-.317-.682-.476-1.148-.476-.467 0-.85.159-1.148.476-.299.317-.448.756-.448 1.316 0 .57.149 1.017.448 1.344.298.317.681.476 1.148.476zM231.777 25.412a1 1 0 0 1 1 1v5.202c0 1.41-.378 2.464-1.134 3.164-.747.71-1.825 1.064-3.234 1.064a8.187 8.187 0 0 1-2.072-.252 5.524 5.524 0 0 1-.887-.314c-.446-.204-.57-.75-.344-1.186.294-.566 1.058-.72 1.665-.525a4.353 4.353 0 0 0 1.386.233c.672 0 1.167-.154 1.484-.462s.476-.765.476-1.372c0-.063-.077-.097-.125-.055-.547.466-1.215.7-2.003.7-.98 0-1.764-.29-2.352-.869-.579-.579-.868-1.447-.868-2.604v-2.724a1 1 0 0 1 1-1h.66a1 1 0 0 1 1 1v2.29c0 .579.107.999.322 1.26.215.261.527.392.938.392.42 0 .761-.15 1.022-.448.271-.299.406-.747.406-1.344v-2.15a1 1 0 0 1 1-1z" }))));
+}
+function LinkWithPasby(_a) {
+    var background = _a.background, logoBgk = _a.logoBgk, logoTextColor = _a.logoTextColor, textColor = _a.textColor, props = __rest(_a, ["background", "logoBgk", "logoTextColor", "textColor"]);
+    return (React.createElement("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", width: 252, height: 56, fill: "none" }, props),
+        React.createElement("rect", { width: 252, height: 56, fill: background !== null && background !== void 0 ? background : "#DD3E3E", rx: 8 }),
+        React.createElement("path", { fill: logoBgk !== null && logoBgk !== void 0 ? logoBgk : "#fff", d: "M35.818 42.907a13.71 13.71 0 0 1-6.125-10.203l-.636-6.935a13.7 13.7 0 0 1 4.175-11.15l5.022-4.804a13.76 13.76 0 0 1 11.344-3.692l6.904.927a13.744 13.744 0 0 1 9.956 6.544l3.588 5.978a13.69 13.69 0 0 1 1.085 11.847l-2.437 6.513a13.73 13.73 0 0 1-8.614 8.24l-6.614 2.152a13.767 13.767 0 0 1-11.82-1.586z" }),
+        React.createElement("path", { fill: logoTextColor !== null && logoTextColor !== void 0 ? logoTextColor : "#DD3E3E", d: "M43.9 18.756c.54 0 1.028.128 1.467.385.446.25.794.606 1.046 1.068.252.455.378.987.378 1.597s-.126 1.145-.378 1.607a2.74 2.74 0 0 1-1.046 1.068c-.439.25-.928.375-1.467.375-.68 0-1.747.55-1.747 1.23v.057a.76.76 0 0 1-.762.76h-.08a.84.84 0 0 1-.84-.839v-6.419c0-.442.36-.801.803-.801h.625a.18.18 0 0 1 .179.178c0 .168.227.256.363.156.382-.282.868-.422 1.46-.422zm-.291 4.69c.431 0 .784-.147 1.057-.44.28-.301.42-.701.42-1.2 0-.5-.14-.896-.42-1.19-.273-.3-.626-.451-1.057-.451s-.787.15-1.068.451c-.273.294-.41.69-.41 1.19 0 .499.137.899.41 1.2.28.293.637.44 1.068.44zm9.355-4.602a.84.84 0 0 1 .841.84v4.282c0 .443-.36.802-.803.802h-.625a.179.179 0 0 1-.179-.179c0-.168-.227-.256-.363-.155-.38.281-.863.422-1.449.422a2.994 2.994 0 0 1-1.488-.375 2.665 2.665 0 0 1-1.035-1.068c-.252-.462-.378-.998-.378-1.607s.126-1.146.378-1.608a2.666 2.666 0 0 1 1.035-1.068 2.99 2.99 0 0 1 1.488-.375c.56 0 1.026.136 1.4.408.129.093.337.01.337-.148a.17.17 0 0 1 .171-.171zm-2.286 4.602a1.4 1.4 0 0 0 1.057-.44c.28-.301.42-.701.42-1.2 0-.5-.14-.896-.42-1.19a1.383 1.383 0 0 0-1.057-.451c-.432 0-.788.15-1.068.451-.28.294-.42.69-.42 1.19 0 .499.14.899.42 1.2.28.293.636.44 1.068.44zm6.637 1.41a5.71 5.71 0 0 1-1.413-.177 5 5 0 0 1-.595-.198c-.305-.126-.405-.483-.27-.783.172-.375.643-.512 1.032-.372a3.984 3.984 0 0 0 1.311.23c.711 0 1.067-.18 1.067-.54 0-.168-.097-.29-.29-.363s-.493-.135-.896-.187a8.486 8.486 0 0 1-1.176-.253 1.855 1.855 0 0 1-.808-.506c-.223-.243-.335-.588-.335-1.036 0-.374.104-.704.313-.99.216-.294.525-.522.927-.683.41-.162.892-.242 1.446-.242.41 0 .816.047 1.218.143.168.036.323.078.466.126.326.11.44.483.297.795-.166.362-.609.496-.99.379a3.377 3.377 0 0 0-.991-.144c-.36 0-.63.051-.81.154-.179.103-.269.235-.269.396 0 .184.097.312.291.386.194.073.504.143.928.209.474.08.863.169 1.165.264.302.088.564.254.787.496.223.242.334.58.334 1.013 0 .367-.108.694-.323.98-.216.286-.532.51-.95.671-.41.155-.898.232-1.466.232zm-.671 9.86a3.816 3.816 0 0 1 .08.072 1.287 1.287 0 0 1 .364.902v.04c-.002.102-.01.198-.033.297l-.005.02a1.276 1.276 0 0 1-.246.51l-.012.017a1.27 1.27 0 0 1-.817.44 1.495 1.495 0 0 1-.481-.027l-.021-.005a1.222 1.222 0 0 1-.751-.54 1.422 1.422 0 0 1-.177-1.024l.018-.066.007-.022c.099-.337.329-.613.63-.782a1.288 1.288 0 0 1 1.444.168zm-1.684.612c-.019.014-.034.035-.032.058a.08.08 0 0 0 .048.067.131.131 0 0 0 .052.006h.041l.037-.002h.037l.064-.002c.015 0 .026.011.026.026l-.001.243v.125l-.001.121v.111l-.001.037a.127.127 0 0 0 .01.04c.01.024.035.043.061.041a.085.085 0 0 0 .057-.027.113.113 0 0 0 .018-.07v-.163l-.001-.12v-.123l-.001-.218c0-.013.01-.023.023-.023l.104.003.037.001h.035l.032.001c.03-.003.03-.003.052-.03a.255.255 0 0 0 .012-.016c.015-.025.005-.06-.016-.08a.123.123 0 0 0-.084-.027h-.138a12.76 12.76 0 0 0-.2 0 8.278 8.278 0 0 0-.127 0h-.068c-.015 0-.03 0-.045.005a.103.103 0 0 0-.031.016zm.885-.004a.098.098 0 0 0-.04.068c-.003.023-.002.047-.003.072v.621a.204.204 0 0 0 .013.065.089.089 0 0 0 .027.036c.02.015.046.013.067.001a.084.084 0 0 0 .043-.062.432.432 0 0 0 .004-.058v-.03l.001-.034v-.034l.002-.108.002-.074.001-.094a.03.03 0 0 1 .054-.018l.015.02c.032.041.064.084.095.127.01.014.02.03.035.04.022.013.052.008.076-.003a.122.122 0 0 0 .04-.038l.022-.028.025-.032.03-.038.058-.076.019-.024c.004-.006.013-.002.013.005l.003.209v.078l.002.112v.035a49.031 49.031 0 0 1 .001.042.112.112 0 0 0 .01.053c.012.024.036.044.063.042a.087.087 0 0 0 .056-.027c.015-.02.017-.045.018-.07v-.291a31.282 31.282 0 0 1 0-.243v-.161a.223.223 0 0 0-.005-.035c-.006-.029-.027-.054-.056-.058a.083.083 0 0 0-.049.01.127.127 0 0 0-.04.035l-.02.026-.105.136-.006.008a.145.145 0 0 1-.23.005 6.74 6.74 0 0 1-.151-.19c-.025-.024-.061-.039-.09-.02zM43.9 29.491c.54 0 1.028.129 1.467.386.446.25.794.605 1.046 1.068.252.455.378.987.378 1.597s-.126 1.145-.378 1.607a2.74 2.74 0 0 1-1.046 1.068c-.439.25-.928.375-1.467.375-.59 0-1.077-.141-1.46-.423-.135-.1-.362-.012-.362.156 0 .099-.08.178-.18.178h-.624a.803.803 0 0 1-.803-.801v-6.53a.84.84 0 0 1 .84-.839h.05c.437 0 .792.354.792.791v.137c0 .68 1.066 1.23 1.747 1.23zm-.291 4.691c.431 0 .784-.147 1.057-.44.28-.301.42-.701.42-1.2s-.14-.896-.42-1.19c-.273-.3-.626-.451-1.057-.451s-.787.15-1.068.451c-.273.294-.41.69-.41 1.19s.137.899.41 1.2c.28.293.637.44 1.068.44zm9.311-4.602a.84.84 0 0 1 .842.839v4.093c0 1.087-.27 1.894-.809 2.423-.539.528-1.323.793-2.35.793a5.62 5.62 0 0 1-1.554-.21 3.912 3.912 0 0 1-.743-.295c-.291-.154-.362-.52-.205-.81.206-.378.716-.472 1.117-.313a3.358 3.358 0 0 0 1.244.24c.56 0 .97-.132 1.23-.396.258-.264.388-.668.388-1.211 0-.073-.09-.11-.145-.063a2.23 2.23 0 0 1-.621.371 2.54 2.54 0 0 1-.95.176c-.761 0-1.365-.22-1.811-.66-.446-.448-.669-1.116-.669-2.004v-2.134a.84.84 0 0 1 1.683 0v1.88c0 .962.392 1.443 1.175 1.443.403 0 .727-.132.971-.397.244-.271.367-.671.367-1.2V30.42a.84.84 0 0 1 .84-.84z" }),
+        React.createElement("g", { fill: textColor !== null && textColor !== void 0 ? textColor : "#fff" },
+            React.createElement("path", { d: "M84.977 24.2a1 1 0 0 1 1-1h.772a1 1 0 0 1 1 1v5.602a1 1 0 0 0 1 1h2.676a1 1 0 0 1 1 1V32a1 1 0 0 1-1 1h-5.448a1 1 0 0 1-1-1zm8.418 2.212a1 1 0 0 1 1-1h.66a1 1 0 0 1 1 1V32a1 1 0 0 1-1 1h-.66a1 1 0 0 1-1-1zm1.33-1.84c-.485 0-.877-.135-1.175-.406a1.305 1.305 0 0 1-.449-1.008c0-.401.15-.737.449-1.008.298-.27.69-.406 1.175-.406s.878.13 1.177.392c.298.252.447.579.447.98 0 .42-.149.77-.448 1.05-.298.27-.69.406-1.175.406zm8.001.714c.943 0 1.699.28 2.268.84.579.56.868 1.405.868 2.534V32a1 1 0 0 1-1 1h-.66a1 1 0 0 1-1-1v-2.906c0-1.036-.415-1.554-1.246-1.554-.457 0-.826.15-1.106.448-.271.299-.406.747-.406 1.344V32a1 1 0 0 1-1 1h-.66a1 1 0 0 1-1-1v-5.588a1 1 0 0 1 1-1h1.296c.132 0 .238.107.238.238 0 .214.272.33.449.21a3.518 3.518 0 0 1 1.959-.574zm8.763 5.695a.728.728 0 0 0-1.297.455V32a1 1 0 0 1-1 1h-.66a1 1 0 0 1-1-1v-8.388a1 1 0 0 1 1-1h.66a1 1 0 0 1 1 1v2.076c0 .884 1.064 1.333 1.698.716l.727-.708a1 1 0 0 1 .698-.284h.38c.884 0 1.333 1.062.718 1.696l-.896.925a1 1 0 0 0-.068 1.314l1.601 2.035a1 1 0 0 1-.785 1.618h-.68a1 1 0 0 1-.781-.375zm21.091-5.569a1 1 0 0 1 1 1v3.186c0 1.13-.327 2.002-.98 2.618-.644.607-1.554.91-2.73.91-.609 0-1.136-.098-1.583-.295a2.4 2.4 0 0 0-1.841.005c-.441.193-.965.29-1.574.29-1.185 0-2.1-.303-2.744-.91-.635-.616-.952-1.488-.952-2.618v-3.186a1 1 0 0 1 1-1h.66a1 1 0 0 1 1 1v3.004c0 .532.089.924.266 1.176.177.243.453.364.826.364s.653-.126.84-.378.28-.64.28-1.162v-3.004a1 1 0 0 1 1-1h.66a1 1 0 0 1 1 1v3.004c0 .523.093.91.28 1.162s.467.378.84.378.649-.121.826-.364c.177-.252.266-.644.266-1.176v-3.004a1 1 0 0 1 1-1zm2.665 1a1 1 0 0 1 1-1h.66a1 1 0 0 1 1 1V32a1 1 0 0 1-1 1h-.66a1 1 0 0 1-1-1zm1.33-1.84c-.485 0-.877-.135-1.176-.406a1.304 1.304 0 0 1-.448-1.008c0-.401.149-.737.448-1.008.299-.27.691-.406 1.176-.406s.877.13 1.176.392c.299.252.448.579.448.98 0 .42-.149.77-.448 1.05-.299.27-.691.406-1.176.406zm7.693 7.408c.147.416-.016.887-.442 1.001a4.457 4.457 0 0 1-1.154.145c-.99 0-1.75-.243-2.282-.728-.523-.485-.784-1.209-.784-2.17v-5.51a1 1 0 0 1 1-1h.673c.545 0 .987.442.987.987v.126a.86.86 0 0 0 .861.861c.475 0 .861.386.861.861v.266a.861.861 0 0 1-.861.861.86.86 0 0 0-.861.861v1.66c0 .28.07.494.21.643.14.15.331.224.574.224.434 0 .953.163 1.098.572zm6.214-6.694c.943 0 1.699.28 2.268.84.579.56.868 1.405.868 2.534V32a1 1 0 0 1-1 1h-.66a1 1 0 0 1-1-1v-2.906c0-1.036-.415-1.554-1.246-1.554-.457 0-.826.15-1.106.448-.271.299-.406.747-.406 1.344V32a1 1 0 0 1-1 1h-.66a1 1 0 0 1-1-1v-8.388a1 1 0 0 1 1-1h.66a1 1 0 0 1 1 1v1.298c0 .457.592.74 1.022.586.392-.14.812-.21 1.26-.21zm13.654 0a3.65 3.65 0 0 1 1.876.49 3.39 3.39 0 0 1 1.344 1.372c.336.588.504 1.274.504 2.058s-.168 1.475-.504 2.072a3.509 3.509 0 0 1-1.344 1.372 3.736 3.736 0 0 1-1.876.476c-.85 0-2.114.675-2.114 1.526v.08c0 .544-.44.984-.983.984h-.677a1 1 0 0 1-1-1v-8.304a1 1 0 0 1 1-1h1.332c.112 0 .202.09.202.202 0 .189.252.288.405.178.467-.337 1.079-.506 1.835-.506zm-.56 5.726c.467 0 .85-.159 1.148-.476.299-.327.448-.77.448-1.33s-.149-.999-.448-1.316c-.298-.327-.681-.49-1.148-.49-.466 0-.849.164-1.148.49-.298.317-.448.756-.448 1.316s.15 1.003.448 1.33c.299.317.682.476 1.148.476zm12.543-5.6a1 1 0 0 1 1 1V32a1 1 0 0 1-1 1h-1.332a.202.202 0 0 1-.202-.202c0-.188-.252-.288-.405-.178-.467.338-1.079.506-1.835.506a3.813 3.813 0 0 1-1.89-.476 3.621 3.621 0 0 1-1.344-1.386c-.327-.597-.49-1.288-.49-2.072s.163-1.47.49-2.058a3.52 3.52 0 0 1 1.344-1.372 3.814 3.814 0 0 1 1.89-.476c.703 0 1.289.161 1.757.484.141.097.357.004.357-.167a.19.19 0 0 1 .191-.19zm-3.214 5.6c.466 0 .849-.159 1.148-.476.298-.327.448-.775.448-1.344 0-.56-.15-.999-.448-1.316-.299-.317-.682-.476-1.148-.476-.467 0-.85.159-1.148.476-.299.317-.448.756-.448 1.316 0 .57.149 1.017.448 1.344.298.317.681.476 1.148.476zm8.684 2.114c-.635 0-1.26-.07-1.876-.21a6.987 6.987 0 0 1-.716-.212c-.46-.165-.623-.694-.426-1.141.24-.55.919-.758 1.492-.58a5.702 5.702 0 0 0 1.61.24c.429 0 .733-.043.91-.127.187-.093.28-.224.28-.392s-.112-.285-.336-.35c-.215-.075-.56-.145-1.036-.21a10.494 10.494 0 0 1-1.554-.294 2.39 2.39 0 0 1-1.092-.672c-.308-.327-.462-.784-.462-1.372 0-.485.145-.915.434-1.288.289-.383.709-.681 1.26-.896.56-.224 1.227-.336 2.002-.336a8.06 8.06 0 0 1 1.638.168c.189.04.367.084.534.134.485.147.668.696.463 1.16-.235.53-.875.733-1.435.582a4.537 4.537 0 0 0-1.186-.154c-.42 0-.728.051-.924.154-.196.093-.294.22-.294.378 0 .177.107.303.322.378.215.065.569.135 1.064.21.625.093 1.143.2 1.554.322a2.3 2.3 0 0 1 1.064.672c.308.317.462.765.462 1.344 0 .476-.145.905-.434 1.288-.289.373-.719.667-1.288.882-.56.215-1.237.322-2.03.322zm9.672-7.84a3.74 3.74 0 0 1 1.876.476 3.39 3.39 0 0 1 1.344 1.372c.336.588.504 1.274.504 2.058s-.168 1.475-.504 2.072a3.484 3.484 0 0 1-1.344 1.386 3.736 3.736 0 0 1-1.876.476c-.756 0-1.368-.168-1.835-.506-.153-.11-.405-.01-.405.178 0 .112-.09.202-.202.202h-1.332a1 1 0 0 1-1-1v-8.388a1 1 0 0 1 1-1h.66a1 1 0 0 1 1 1v.14c0 .849 1.266 1.534 2.114 1.534zm-.56 5.726c.467 0 .85-.159 1.148-.476.299-.327.448-.775.448-1.344 0-.56-.149-.999-.448-1.316-.298-.317-.681-.476-1.148-.476-.466 0-.849.159-1.148.476-.298.317-.448.756-.448 1.316 0 .57.15 1.017.448 1.344.299.317.682.476 1.148.476zm12.501-5.6a1 1 0 0 1 1 1v5.202c0 1.41-.378 2.464-1.134 3.164-.747.71-1.825 1.064-3.234 1.064a8.18 8.18 0 0 1-2.072-.252 5.49 5.49 0 0 1-.887-.314c-.447-.204-.57-.75-.344-1.186.293-.566 1.057-.72 1.664-.525l.029.01c.457.148.91.223 1.358.223.672 0 1.166-.154 1.484-.462.317-.308.476-.765.476-1.372 0-.063-.077-.097-.125-.055-.547.466-1.215.7-2.003.7-.98 0-1.764-.29-2.352-.869-.579-.579-.868-1.447-.868-2.604v-2.724a1 1 0 0 1 1-1h.66a1 1 0 0 1 1 1v2.29c0 .579.107.999.322 1.26.214.261.527.392.938.392.42 0 .76-.15 1.022-.448.27-.299.406-.747.406-1.344v-2.15a1 1 0 0 1 1-1z" }))));
+}
+var DefaultButton = {
+    login: LoginWithPasby,
+    identify: IdentifyWithPasby,
+    link: LinkWithPasby,
+};
+var Button = function (_a) {
+    var type = _a.type, props = __rest(_a, ["type"]);
+    var Component = DefaultButton[type];
+    return React.createElement(Component, __assign({}, props));
+};
 
 /* eslint-disable */
 /**
  * remove trailing slash from string
  */
-var removeTrailingSlash$1 = function (url) {
+var removeTrailingSlash = function (url) {
     if (url === undefined || url === null)
         return undefined;
     return url.replace(/\/$/, "");
 };
-function unixTimestampToMaxAge(expirationUnixTimestamp) {
-    var currentUnixTimestamp = Math.floor(Date.now() / 1000);
-    var maxAge = expirationUnixTimestamp - currentUnixTimestamp;
-    return maxAge > 0 ? maxAge : 0; // Ensure max-age is not negative
-}
 /**
  * custom delay function
  * @param ms time
@@ -1518,93 +693,74 @@ function delay(ms) {
     });
 }
 
-var isDebugMode = process.env.PASBY_DEBUG_MODE === 'true';
-// We need to use NEXT_PUBLIC for frontend vars
-var PASBY_AUTH_API_PATH = removeTrailingSlash$1(process.env.NEXT_PUBLIC_PASBY_AUTH_API_PATH) ||
-    removeTrailingSlash$1(process.env.PASBY_AUTH_API_PATH) ||
-    '/api/eid';
-var PASBY_CLIENT_SECRET = process.env.PASBY_CLIENT_SECRET;
-var PASBY_CONSUMER_KEY = process.env.PASBY_CONSUMER_KEY;
-var PASBY_CLIENT_ID = process.env.PASBY_CLIENT_ID;
-var PASBY_CONSUMER = process.env.PASBY_CONSUMER;
-var PASBY_POST_LOGOUT_REDIRECT = removeTrailingSlash$1(process.env.PASBY_POST_LOGOUT_REDIRECT);
-var PASBY_POST_LOGIN_FALLBACK = removeTrailingSlash$1(process.env.PASBY_POST_LOGIN_FALLBACK);
-var PASBY_HOST_URL = removeTrailingSlash$1(process.env.PASBY_HOST_URL);
-var config = {
-    isDebugMode: isDebugMode,
-    consumerKey: PASBY_CONSUMER_KEY,
-    secret: PASBY_CLIENT_SECRET,
-    clientID: PASBY_CLIENT_ID,
-    consumer: PASBY_CONSUMER,
-    host: PASBY_HOST_URL,
-    postLogoutRedirectURL: PASBY_POST_LOGOUT_REDIRECT,
-    postLoginFallbackURL: PASBY_POST_LOGIN_FALLBACK,
-    codeChallengeMethod: 'S256',
-    redirectRoutes: {
-        callback: "".concat(PASBY_AUTH_API_PATH, "/callback")
-    },
-    issuerRoutes: {
-        logout: '/logout',
-        identify: '/identify',
-        token: '/token',
+var baseStyle = {
+    original: {
+        logoBgk: '#fff',
+        logo: '#dd3e3e',
+        text: '#fff',
+        bgk: '#dd3e3e',
+    }, light: {
+        logoBgk: '#dd3e3e',
+        logo: '#fff',
+        text: '#dd3e3e',
+        bgk: '#fff',
+    }, dark: {
+        logoBgk: '#dd3e3e',
+        logo: '#fff',
+        text: '#fff',
+        bgk: '#2D3131',
     },
 };
-
-var BASE_PATH = "https://oauthn.web.app".replace(/\/+$/, "");
-var SESSION_KEY = 'pni';
-var CHALLENGE_KEY = 'code-verifier';
-var DEFAULT_ERROR = {
-    status: 'failed',
-    reason: 'Connection is improper and thus has been interrupted',
-    type: 'unknown_error',
+var variantStyle = {
+    original: 'bg-[#dd3e3e]',
+    dark: 'bg-[#2D3131]',
+    light: 'bg-[#fff]',
 };
-
-/**
- * Represents an API request function that sends HTTP requests to a specified path.
- * @param path - The path to which the HTTP request will be sent.
- * @returns An object containing a request function.
- */
-var api = function (path) { return ({
-    /**
-     * Sends an HTTP request to the specified path using the provided method and options.
-     * @param method - The HTTP method to be used for the request (POST or GET).
-     * @param options - An object containing optional request parameters like body and headers.
-     * @returns A Promise that resolves to the response data or an error object.
-     */
-    request: function (method, param) { return __awaiter(void 0, void 0, void 0, function () {
-        var url, axiosOptions, response, error_1, errorResponse;
+function Spinner(_a) {
+    var className = _a.className;
+    return (React__default.createElement("svg", { "aria-hidden": "true", role: "status", className: clsx("inline w-4 h-4 me-3 text-gray-200 animate-spin", className), viewBox: "0 0 100 101", fill: "none", xmlns: "http://www.w3.org/2000/svg" },
+        React__default.createElement("path", { d: "M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z", fill: "currentColor" }),
+        React__default.createElement("path", { d: "M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z", fill: "#2D3131" })));
+}
+function AuthenticationButton(_a) {
+    var _this = this;
+    var type = _a.type, style = _a.style, className = _a.className, onClick = _a.onClick;
+    var _b = useState(false), isLoading = _b[0], setIsLoading = _b[1];
+    var handleClick = function () { return __awaiter(_this, void 0, void 0, function () {
+        var e_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    _a.trys.push([0, 2, , 3]);
-                    url = "".concat(BASE_PATH, "/api/").concat(path);
-                    console.log("API url -- ".concat(url));
-                    axiosOptions = __assign({ headers: param.headers
-                            ? JSON.parse(JSON.stringify(param.headers))
-                            : { 'Accept': 'application/json' } }, (method === 'POST' && { data: param.body }));
-                    return [4 /*yield*/, axios.request(__assign({ url: url, method: method }, axiosOptions))];
+                    setIsLoading(true);
+                    _a.label = 1;
                 case 1:
-                    response = _a.sent();
-                    return [2 /*return*/, response.data];
+                    _a.trys.push([1, 5, 6, 7]);
+                    if (!onClick) return [3 /*break*/, 3];
+                    return [4 /*yield*/, onClick()];
                 case 2:
-                    error_1 = _a.sent();
-                    if (axios.isAxiosError(error_1) && error_1.response) {
-                        console.error("Axios error --- ".concat(JSON.stringify(error_1.response.data)));
-                        errorResponse = error_1.response.data;
-                        return [2 /*return*/, {
-                                status: errorResponse.status,
-                                reason: errorResponse.reason,
-                                type: errorResponse.type,
-                            }];
-                    }
-                    else {
-                        return [2 /*return*/, DEFAULT_ERROR];
-                    }
-                case 3: return [2 /*return*/];
+                    _a.sent();
+                    _a.label = 3;
+                case 3: return [4 /*yield*/, delay(2000)];
+                case 4:
+                    _a.sent();
+                    return [3 /*break*/, 7];
+                case 5:
+                    e_1 = _a.sent();
+                    console.error(e_1);
+                    return [3 /*break*/, 7];
+                case 6:
+                    setIsLoading(false);
+                    return [7 /*endfinally*/];
+                case 7: return [2 /*return*/];
             }
         });
-    }); },
-}); };
+    }); };
+    return (React__default.createElement("button", { onClick: handleClick, className: clsx('relative flex justify-center items-center rounded-lg gap-2', variantStyle[style], 'hover:brightness-125 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2', isLoading ? 'brightness-75' : '', className) },
+        isLoading ?
+            React__default.createElement(Spinner, { className: "absolute right-2 w-5 h-5" })
+            : null,
+        React__default.createElement(Button, { type: type, logoBgk: baseStyle[style].logoBgk, logoTextColor: baseStyle[style].logo, textColor: baseStyle[style].text, background: baseStyle[style].bgk })));
+}
 
 function generateCodeVerifier() {
     var array = new Uint32Array(56 / 2);
@@ -1648,1253 +804,144 @@ function pkceChallenge() {
     });
 }
 
-function envMissing(env) {
-    return "The environment variable '".concat(env, "' is required. Set it in your .env file");
-}
+var isDebugMode = process.env.PASBY_DEBUG_MODE === 'true';
+// We need to use NEXT_PUBLIC for frontend vars
+var PASBY_AUTH_API_PATH = removeTrailingSlash(process.env.NEXT_PUBLIC_PASBY_AUTH_API_PATH) ||
+    removeTrailingSlash(process.env.PASBY_AUTH_API_PATH) ||
+    '/api/eid';
+var PASBY_CLIENT_SECRET = process.env.PASBY_CLIENT_SECRET;
+var PASBY_CONSUMER_KEY = process.env.PASBY_CONSUMER_KEY;
+var PASBY_CLIENT_ID = process.env.PASBY_CLIENT_ID;
+var PASBY_CONSUMER = process.env.PASBY_CONSUMER;
+var PASBY_POST_LOGOUT_REDIRECT = removeTrailingSlash(process.env.PASBY_POST_LOGOUT_REDIRECT);
+var PASBY_REDIRECT_URI = removeTrailingSlash(process.env.PASBY_REDIRECT_URI);
+var PASBY_POST_LOGIN_FALLBACK = removeTrailingSlash(process.env.PASBY_POST_LOGIN_FALLBACK);
+var PASBY_HOST_URL = removeTrailingSlash(process.env.PASBY_HOST_URL);
+var config = {
+    isDebugMode: isDebugMode,
+    consumerKey: PASBY_CONSUMER_KEY,
+    secret: PASBY_CLIENT_SECRET,
+    clientID: PASBY_CLIENT_ID,
+    consumer: PASBY_CONSUMER,
+    host: PASBY_HOST_URL,
+    postLogoutRedirectURL: PASBY_POST_LOGOUT_REDIRECT,
+    postLoginFallbackURL: PASBY_POST_LOGIN_FALLBACK,
+    codeChallengeMethod: 'S256',
+    redirectUri: PASBY_REDIRECT_URI,
+    redirectRoutes: {
+        callback: "".concat(PASBY_AUTH_API_PATH, "/callback")
+    },
+};
 
-var callback = function (path, method, options) { return __awaiter(void 0, void 0, void 0, function () {
+var DEFAULT_ERROR = {
+    status: 'failed',
+    reason: 'Connection is improper and thus has been interrupted',
+    type: 'unknown_error',
+};
+
+var api = /** @class */ (function () {
+    function api() {
+    }
+    api.request = function (url, method, param) {
+        return __awaiter(this, void 0, void 0, function () {
+            var axiosOptions, response, error_1, errorResponse;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        axiosOptions = __assign({ headers: param.headers
+                                ? JSON.parse(JSON.stringify(param.headers))
+                                : { 'Accept': 'application/json' } }, (method === 'POST' && { data: param.body }));
+                        return [4 /*yield*/, axios.request(__assign({ url: url, method: method }, axiosOptions))];
+                    case 1:
+                        response = _a.sent();
+                        return [2 /*return*/, response.data];
+                    case 2:
+                        error_1 = _a.sent();
+                        if (axios.isAxiosError(error_1) && error_1.response) {
+                            console.error("Axios error --- ".concat(JSON.stringify(error_1.response.data)));
+                            errorResponse = error_1.response.data;
+                            return [2 /*return*/, {
+                                    status: errorResponse.status,
+                                    reason: errorResponse.reason,
+                                    type: errorResponse.type,
+                                }];
+                        }
+                        else {
+                            return [2 /*return*/, DEFAULT_ERROR];
+                        }
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    return api;
+}());
+var callback = function (url, method, options) { return __awaiter(void 0, void 0, void 0, function () {
     var response, status, reason;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, api(path).request(method, options)];
+            case 0: return [4 /*yield*/, api.request(url, method, options)];
             case 1:
                 response = _a.sent();
                 status = response.status, reason = response.reason;
                 if (status !== 'successful' || !response.data) {
                     throw new Error(reason !== null && reason !== void 0 ? reason : 'Request was unsuccessful');
                 }
+                console.log("Response data --- ".concat(JSON.stringify(response.data)));
                 return [2 /*return*/, response.data];
         }
     });
 }); };
-var flowClient = function () {
-    return {
-        begin: function (options, redirectState) {
-            return __awaiter(this, void 0, void 0, function () {
-                var consumerKey, secret, host, redirectRoutes, challenge, link;
-                var _a, _b, _c;
-                return __generator(this, function (_d) {
-                    switch (_d.label) {
-                        case 0:
-                            consumerKey = config.consumerKey, secret = config.secret, host = config.host, redirectRoutes = config.redirectRoutes;
-                            if (!secret) {
-                                throw new Error(envMissing("PASBY_CLIENT_SECRET"));
-                            }
-                            return [4 /*yield*/, pkceChallenge()];
-                        case 1:
-                            challenge = _d.sent();
-                            return [4 /*yield*/, callback('v1/oidc/kipindi', 'POST', {
-                                    body: {
-                                        callback: "".concat(host).concat(redirectRoutes.callback),
-                                        action: (_a = options === null || options === void 0 ? void 0 : options.action) !== null && _a !== void 0 ? _a : 'login',
-                                        claims: (_b = options === null || options === void 0 ? void 0 : options.claims) !== null && _b !== void 0 ? _b : [],
-                                        challenge: challenge.challenge,
-                                        payload: (_c = options === null || options === void 0 ? void 0 : options.payload) !== null && _c !== void 0 ? _c : ''
-                                    },
-                                    headers: {
-                                        'x-api-key': consumerKey,
-                                        'x-access-secret': secret,
-                                    }
-                                })];
-                        case 2:
-                            link = (_d.sent()).link;
-                            headers.cookies().set(CHALLENGE_KEY, challenge.verifier, { secure: true });
-                            return [2 /*return*/, "".concat(link).concat(redirectState ? "state=".concat(redirectState) : '')];
-                    }
-                });
-            });
-        },
-        callback: function (code) {
-            return __awaiter(this, void 0, void 0, function () {
-                var secret, consumerKey, codeVerifier, _a, challenge, access, exp;
-                var _b;
-                return __generator(this, function (_c) {
-                    switch (_c.label) {
-                        case 0:
-                            secret = config.secret, consumerKey = config.consumerKey;
-                            if (!secret) {
-                                throw new Error(envMissing("PASBY_CLIENT_SECRET"));
-                            }
-                            if (!consumerKey) {
-                                throw new Error(envMissing("PASBY_CONSUMER_KEY"));
-                            }
-                            codeVerifier = (_b = headers.cookies().get(CHALLENGE_KEY)) === null || _b === void 0 ? void 0 : _b.value;
-                            if (!codeVerifier) {
-                                throw new Error('Missing code verifier');
-                            }
-                            return [4 /*yield*/, callback('v1/oidc/kupeana', 'POST', {
-                                    body: {
-                                        verifier: codeVerifier,
-                                    },
-                                    headers: {
-                                        'Accept': 'application/json',
-                                        'authorization': "Shake ".concat(code),
-                                        'x-api-key': consumerKey,
-                                        'x-access-secret': secret,
-                                    }
-                                })];
-                        case 1:
-                            _a = _c.sent(), challenge = _a.challenge, access = _a.access, exp = _a.exp;
-                            headers.cookies().set(SESSION_KEY, access, { maxAge: unixTimestampToMaxAge(exp), secure: true });
-                            headers.cookies().set(CHALLENGE_KEY, challenge, { secure: true });
-                            return [2 /*return*/];
-                    }
-                });
-            });
-        }
-    };
-};
 
-var server = {exports: {}};
-
-var request = {};
-
-var nextUrl = {};
-
-var detectDomainLocale = {};
-
-(function (exports) {
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	Object.defineProperty(exports, "detectDomainLocale", {
-	    enumerable: true,
-	    get: function() {
-	        return detectDomainLocale;
-	    }
-	});
-	function detectDomainLocale(domainItems, hostname, detectedLocale) {
-	    if (!domainItems) return;
-	    if (detectedLocale) {
-	        detectedLocale = detectedLocale.toLowerCase();
-	    }
-	    for (const item of domainItems){
-	        var _item_domain, _item_locales;
-	        // remove port if present
-	        const domainHostname = (_item_domain = item.domain) == null ? void 0 : _item_domain.split(":", 1)[0].toLowerCase();
-	        if (hostname === domainHostname || detectedLocale === item.defaultLocale.toLowerCase() || ((_item_locales = item.locales) == null ? void 0 : _item_locales.some((locale)=>locale.toLowerCase() === detectedLocale))) {
-	            return item;
-	        }
-	    }
-	}
-
-	
-} (detectDomainLocale));
-
-var formatNextPathnameInfo = {};
-
-var removeTrailingSlash = {};
-
-/**
- * Removes the trailing slash for a given route or page path. Preserves the
- * root page. Examples:
- *   - `/foo/bar/` -> `/foo/bar`
- *   - `/foo/bar` -> `/foo/bar`
- *   - `/` -> `/`
- */
-
-(function (exports) {
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	Object.defineProperty(exports, "removeTrailingSlash", {
-	    enumerable: true,
-	    get: function() {
-	        return removeTrailingSlash;
-	    }
-	});
-	function removeTrailingSlash(route) {
-	    return route.replace(/\/$/, "") || "/";
-	}
-
-	
-} (removeTrailingSlash));
-
-var addPathPrefix = {};
-
-var parsePath = {};
-
-/**
- * Given a path this function will find the pathname, query and hash and return
- * them. This is useful to parse full paths on the client side.
- * @param path A path to parse e.g. /foo/bar?id=1#hash
- */
-
-(function (exports) {
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	Object.defineProperty(exports, "parsePath", {
-	    enumerable: true,
-	    get: function() {
-	        return parsePath;
-	    }
-	});
-	function parsePath(path) {
-	    const hashIndex = path.indexOf("#");
-	    const queryIndex = path.indexOf("?");
-	    const hasQuery = queryIndex > -1 && (hashIndex < 0 || queryIndex < hashIndex);
-	    if (hasQuery || hashIndex > -1) {
-	        return {
-	            pathname: path.substring(0, hasQuery ? queryIndex : hashIndex),
-	            query: hasQuery ? path.substring(queryIndex, hashIndex > -1 ? hashIndex : undefined) : "",
-	            hash: hashIndex > -1 ? path.slice(hashIndex) : ""
-	        };
-	    }
-	    return {
-	        pathname: path,
-	        query: "",
-	        hash: ""
-	    };
-	}
-
-	
-} (parsePath));
-
-(function (exports) {
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	Object.defineProperty(exports, "addPathPrefix", {
-	    enumerable: true,
-	    get: function() {
-	        return addPathPrefix;
-	    }
-	});
-	const _parsepath = parsePath;
-	function addPathPrefix(path, prefix) {
-	    if (!path.startsWith("/") || !prefix) {
-	        return path;
-	    }
-	    const { pathname, query, hash } = (0, _parsepath.parsePath)(path);
-	    return "" + prefix + pathname + query + hash;
-	}
-
-	
-} (addPathPrefix));
-
-var addPathSuffix = {};
-
-(function (exports) {
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	Object.defineProperty(exports, "addPathSuffix", {
-	    enumerable: true,
-	    get: function() {
-	        return addPathSuffix;
-	    }
-	});
-	const _parsepath = parsePath;
-	function addPathSuffix(path, suffix) {
-	    if (!path.startsWith("/") || !suffix) {
-	        return path;
-	    }
-	    const { pathname, query, hash } = (0, _parsepath.parsePath)(path);
-	    return "" + pathname + suffix + query + hash;
-	}
-
-	
-} (addPathSuffix));
-
-var addLocale = {};
-
-var pathHasPrefix = {};
-
-(function (exports) {
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	Object.defineProperty(exports, "pathHasPrefix", {
-	    enumerable: true,
-	    get: function() {
-	        return pathHasPrefix;
-	    }
-	});
-	const _parsepath = parsePath;
-	function pathHasPrefix(path, prefix) {
-	    if (typeof path !== "string") {
-	        return false;
-	    }
-	    const { pathname } = (0, _parsepath.parsePath)(path);
-	    return pathname === prefix || pathname.startsWith(prefix + "/");
-	}
-
-	
-} (pathHasPrefix));
-
-(function (exports) {
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	Object.defineProperty(exports, "addLocale", {
-	    enumerable: true,
-	    get: function() {
-	        return addLocale;
-	    }
-	});
-	const _addpathprefix = addPathPrefix;
-	const _pathhasprefix = pathHasPrefix;
-	function addLocale(path, locale, defaultLocale, ignorePrefix) {
-	    // If no locale was given or the locale is the default locale, we don't need
-	    // to prefix the path.
-	    if (!locale || locale === defaultLocale) return path;
-	    const lower = path.toLowerCase();
-	    // If the path is an API path or the path already has the locale prefix, we
-	    // don't need to prefix the path.
-	    if (!ignorePrefix) {
-	        if ((0, _pathhasprefix.pathHasPrefix)(lower, "/api")) return path;
-	        if ((0, _pathhasprefix.pathHasPrefix)(lower, "/" + locale.toLowerCase())) return path;
-	    }
-	    // Add the locale prefix to the path.
-	    return (0, _addpathprefix.addPathPrefix)(path, "/" + locale);
-	}
-
-	
-} (addLocale));
-
-(function (exports) {
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	Object.defineProperty(exports, "formatNextPathnameInfo", {
-	    enumerable: true,
-	    get: function() {
-	        return formatNextPathnameInfo;
-	    }
-	});
-	const _removetrailingslash = removeTrailingSlash;
-	const _addpathprefix = addPathPrefix;
-	const _addpathsuffix = addPathSuffix;
-	const _addlocale = addLocale;
-	function formatNextPathnameInfo(info) {
-	    let pathname = (0, _addlocale.addLocale)(info.pathname, info.locale, info.buildId ? undefined : info.defaultLocale, info.ignorePrefix);
-	    if (info.buildId || !info.trailingSlash) {
-	        pathname = (0, _removetrailingslash.removeTrailingSlash)(pathname);
-	    }
-	    if (info.buildId) {
-	        pathname = (0, _addpathsuffix.addPathSuffix)((0, _addpathprefix.addPathPrefix)(pathname, "/_next/data/" + info.buildId), info.pathname === "/" ? "index.json" : ".json");
-	    }
-	    pathname = (0, _addpathprefix.addPathPrefix)(pathname, info.basePath);
-	    return !info.buildId && info.trailingSlash ? !pathname.endsWith("/") ? (0, _addpathsuffix.addPathSuffix)(pathname, "/") : pathname : (0, _removetrailingslash.removeTrailingSlash)(pathname);
-	}
-
-	
-} (formatNextPathnameInfo));
-
-var getHostname = {};
-
-(function (exports) {
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	Object.defineProperty(exports, "getHostname", {
-	    enumerable: true,
-	    get: function() {
-	        return getHostname;
-	    }
-	});
-	function getHostname(parsed, headers) {
-	    // Get the hostname from the headers if it exists, otherwise use the parsed
-	    // hostname.
-	    let hostname;
-	    if ((headers == null ? void 0 : headers.host) && !Array.isArray(headers.host)) {
-	        hostname = headers.host.toString().split(":", 1)[0];
-	    } else if (parsed.hostname) {
-	        hostname = parsed.hostname;
-	    } else return;
-	    return hostname.toLowerCase();
-	}
-
-	
-} (getHostname));
-
-var getNextPathnameInfo = {};
-
-var normalizeLocalePath = {};
-
-(function (exports) {
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	Object.defineProperty(exports, "normalizeLocalePath", {
-	    enumerable: true,
-	    get: function() {
-	        return normalizeLocalePath;
-	    }
-	});
-	function normalizeLocalePath(pathname, locales) {
-	    let detectedLocale;
-	    // first item will be empty string from splitting at first char
-	    const pathnameParts = pathname.split("/");
-	    (locales || []).some((locale)=>{
-	        if (pathnameParts[1] && pathnameParts[1].toLowerCase() === locale.toLowerCase()) {
-	            detectedLocale = locale;
-	            pathnameParts.splice(1, 1);
-	            pathname = pathnameParts.join("/") || "/";
-	            return true;
-	        }
-	        return false;
-	    });
-	    return {
-	        pathname,
-	        detectedLocale
-	    };
-	}
-
-	
-} (normalizeLocalePath));
-
-var removePathPrefix = {};
-
-(function (exports) {
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	Object.defineProperty(exports, "removePathPrefix", {
-	    enumerable: true,
-	    get: function() {
-	        return removePathPrefix;
-	    }
-	});
-	const _pathhasprefix = pathHasPrefix;
-	function removePathPrefix(path, prefix) {
-	    // If the path doesn't start with the prefix we can return it as is. This
-	    // protects us from situations where the prefix is a substring of the path
-	    // prefix such as:
-	    //
-	    // For prefix: /blog
-	    //
-	    //   /blog -> true
-	    //   /blog/ -> true
-	    //   /blog/1 -> true
-	    //   /blogging -> false
-	    //   /blogging/ -> false
-	    //   /blogging/1 -> false
-	    if (!(0, _pathhasprefix.pathHasPrefix)(path, prefix)) {
-	        return path;
-	    }
-	    // Remove the prefix from the path via slicing.
-	    const withoutPrefix = path.slice(prefix.length);
-	    // If the path without the prefix starts with a `/` we can return it as is.
-	    if (withoutPrefix.startsWith("/")) {
-	        return withoutPrefix;
-	    }
-	    // If the path without the prefix doesn't start with a `/` we need to add it
-	    // back to the path to make sure it's a valid path.
-	    return "/" + withoutPrefix;
-	}
-
-	
-} (removePathPrefix));
-
-(function (exports) {
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	Object.defineProperty(exports, "getNextPathnameInfo", {
-	    enumerable: true,
-	    get: function() {
-	        return getNextPathnameInfo;
-	    }
-	});
-	const _normalizelocalepath = normalizeLocalePath;
-	const _removepathprefix = removePathPrefix;
-	const _pathhasprefix = pathHasPrefix;
-	function getNextPathnameInfo(pathname, options) {
-	    var _options_nextConfig;
-	    const { basePath, i18n, trailingSlash } = (_options_nextConfig = options.nextConfig) != null ? _options_nextConfig : {};
-	    const info = {
-	        pathname,
-	        trailingSlash: pathname !== "/" ? pathname.endsWith("/") : trailingSlash
-	    };
-	    if (basePath && (0, _pathhasprefix.pathHasPrefix)(info.pathname, basePath)) {
-	        info.pathname = (0, _removepathprefix.removePathPrefix)(info.pathname, basePath);
-	        info.basePath = basePath;
-	    }
-	    let pathnameNoDataPrefix = info.pathname;
-	    if (info.pathname.startsWith("/_next/data/") && info.pathname.endsWith(".json")) {
-	        const paths = info.pathname.replace(/^\/_next\/data\//, "").replace(/\.json$/, "").split("/");
-	        const buildId = paths[0];
-	        info.buildId = buildId;
-	        pathnameNoDataPrefix = paths[1] !== "index" ? "/" + paths.slice(1).join("/") : "/";
-	        // update pathname with normalized if enabled although
-	        // we use normalized to populate locale info still
-	        if (options.parseData === true) {
-	            info.pathname = pathnameNoDataPrefix;
-	        }
-	    }
-	    // If provided, use the locale route normalizer to detect the locale instead
-	    // of the function below.
-	    if (i18n) {
-	        let result = options.i18nProvider ? options.i18nProvider.analyze(info.pathname) : (0, _normalizelocalepath.normalizeLocalePath)(info.pathname, i18n.locales);
-	        info.locale = result.detectedLocale;
-	        var _result_pathname;
-	        info.pathname = (_result_pathname = result.pathname) != null ? _result_pathname : info.pathname;
-	        if (!result.detectedLocale && info.buildId) {
-	            result = options.i18nProvider ? options.i18nProvider.analyze(pathnameNoDataPrefix) : (0, _normalizelocalepath.normalizeLocalePath)(pathnameNoDataPrefix, i18n.locales);
-	            if (result.detectedLocale) {
-	                info.locale = result.detectedLocale;
-	            }
-	        }
-	    }
-	    return info;
-	}
-
-	
-} (getNextPathnameInfo));
-
-(function (exports) {
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	Object.defineProperty(exports, "NextURL", {
-	    enumerable: true,
-	    get: function() {
-	        return NextURL;
-	    }
-	});
-	const _detectdomainlocale = detectDomainLocale;
-	const _formatnextpathnameinfo = formatNextPathnameInfo;
-	const _gethostname = getHostname;
-	const _getnextpathnameinfo = getNextPathnameInfo;
-	const REGEX_LOCALHOST_HOSTNAME = /(?!^https?:\/\/)(127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}|\[::1\]|localhost)/;
-	function parseURL(url, base) {
-	    return new URL(String(url).replace(REGEX_LOCALHOST_HOSTNAME, "localhost"), base && String(base).replace(REGEX_LOCALHOST_HOSTNAME, "localhost"));
-	}
-	const Internal = Symbol("NextURLInternal");
-	class NextURL {
-	    constructor(input, baseOrOpts, opts){
-	        let base;
-	        let options;
-	        if (typeof baseOrOpts === "object" && "pathname" in baseOrOpts || typeof baseOrOpts === "string") {
-	            base = baseOrOpts;
-	            options = opts || {};
-	        } else {
-	            options = opts || baseOrOpts || {};
-	        }
-	        this[Internal] = {
-	            url: parseURL(input, base ?? options.base),
-	            options: options,
-	            basePath: ""
-	        };
-	        this.analyze();
-	    }
-	    analyze() {
-	        var _this_Internal_options_nextConfig_i18n, _this_Internal_options_nextConfig, _this_Internal_domainLocale, _this_Internal_options_nextConfig_i18n1, _this_Internal_options_nextConfig1;
-	        const info = (0, _getnextpathnameinfo.getNextPathnameInfo)(this[Internal].url.pathname, {
-	            nextConfig: this[Internal].options.nextConfig,
-	            parseData: !process.env.__NEXT_NO_MIDDLEWARE_URL_NORMALIZE,
-	            i18nProvider: this[Internal].options.i18nProvider
-	        });
-	        const hostname = (0, _gethostname.getHostname)(this[Internal].url, this[Internal].options.headers);
-	        this[Internal].domainLocale = this[Internal].options.i18nProvider ? this[Internal].options.i18nProvider.detectDomainLocale(hostname) : (0, _detectdomainlocale.detectDomainLocale)((_this_Internal_options_nextConfig = this[Internal].options.nextConfig) == null ? void 0 : (_this_Internal_options_nextConfig_i18n = _this_Internal_options_nextConfig.i18n) == null ? void 0 : _this_Internal_options_nextConfig_i18n.domains, hostname);
-	        const defaultLocale = ((_this_Internal_domainLocale = this[Internal].domainLocale) == null ? void 0 : _this_Internal_domainLocale.defaultLocale) || ((_this_Internal_options_nextConfig1 = this[Internal].options.nextConfig) == null ? void 0 : (_this_Internal_options_nextConfig_i18n1 = _this_Internal_options_nextConfig1.i18n) == null ? void 0 : _this_Internal_options_nextConfig_i18n1.defaultLocale);
-	        this[Internal].url.pathname = info.pathname;
-	        this[Internal].defaultLocale = defaultLocale;
-	        this[Internal].basePath = info.basePath ?? "";
-	        this[Internal].buildId = info.buildId;
-	        this[Internal].locale = info.locale ?? defaultLocale;
-	        this[Internal].trailingSlash = info.trailingSlash;
-	    }
-	    formatPathname() {
-	        return (0, _formatnextpathnameinfo.formatNextPathnameInfo)({
-	            basePath: this[Internal].basePath,
-	            buildId: this[Internal].buildId,
-	            defaultLocale: !this[Internal].options.forceLocale ? this[Internal].defaultLocale : undefined,
-	            locale: this[Internal].locale,
-	            pathname: this[Internal].url.pathname,
-	            trailingSlash: this[Internal].trailingSlash
-	        });
-	    }
-	    formatSearch() {
-	        return this[Internal].url.search;
-	    }
-	    get buildId() {
-	        return this[Internal].buildId;
-	    }
-	    set buildId(buildId) {
-	        this[Internal].buildId = buildId;
-	    }
-	    get locale() {
-	        return this[Internal].locale ?? "";
-	    }
-	    set locale(locale) {
-	        var _this_Internal_options_nextConfig_i18n, _this_Internal_options_nextConfig;
-	        if (!this[Internal].locale || !((_this_Internal_options_nextConfig = this[Internal].options.nextConfig) == null ? void 0 : (_this_Internal_options_nextConfig_i18n = _this_Internal_options_nextConfig.i18n) == null ? void 0 : _this_Internal_options_nextConfig_i18n.locales.includes(locale))) {
-	            throw new TypeError(`The NextURL configuration includes no locale "${locale}"`);
-	        }
-	        this[Internal].locale = locale;
-	    }
-	    get defaultLocale() {
-	        return this[Internal].defaultLocale;
-	    }
-	    get domainLocale() {
-	        return this[Internal].domainLocale;
-	    }
-	    get searchParams() {
-	        return this[Internal].url.searchParams;
-	    }
-	    get host() {
-	        return this[Internal].url.host;
-	    }
-	    set host(value) {
-	        this[Internal].url.host = value;
-	    }
-	    get hostname() {
-	        return this[Internal].url.hostname;
-	    }
-	    set hostname(value) {
-	        this[Internal].url.hostname = value;
-	    }
-	    get port() {
-	        return this[Internal].url.port;
-	    }
-	    set port(value) {
-	        this[Internal].url.port = value;
-	    }
-	    get protocol() {
-	        return this[Internal].url.protocol;
-	    }
-	    set protocol(value) {
-	        this[Internal].url.protocol = value;
-	    }
-	    get href() {
-	        const pathname = this.formatPathname();
-	        const search = this.formatSearch();
-	        return `${this.protocol}//${this.host}${pathname}${search}${this.hash}`;
-	    }
-	    set href(url) {
-	        this[Internal].url = parseURL(url);
-	        this.analyze();
-	    }
-	    get origin() {
-	        return this[Internal].url.origin;
-	    }
-	    get pathname() {
-	        return this[Internal].url.pathname;
-	    }
-	    set pathname(value) {
-	        this[Internal].url.pathname = value;
-	    }
-	    get hash() {
-	        return this[Internal].url.hash;
-	    }
-	    set hash(value) {
-	        this[Internal].url.hash = value;
-	    }
-	    get search() {
-	        return this[Internal].url.search;
-	    }
-	    set search(value) {
-	        this[Internal].url.search = value;
-	    }
-	    get password() {
-	        return this[Internal].url.password;
-	    }
-	    set password(value) {
-	        this[Internal].url.password = value;
-	    }
-	    get username() {
-	        return this[Internal].url.username;
-	    }
-	    set username(value) {
-	        this[Internal].url.username = value;
-	    }
-	    get basePath() {
-	        return this[Internal].basePath;
-	    }
-	    set basePath(value) {
-	        this[Internal].basePath = value.startsWith("/") ? value : `/${value}`;
-	    }
-	    toString() {
-	        return this.href;
-	    }
-	    toJSON() {
-	        return this.href;
-	    }
-	    [Symbol.for("edge-runtime.inspect.custom")]() {
-	        return {
-	            href: this.href,
-	            origin: this.origin,
-	            protocol: this.protocol,
-	            username: this.username,
-	            password: this.password,
-	            host: this.host,
-	            hostname: this.hostname,
-	            port: this.port,
-	            pathname: this.pathname,
-	            search: this.search,
-	            searchParams: this.searchParams,
-	            hash: this.hash
-	        };
-	    }
-	    clone() {
-	        return new NextURL(String(this), this[Internal].options);
-	    }
-	}
-
-	
-} (nextUrl));
-
-var utils = {};
-
-(function (exports) {
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	function _export(target, all) {
-	    for(var name in all)Object.defineProperty(target, name, {
-	        enumerable: true,
-	        get: all[name]
-	    });
-	}
-	_export(exports, {
-	    fromNodeOutgoingHttpHeaders: function() {
-	        return fromNodeOutgoingHttpHeaders;
-	    },
-	    splitCookiesString: function() {
-	        return splitCookiesString;
-	    },
-	    toNodeOutgoingHttpHeaders: function() {
-	        return toNodeOutgoingHttpHeaders;
-	    },
-	    validateURL: function() {
-	        return validateURL;
-	    }
-	});
-	function fromNodeOutgoingHttpHeaders(nodeHeaders) {
-	    const headers = new Headers();
-	    for (let [key, value] of Object.entries(nodeHeaders)){
-	        const values = Array.isArray(value) ? value : [
-	            value
-	        ];
-	        for (let v of values){
-	            if (typeof v === "undefined") continue;
-	            if (typeof v === "number") {
-	                v = v.toString();
-	            }
-	            headers.append(key, v);
-	        }
-	    }
-	    return headers;
-	}
-	function splitCookiesString(cookiesString) {
-	    var cookiesStrings = [];
-	    var pos = 0;
-	    var start;
-	    var ch;
-	    var lastComma;
-	    var nextStart;
-	    var cookiesSeparatorFound;
-	    function skipWhitespace() {
-	        while(pos < cookiesString.length && /\s/.test(cookiesString.charAt(pos))){
-	            pos += 1;
-	        }
-	        return pos < cookiesString.length;
-	    }
-	    function notSpecialChar() {
-	        ch = cookiesString.charAt(pos);
-	        return ch !== "=" && ch !== ";" && ch !== ",";
-	    }
-	    while(pos < cookiesString.length){
-	        start = pos;
-	        cookiesSeparatorFound = false;
-	        while(skipWhitespace()){
-	            ch = cookiesString.charAt(pos);
-	            if (ch === ",") {
-	                // ',' is a cookie separator if we have later first '=', not ';' or ','
-	                lastComma = pos;
-	                pos += 1;
-	                skipWhitespace();
-	                nextStart = pos;
-	                while(pos < cookiesString.length && notSpecialChar()){
-	                    pos += 1;
-	                }
-	                // currently special character
-	                if (pos < cookiesString.length && cookiesString.charAt(pos) === "=") {
-	                    // we found cookies separator
-	                    cookiesSeparatorFound = true;
-	                    // pos is inside the next cookie, so back up and return it.
-	                    pos = nextStart;
-	                    cookiesStrings.push(cookiesString.substring(start, lastComma));
-	                    start = pos;
-	                } else {
-	                    // in param ',' or param separator ';',
-	                    // we continue from that comma
-	                    pos = lastComma + 1;
-	                }
-	            } else {
-	                pos += 1;
-	            }
-	        }
-	        if (!cookiesSeparatorFound || pos >= cookiesString.length) {
-	            cookiesStrings.push(cookiesString.substring(start, cookiesString.length));
-	        }
-	    }
-	    return cookiesStrings;
-	}
-	function toNodeOutgoingHttpHeaders(headers) {
-	    const nodeHeaders = {};
-	    const cookies = [];
-	    if (headers) {
-	        for (const [key, value] of headers.entries()){
-	            if (key.toLowerCase() === "set-cookie") {
-	                // We may have gotten a comma joined string of cookies, or multiple
-	                // set-cookie headers. We need to merge them into one header array
-	                // to represent all the cookies.
-	                cookies.push(...splitCookiesString(value));
-	                nodeHeaders[key] = cookies.length === 1 ? cookies[0] : cookies;
-	            } else {
-	                nodeHeaders[key] = value;
-	            }
-	        }
-	    }
-	    return nodeHeaders;
-	}
-	function validateURL(url) {
-	    try {
-	        return String(new URL(String(url)));
-	    } catch (error) {
-	        throw new Error(`URL is malformed "${String(url)}". Please use only absolute URLs - https://nextjs.org/docs/messages/middleware-relative-urls`, {
-	            cause: error
-	        });
-	    }
-	}
-
-	
-} (utils));
-
-var error = {};
-
-(function (exports) {
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	function _export(target, all) {
-	    for(var name in all)Object.defineProperty(target, name, {
-	        enumerable: true,
-	        get: all[name]
-	    });
-	}
-	_export(exports, {
-	    PageSignatureError: function() {
-	        return PageSignatureError;
-	    },
-	    RemovedPageError: function() {
-	        return RemovedPageError;
-	    },
-	    RemovedUAError: function() {
-	        return RemovedUAError;
-	    }
-	});
-	class PageSignatureError extends Error {
-	    constructor({ page }){
-	        super(`The middleware "${page}" accepts an async API directly with the form:
-  
-  export function middleware(request, event) {
-    return NextResponse.redirect('/new-location')
-  }
-  
-  Read more: https://nextjs.org/docs/messages/middleware-new-signature
-  `);
-	    }
-	}
-	class RemovedPageError extends Error {
-	    constructor(){
-	        super(`The request.page has been deprecated in favour of \`URLPattern\`.
-  Read more: https://nextjs.org/docs/messages/middleware-request-page
-  `);
-	    }
-	}
-	class RemovedUAError extends Error {
-	    constructor(){
-	        super(`The request.ua has been removed in favour of \`userAgent\` function.
-  Read more: https://nextjs.org/docs/messages/middleware-parse-user-agent
-  `);
-	    }
-	}
-
-	
-} (error));
-
-(function (exports) {
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	function _export(target, all) {
-	    for(var name in all)Object.defineProperty(target, name, {
-	        enumerable: true,
-	        get: all[name]
-	    });
-	}
-	_export(exports, {
-	    INTERNALS: function() {
-	        return INTERNALS;
-	    },
-	    NextRequest: function() {
-	        return NextRequest;
-	    }
-	});
-	const _nexturl = nextUrl;
-	const _utils = utils;
-	const _error = error;
-	const _cookies = cookies$1;
-	const INTERNALS = Symbol("internal request");
-	class NextRequest extends Request {
-	    constructor(input, init = {}){
-	        const url = typeof input !== "string" && "url" in input ? input.url : String(input);
-	        (0, _utils.validateURL)(url);
-	        if (input instanceof Request) super(input, init);
-	        else super(url, init);
-	        const nextUrl = new _nexturl.NextURL(url, {
-	            headers: (0, _utils.toNodeOutgoingHttpHeaders)(this.headers),
-	            nextConfig: init.nextConfig
-	        });
-	        this[INTERNALS] = {
-	            cookies: new _cookies.RequestCookies(this.headers),
-	            geo: init.geo || {},
-	            ip: init.ip,
-	            nextUrl,
-	            url: process.env.__NEXT_NO_MIDDLEWARE_URL_NORMALIZE ? url : nextUrl.toString()
-	        };
-	    }
-	    [Symbol.for("edge-runtime.inspect.custom")]() {
-	        return {
-	            cookies: this.cookies,
-	            geo: this.geo,
-	            ip: this.ip,
-	            nextUrl: this.nextUrl,
-	            url: this.url,
-	            // rest of props come from Request
-	            bodyUsed: this.bodyUsed,
-	            cache: this.cache,
-	            credentials: this.credentials,
-	            destination: this.destination,
-	            headers: Object.fromEntries(this.headers),
-	            integrity: this.integrity,
-	            keepalive: this.keepalive,
-	            method: this.method,
-	            mode: this.mode,
-	            redirect: this.redirect,
-	            referrer: this.referrer,
-	            referrerPolicy: this.referrerPolicy,
-	            signal: this.signal
-	        };
-	    }
-	    get cookies() {
-	        return this[INTERNALS].cookies;
-	    }
-	    get geo() {
-	        return this[INTERNALS].geo;
-	    }
-	    get ip() {
-	        return this[INTERNALS].ip;
-	    }
-	    get nextUrl() {
-	        return this[INTERNALS].nextUrl;
-	    }
-	    /**
-	   * @deprecated
-	   * `page` has been deprecated in favour of `URLPattern`.
-	   * Read more: https://nextjs.org/docs/messages/middleware-request-page
-	   */ get page() {
-	        throw new _error.RemovedPageError();
-	    }
-	    /**
-	   * @deprecated
-	   * `ua` has been removed in favour of \`userAgent\` function.
-	   * Read more: https://nextjs.org/docs/messages/middleware-parse-user-agent
-	   */ get ua() {
-	        throw new _error.RemovedUAError();
-	    }
-	    get url() {
-	        return this[INTERNALS].url;
-	    }
-	}
-
-	
-} (request));
-
-var response = {};
-
-(function (exports) {
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	Object.defineProperty(exports, "NextResponse", {
-	    enumerable: true,
-	    get: function() {
-	        return NextResponse;
-	    }
-	});
-	const _nexturl = nextUrl;
-	const _utils = utils;
-	const _cookies = cookies$1;
-	const INTERNALS = Symbol("internal response");
-	const REDIRECTS = new Set([
-	    301,
-	    302,
-	    303,
-	    307,
-	    308
-	]);
-	function handleMiddlewareField(init, headers) {
-	    var _init_request;
-	    if (init == null ? void 0 : (_init_request = init.request) == null ? void 0 : _init_request.headers) {
-	        if (!(init.request.headers instanceof Headers)) {
-	            throw new Error("request.headers must be an instance of Headers");
-	        }
-	        const keys = [];
-	        for (const [key, value] of init.request.headers){
-	            headers.set("x-middleware-request-" + key, value);
-	            keys.push(key);
-	        }
-	        headers.set("x-middleware-override-headers", keys.join(","));
-	    }
-	}
-	class NextResponse extends Response {
-	    constructor(body, init = {}){
-	        super(body, init);
-	        this[INTERNALS] = {
-	            cookies: new _cookies.ResponseCookies(this.headers),
-	            url: init.url ? new _nexturl.NextURL(init.url, {
-	                headers: (0, _utils.toNodeOutgoingHttpHeaders)(this.headers),
-	                nextConfig: init.nextConfig
-	            }) : undefined
-	        };
-	    }
-	    [Symbol.for("edge-runtime.inspect.custom")]() {
-	        return {
-	            cookies: this.cookies,
-	            url: this.url,
-	            // rest of props come from Response
-	            body: this.body,
-	            bodyUsed: this.bodyUsed,
-	            headers: Object.fromEntries(this.headers),
-	            ok: this.ok,
-	            redirected: this.redirected,
-	            status: this.status,
-	            statusText: this.statusText,
-	            type: this.type
-	        };
-	    }
-	    get cookies() {
-	        return this[INTERNALS].cookies;
-	    }
-	    static json(body, init) {
-	        const response = Response.json(body, init);
-	        return new NextResponse(response.body, response);
-	    }
-	    static redirect(url, init) {
-	        const status = typeof init === "number" ? init : (init == null ? void 0 : init.status) ?? 307;
-	        if (!REDIRECTS.has(status)) {
-	            throw new RangeError('Failed to execute "redirect" on "response": Invalid status code');
-	        }
-	        const initObj = typeof init === "object" ? init : {};
-	        const headers = new Headers(initObj == null ? void 0 : initObj.headers);
-	        headers.set("Location", (0, _utils.validateURL)(url));
-	        return new NextResponse(null, {
-	            ...initObj,
-	            headers,
-	            status
-	        });
-	    }
-	    static rewrite(destination, init) {
-	        const headers = new Headers(init == null ? void 0 : init.headers);
-	        headers.set("x-middleware-rewrite", (0, _utils.validateURL)(destination));
-	        handleMiddlewareField(init, headers);
-	        return new NextResponse(null, {
-	            ...init,
-	            headers
-	        });
-	    }
-	    static next(init) {
-	        const headers = new Headers(init == null ? void 0 : init.headers);
-	        headers.set("x-middleware-next", "1");
-	        handleMiddlewareField(init, headers);
-	        return new NextResponse(null, {
-	            ...init,
-	            headers
-	        });
-	    }
-	}
-
-	
-} (response));
-
-var imageResponse = {};
-
-/**
- * @deprecated ImageResponse moved from "next/server" to "next/og" since Next.js 14, please import from "next/og" instead.
- * Migration with codemods: https://nextjs.org/docs/app/building-your-application/upgrading/codemods#next-og-import
- */
-
-(function (exports) {
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	Object.defineProperty(exports, "ImageResponse", {
-	    enumerable: true,
-	    get: function() {
-	        return ImageResponse;
-	    }
-	});
-	function ImageResponse() {
-	    throw new Error('ImageResponse moved from "next/server" to "next/og" since Next.js 14, please import from "next/og" instead');
-	}
-
-	
-} (imageResponse));
-
-var userAgent = {};
-
-var uaParser = {exports: {}};
-
-(()=>{var i={226:function(i,e){(function(o,a){var r="1.0.35",t="",n="?",s="function",b="undefined",w="object",l="string",d="major",c="model",u="name",p="type",m="vendor",f="version",h="architecture",v="console",g="mobile",k="tablet",x="smarttv",_="wearable",y="embedded",q=350;var T="Amazon",S="Apple",z="ASUS",N="BlackBerry",A="Browser",C="Chrome",E="Edge",O="Firefox",U="Google",j="Huawei",P="LG",R="Microsoft",M="Motorola",B="Opera",V="Samsung",D="Sharp",I="Sony",F="Xiaomi",G="Zebra",H="Facebook",L="Chromium OS",Z="Mac OS";var extend=function(i,e){var o={};for(var a in i){if(e[a]&&e[a].length%2===0){o[a]=e[a].concat(i[a]);}else {o[a]=i[a];}}return o},enumerize=function(i){var e={};for(var o=0;o<i.length;o++){e[i[o].toUpperCase()]=i[o];}return e},has=function(i,e){return typeof i===l?lowerize(e).indexOf(lowerize(i))!==-1:false},lowerize=function(i){return i.toLowerCase()},majorize=function(i){return typeof i===l?i.replace(/[^\d\.]/g,t).split(".")[0]:a},trim=function(i,e){if(typeof i===l){i=i.replace(/^\s\s*/,t);return typeof e===b?i:i.substring(0,q)}};var rgxMapper=function(i,e){var o=0,r,t,n,b,l,d;while(o<e.length&&!l){var c=e[o],u=e[o+1];r=t=0;while(r<c.length&&!l){if(!c[r]){break}l=c[r++].exec(i);if(!!l){for(n=0;n<u.length;n++){d=l[++t];b=u[n];if(typeof b===w&&b.length>0){if(b.length===2){if(typeof b[1]==s){this[b[0]]=b[1].call(this,d);}else {this[b[0]]=b[1];}}else if(b.length===3){if(typeof b[1]===s&&!(b[1].exec&&b[1].test)){this[b[0]]=d?b[1].call(this,d,b[2]):a;}else {this[b[0]]=d?d.replace(b[1],b[2]):a;}}else if(b.length===4){this[b[0]]=d?b[3].call(this,d.replace(b[1],b[2])):a;}}else {this[b]=d?d:a;}}}}o+=2;}},strMapper=function(i,e){for(var o in e){if(typeof e[o]===w&&e[o].length>0){for(var r=0;r<e[o].length;r++){if(has(e[o][r],i)){return o===n?a:o}}}else if(has(e[o],i)){return o===n?a:o}}return i};var $={"1.0":"/8",1.2:"/1",1.3:"/3","2.0":"/412","2.0.2":"/416","2.0.3":"/417","2.0.4":"/419","?":"/"},X={ME:"4.90","NT 3.11":"NT3.51","NT 4.0":"NT4.0",2e3:"NT 5.0",XP:["NT 5.1","NT 5.2"],Vista:"NT 6.0",7:"NT 6.1",8:"NT 6.2",8.1:"NT 6.3",10:["NT 6.4","NT 10.0"],RT:"ARM"};var K={browser:[[/\b(?:crmo|crios)\/([\w\.]+)/i],[f,[u,"Chrome"]],[/edg(?:e|ios|a)?\/([\w\.]+)/i],[f,[u,"Edge"]],[/(opera mini)\/([-\w\.]+)/i,/(opera [mobiletab]{3,6})\b.+version\/([-\w\.]+)/i,/(opera)(?:.+version\/|[\/ ]+)([\w\.]+)/i],[u,f],[/opios[\/ ]+([\w\.]+)/i],[f,[u,B+" Mini"]],[/\bopr\/([\w\.]+)/i],[f,[u,B]],[/(kindle)\/([\w\.]+)/i,/(lunascape|maxthon|netfront|jasmine|blazer)[\/ ]?([\w\.]*)/i,/(avant |iemobile|slim)(?:browser)?[\/ ]?([\w\.]*)/i,/(ba?idubrowser)[\/ ]?([\w\.]+)/i,/(?:ms|\()(ie) ([\w\.]+)/i,/(flock|rockmelt|midori|epiphany|silk|skyfire|bolt|iron|vivaldi|iridium|phantomjs|bowser|quark|qupzilla|falkon|rekonq|puffin|brave|whale(?!.+naver)|qqbrowserlite|qq|duckduckgo)\/([-\w\.]+)/i,/(heytap|ovi)browser\/([\d\.]+)/i,/(weibo)__([\d\.]+)/i],[u,f],[/(?:\buc? ?browser|(?:juc.+)ucweb)[\/ ]?([\w\.]+)/i],[f,[u,"UC"+A]],[/microm.+\bqbcore\/([\w\.]+)/i,/\bqbcore\/([\w\.]+).+microm/i],[f,[u,"WeChat(Win) Desktop"]],[/micromessenger\/([\w\.]+)/i],[f,[u,"WeChat"]],[/konqueror\/([\w\.]+)/i],[f,[u,"Konqueror"]],[/trident.+rv[: ]([\w\.]{1,9})\b.+like gecko/i],[f,[u,"IE"]],[/ya(?:search)?browser\/([\w\.]+)/i],[f,[u,"Yandex"]],[/(avast|avg)\/([\w\.]+)/i],[[u,/(.+)/,"$1 Secure "+A],f],[/\bfocus\/([\w\.]+)/i],[f,[u,O+" Focus"]],[/\bopt\/([\w\.]+)/i],[f,[u,B+" Touch"]],[/coc_coc\w+\/([\w\.]+)/i],[f,[u,"Coc Coc"]],[/dolfin\/([\w\.]+)/i],[f,[u,"Dolphin"]],[/coast\/([\w\.]+)/i],[f,[u,B+" Coast"]],[/miuibrowser\/([\w\.]+)/i],[f,[u,"MIUI "+A]],[/fxios\/([-\w\.]+)/i],[f,[u,O]],[/\bqihu|(qi?ho?o?|360)browser/i],[[u,"360 "+A]],[/(oculus|samsung|sailfish|huawei)browser\/([\w\.]+)/i],[[u,/(.+)/,"$1 "+A],f],[/(comodo_dragon)\/([\w\.]+)/i],[[u,/_/g," "],f],[/(electron)\/([\w\.]+) safari/i,/(tesla)(?: qtcarbrowser|\/(20\d\d\.[-\w\.]+))/i,/m?(qqbrowser|baiduboxapp|2345Explorer)[\/ ]?([\w\.]+)/i],[u,f],[/(metasr)[\/ ]?([\w\.]+)/i,/(lbbrowser)/i,/\[(linkedin)app\]/i],[u],[/((?:fban\/fbios|fb_iab\/fb4a)(?!.+fbav)|;fbav\/([\w\.]+);)/i],[[u,H],f],[/(kakao(?:talk|story))[\/ ]([\w\.]+)/i,/(naver)\(.*?(\d+\.[\w\.]+).*\)/i,/safari (line)\/([\w\.]+)/i,/\b(line)\/([\w\.]+)\/iab/i,/(chromium|instagram)[\/ ]([-\w\.]+)/i],[u,f],[/\bgsa\/([\w\.]+) .*safari\//i],[f,[u,"GSA"]],[/musical_ly(?:.+app_?version\/|_)([\w\.]+)/i],[f,[u,"TikTok"]],[/headlesschrome(?:\/([\w\.]+)| )/i],[f,[u,C+" Headless"]],[/ wv\).+(chrome)\/([\w\.]+)/i],[[u,C+" WebView"],f],[/droid.+ version\/([\w\.]+)\b.+(?:mobile safari|safari)/i],[f,[u,"Android "+A]],[/(chrome|omniweb|arora|[tizenoka]{5} ?browser)\/v?([\w\.]+)/i],[u,f],[/version\/([\w\.\,]+) .*mobile\/\w+ (safari)/i],[f,[u,"Mobile Safari"]],[/version\/([\w(\.|\,)]+) .*(mobile ?safari|safari)/i],[f,u],[/webkit.+?(mobile ?safari|safari)(\/[\w\.]+)/i],[u,[f,strMapper,$]],[/(webkit|khtml)\/([\w\.]+)/i],[u,f],[/(navigator|netscape\d?)\/([-\w\.]+)/i],[[u,"Netscape"],f],[/mobile vr; rv:([\w\.]+)\).+firefox/i],[f,[u,O+" Reality"]],[/ekiohf.+(flow)\/([\w\.]+)/i,/(swiftfox)/i,/(icedragon|iceweasel|camino|chimera|fennec|maemo browser|minimo|conkeror|klar)[\/ ]?([\w\.\+]+)/i,/(seamonkey|k-meleon|icecat|iceape|firebird|phoenix|palemoon|basilisk|waterfox)\/([-\w\.]+)$/i,/(firefox)\/([\w\.]+)/i,/(mozilla)\/([\w\.]+) .+rv\:.+gecko\/\d+/i,/(polaris|lynx|dillo|icab|doris|amaya|w3m|netsurf|sleipnir|obigo|mosaic|(?:go|ice|up)[\. ]?browser)[-\/ ]?v?([\w\.]+)/i,/(links) \(([\w\.]+)/i,/panasonic;(viera)/i],[u,f],[/(cobalt)\/([\w\.]+)/i],[u,[f,/master.|lts./,""]]],cpu:[[/(?:(amd|x(?:(?:86|64)[-_])?|wow|win)64)[;\)]/i],[[h,"amd64"]],[/(ia32(?=;))/i],[[h,lowerize]],[/((?:i[346]|x)86)[;\)]/i],[[h,"ia32"]],[/\b(aarch64|arm(v?8e?l?|_?64))\b/i],[[h,"arm64"]],[/\b(arm(?:v[67])?ht?n?[fl]p?)\b/i],[[h,"armhf"]],[/windows (ce|mobile); ppc;/i],[[h,"arm"]],[/((?:ppc|powerpc)(?:64)?)(?: mac|;|\))/i],[[h,/ower/,t,lowerize]],[/(sun4\w)[;\)]/i],[[h,"sparc"]],[/((?:avr32|ia64(?=;))|68k(?=\))|\barm(?=v(?:[1-7]|[5-7]1)l?|;|eabi)|(?=atmel )avr|(?:irix|mips|sparc)(?:64)?\b|pa-risc)/i],[[h,lowerize]]],device:[[/\b(sch-i[89]0\d|shw-m380s|sm-[ptx]\w{2,4}|gt-[pn]\d{2,4}|sgh-t8[56]9|nexus 10)/i],[c,[m,V],[p,k]],[/\b((?:s[cgp]h|gt|sm)-\w+|sc[g-]?[\d]+a?|galaxy nexus)/i,/samsung[- ]([-\w]+)/i,/sec-(sgh\w+)/i],[c,[m,V],[p,g]],[/(?:\/|\()(ip(?:hone|od)[\w, ]*)(?:\/|;)/i],[c,[m,S],[p,g]],[/\((ipad);[-\w\),; ]+apple/i,/applecoremedia\/[\w\.]+ \((ipad)/i,/\b(ipad)\d\d?,\d\d?[;\]].+ios/i],[c,[m,S],[p,k]],[/(macintosh);/i],[c,[m,S]],[/\b(sh-?[altvz]?\d\d[a-ekm]?)/i],[c,[m,D],[p,g]],[/\b((?:ag[rs][23]?|bah2?|sht?|btv)-a?[lw]\d{2})\b(?!.+d\/s)/i],[c,[m,j],[p,k]],[/(?:huawei|honor)([-\w ]+)[;\)]/i,/\b(nexus 6p|\w{2,4}e?-[atu]?[ln][\dx][012359c][adn]?)\b(?!.+d\/s)/i],[c,[m,j],[p,g]],[/\b(poco[\w ]+)(?: bui|\))/i,/\b; (\w+) build\/hm\1/i,/\b(hm[-_ ]?note?[_ ]?(?:\d\w)?) bui/i,/\b(redmi[\-_ ]?(?:note|k)?[\w_ ]+)(?: bui|\))/i,/\b(mi[-_ ]?(?:a\d|one|one[_ ]plus|note lte|max|cc)?[_ ]?(?:\d?\w?)[_ ]?(?:plus|se|lite)?)(?: bui|\))/i],[[c,/_/g," "],[m,F],[p,g]],[/\b(mi[-_ ]?(?:pad)(?:[\w_ ]+))(?: bui|\))/i],[[c,/_/g," "],[m,F],[p,k]],[/; (\w+) bui.+ oppo/i,/\b(cph[12]\d{3}|p(?:af|c[al]|d\w|e[ar])[mt]\d0|x9007|a101op)\b/i],[c,[m,"OPPO"],[p,g]],[/vivo (\w+)(?: bui|\))/i,/\b(v[12]\d{3}\w?[at])(?: bui|;)/i],[c,[m,"Vivo"],[p,g]],[/\b(rmx[12]\d{3})(?: bui|;|\))/i],[c,[m,"Realme"],[p,g]],[/\b(milestone|droid(?:[2-4x]| (?:bionic|x2|pro|razr))?:?( 4g)?)\b[\w ]+build\//i,/\bmot(?:orola)?[- ](\w*)/i,/((?:moto[\w\(\) ]+|xt\d{3,4}|nexus 6)(?= bui|\)))/i],[c,[m,M],[p,g]],[/\b(mz60\d|xoom[2 ]{0,2}) build\//i],[c,[m,M],[p,k]],[/((?=lg)?[vl]k\-?\d{3}) bui| 3\.[-\w; ]{10}lg?-([06cv9]{3,4})/i],[c,[m,P],[p,k]],[/(lm(?:-?f100[nv]?|-[\w\.]+)(?= bui|\))|nexus [45])/i,/\blg[-e;\/ ]+((?!browser|netcast|android tv)\w+)/i,/\blg-?([\d\w]+) bui/i],[c,[m,P],[p,g]],[/(ideatab[-\w ]+)/i,/lenovo ?(s[56]000[-\w]+|tab(?:[\w ]+)|yt[-\d\w]{6}|tb[-\d\w]{6})/i],[c,[m,"Lenovo"],[p,k]],[/(?:maemo|nokia).*(n900|lumia \d+)/i,/nokia[-_ ]?([-\w\.]*)/i],[[c,/_/g," "],[m,"Nokia"],[p,g]],[/(pixel c)\b/i],[c,[m,U],[p,k]],[/droid.+; (pixel[\daxl ]{0,6})(?: bui|\))/i],[c,[m,U],[p,g]],[/droid.+ (a?\d[0-2]{2}so|[c-g]\d{4}|so[-gl]\w+|xq-a\w[4-7][12])(?= bui|\).+chrome\/(?![1-6]{0,1}\d\.))/i],[c,[m,I],[p,g]],[/sony tablet [ps]/i,/\b(?:sony)?sgp\w+(?: bui|\))/i],[[c,"Xperia Tablet"],[m,I],[p,k]],[/ (kb2005|in20[12]5|be20[12][59])\b/i,/(?:one)?(?:plus)? (a\d0\d\d)(?: b|\))/i],[c,[m,"OnePlus"],[p,g]],[/(alexa)webm/i,/(kf[a-z]{2}wi|aeo[c-r]{2})( bui|\))/i,/(kf[a-z]+)( bui|\)).+silk\//i],[c,[m,T],[p,k]],[/((?:sd|kf)[0349hijorstuw]+)( bui|\)).+silk\//i],[[c,/(.+)/g,"Fire Phone $1"],[m,T],[p,g]],[/(playbook);[-\w\),; ]+(rim)/i],[c,m,[p,k]],[/\b((?:bb[a-f]|st[hv])100-\d)/i,/\(bb10; (\w+)/i],[c,[m,N],[p,g]],[/(?:\b|asus_)(transfo[prime ]{4,10} \w+|eeepc|slider \w+|nexus 7|padfone|p00[cj])/i],[c,[m,z],[p,k]],[/ (z[bes]6[027][012][km][ls]|zenfone \d\w?)\b/i],[c,[m,z],[p,g]],[/(nexus 9)/i],[c,[m,"HTC"],[p,k]],[/(htc)[-;_ ]{1,2}([\w ]+(?=\)| bui)|\w+)/i,/(zte)[- ]([\w ]+?)(?: bui|\/|\))/i,/(alcatel|geeksphone|nexian|panasonic(?!(?:;|\.))|sony(?!-bra))[-_ ]?([-\w]*)/i],[m,[c,/_/g," "],[p,g]],[/droid.+; ([ab][1-7]-?[0178a]\d\d?)/i],[c,[m,"Acer"],[p,k]],[/droid.+; (m[1-5] note) bui/i,/\bmz-([-\w]{2,})/i],[c,[m,"Meizu"],[p,g]],[/(blackberry|benq|palm(?=\-)|sonyericsson|acer|asus|dell|meizu|motorola|polytron)[-_ ]?([-\w]*)/i,/(hp) ([\w ]+\w)/i,/(asus)-?(\w+)/i,/(microsoft); (lumia[\w ]+)/i,/(lenovo)[-_ ]?([-\w]+)/i,/(jolla)/i,/(oppo) ?([\w ]+) bui/i],[m,c,[p,g]],[/(kobo)\s(ereader|touch)/i,/(archos) (gamepad2?)/i,/(hp).+(touchpad(?!.+tablet)|tablet)/i,/(kindle)\/([\w\.]+)/i,/(nook)[\w ]+build\/(\w+)/i,/(dell) (strea[kpr\d ]*[\dko])/i,/(le[- ]+pan)[- ]+(\w{1,9}) bui/i,/(trinity)[- ]*(t\d{3}) bui/i,/(gigaset)[- ]+(q\w{1,9}) bui/i,/(vodafone) ([\w ]+)(?:\)| bui)/i],[m,c,[p,k]],[/(surface duo)/i],[c,[m,R],[p,k]],[/droid [\d\.]+; (fp\du?)(?: b|\))/i],[c,[m,"Fairphone"],[p,g]],[/(u304aa)/i],[c,[m,"AT&T"],[p,g]],[/\bsie-(\w*)/i],[c,[m,"Siemens"],[p,g]],[/\b(rct\w+) b/i],[c,[m,"RCA"],[p,k]],[/\b(venue[\d ]{2,7}) b/i],[c,[m,"Dell"],[p,k]],[/\b(q(?:mv|ta)\w+) b/i],[c,[m,"Verizon"],[p,k]],[/\b(?:barnes[& ]+noble |bn[rt])([\w\+ ]*) b/i],[c,[m,"Barnes & Noble"],[p,k]],[/\b(tm\d{3}\w+) b/i],[c,[m,"NuVision"],[p,k]],[/\b(k88) b/i],[c,[m,"ZTE"],[p,k]],[/\b(nx\d{3}j) b/i],[c,[m,"ZTE"],[p,g]],[/\b(gen\d{3}) b.+49h/i],[c,[m,"Swiss"],[p,g]],[/\b(zur\d{3}) b/i],[c,[m,"Swiss"],[p,k]],[/\b((zeki)?tb.*\b) b/i],[c,[m,"Zeki"],[p,k]],[/\b([yr]\d{2}) b/i,/\b(dragon[- ]+touch |dt)(\w{5}) b/i],[[m,"Dragon Touch"],c,[p,k]],[/\b(ns-?\w{0,9}) b/i],[c,[m,"Insignia"],[p,k]],[/\b((nxa|next)-?\w{0,9}) b/i],[c,[m,"NextBook"],[p,k]],[/\b(xtreme\_)?(v(1[045]|2[015]|[3469]0|7[05])) b/i],[[m,"Voice"],c,[p,g]],[/\b(lvtel\-)?(v1[12]) b/i],[[m,"LvTel"],c,[p,g]],[/\b(ph-1) /i],[c,[m,"Essential"],[p,g]],[/\b(v(100md|700na|7011|917g).*\b) b/i],[c,[m,"Envizen"],[p,k]],[/\b(trio[-\w\. ]+) b/i],[c,[m,"MachSpeed"],[p,k]],[/\btu_(1491) b/i],[c,[m,"Rotor"],[p,k]],[/(shield[\w ]+) b/i],[c,[m,"Nvidia"],[p,k]],[/(sprint) (\w+)/i],[m,c,[p,g]],[/(kin\.[onetw]{3})/i],[[c,/\./g," "],[m,R],[p,g]],[/droid.+; (cc6666?|et5[16]|mc[239][23]x?|vc8[03]x?)\)/i],[c,[m,G],[p,k]],[/droid.+; (ec30|ps20|tc[2-8]\d[kx])\)/i],[c,[m,G],[p,g]],[/smart-tv.+(samsung)/i],[m,[p,x]],[/hbbtv.+maple;(\d+)/i],[[c,/^/,"SmartTV"],[m,V],[p,x]],[/(nux; netcast.+smarttv|lg (netcast\.tv-201\d|android tv))/i],[[m,P],[p,x]],[/(apple) ?tv/i],[m,[c,S+" TV"],[p,x]],[/crkey/i],[[c,C+"cast"],[m,U],[p,x]],[/droid.+aft(\w)( bui|\))/i],[c,[m,T],[p,x]],[/\(dtv[\);].+(aquos)/i,/(aquos-tv[\w ]+)\)/i],[c,[m,D],[p,x]],[/(bravia[\w ]+)( bui|\))/i],[c,[m,I],[p,x]],[/(mitv-\w{5}) bui/i],[c,[m,F],[p,x]],[/Hbbtv.*(technisat) (.*);/i],[m,c,[p,x]],[/\b(roku)[\dx]*[\)\/]((?:dvp-)?[\d\.]*)/i,/hbbtv\/\d+\.\d+\.\d+ +\([\w\+ ]*; *([\w\d][^;]*);([^;]*)/i],[[m,trim],[c,trim],[p,x]],[/\b(android tv|smart[- ]?tv|opera tv|tv; rv:)\b/i],[[p,x]],[/(ouya)/i,/(nintendo) ([wids3utch]+)/i],[m,c,[p,v]],[/droid.+; (shield) bui/i],[c,[m,"Nvidia"],[p,v]],[/(playstation [345portablevi]+)/i],[c,[m,I],[p,v]],[/\b(xbox(?: one)?(?!; xbox))[\); ]/i],[c,[m,R],[p,v]],[/((pebble))app/i],[m,c,[p,_]],[/(watch)(?: ?os[,\/]|\d,\d\/)[\d\.]+/i],[c,[m,S],[p,_]],[/droid.+; (glass) \d/i],[c,[m,U],[p,_]],[/droid.+; (wt63?0{2,3})\)/i],[c,[m,G],[p,_]],[/(quest( 2| pro)?)/i],[c,[m,H],[p,_]],[/(tesla)(?: qtcarbrowser|\/[-\w\.]+)/i],[m,[p,y]],[/(aeobc)\b/i],[c,[m,T],[p,y]],[/droid .+?; ([^;]+?)(?: bui|\) applew).+? mobile safari/i],[c,[p,g]],[/droid .+?; ([^;]+?)(?: bui|\) applew).+?(?! mobile) safari/i],[c,[p,k]],[/\b((tablet|tab)[;\/]|focus\/\d(?!.+mobile))/i],[[p,k]],[/(phone|mobile(?:[;\/]| [ \w\/\.]*safari)|pda(?=.+windows ce))/i],[[p,g]],[/(android[-\w\. ]{0,9});.+buil/i],[c,[m,"Generic"]]],engine:[[/windows.+ edge\/([\w\.]+)/i],[f,[u,E+"HTML"]],[/webkit\/537\.36.+chrome\/(?!27)([\w\.]+)/i],[f,[u,"Blink"]],[/(presto)\/([\w\.]+)/i,/(webkit|trident|netfront|netsurf|amaya|lynx|w3m|goanna)\/([\w\.]+)/i,/ekioh(flow)\/([\w\.]+)/i,/(khtml|tasman|links)[\/ ]\(?([\w\.]+)/i,/(icab)[\/ ]([23]\.[\d\.]+)/i,/\b(libweb)/i],[u,f],[/rv\:([\w\.]{1,9})\b.+(gecko)/i],[f,u]],os:[[/microsoft (windows) (vista|xp)/i],[u,f],[/(windows) nt 6\.2; (arm)/i,/(windows (?:phone(?: os)?|mobile))[\/ ]?([\d\.\w ]*)/i,/(windows)[\/ ]?([ntce\d\. ]+\w)(?!.+xbox)/i],[u,[f,strMapper,X]],[/(win(?=3|9|n)|win 9x )([nt\d\.]+)/i],[[u,"Windows"],[f,strMapper,X]],[/ip[honead]{2,4}\b(?:.*os ([\w]+) like mac|; opera)/i,/ios;fbsv\/([\d\.]+)/i,/cfnetwork\/.+darwin/i],[[f,/_/g,"."],[u,"iOS"]],[/(mac os x) ?([\w\. ]*)/i,/(macintosh|mac_powerpc\b)(?!.+haiku)/i],[[u,Z],[f,/_/g,"."]],[/droid ([\w\.]+)\b.+(android[- ]x86|harmonyos)/i],[f,u],[/(android|webos|qnx|bada|rim tablet os|maemo|meego|sailfish)[-\/ ]?([\w\.]*)/i,/(blackberry)\w*\/([\w\.]*)/i,/(tizen|kaios)[\/ ]([\w\.]+)/i,/\((series40);/i],[u,f],[/\(bb(10);/i],[f,[u,N]],[/(?:symbian ?os|symbos|s60(?=;)|series60)[-\/ ]?([\w\.]*)/i],[f,[u,"Symbian"]],[/mozilla\/[\d\.]+ \((?:mobile|tablet|tv|mobile; [\w ]+); rv:.+ gecko\/([\w\.]+)/i],[f,[u,O+" OS"]],[/web0s;.+rt(tv)/i,/\b(?:hp)?wos(?:browser)?\/([\w\.]+)/i],[f,[u,"webOS"]],[/watch(?: ?os[,\/]|\d,\d\/)([\d\.]+)/i],[f,[u,"watchOS"]],[/crkey\/([\d\.]+)/i],[f,[u,C+"cast"]],[/(cros) [\w]+(?:\)| ([\w\.]+)\b)/i],[[u,L],f],[/panasonic;(viera)/i,/(netrange)mmh/i,/(nettv)\/(\d+\.[\w\.]+)/i,/(nintendo|playstation) ([wids345portablevuch]+)/i,/(xbox); +xbox ([^\);]+)/i,/\b(joli|palm)\b ?(?:os)?\/?([\w\.]*)/i,/(mint)[\/\(\) ]?(\w*)/i,/(mageia|vectorlinux)[; ]/i,/([kxln]?ubuntu|debian|suse|opensuse|gentoo|arch(?= linux)|slackware|fedora|mandriva|centos|pclinuxos|red ?hat|zenwalk|linpus|raspbian|plan 9|minix|risc os|contiki|deepin|manjaro|elementary os|sabayon|linspire)(?: gnu\/linux)?(?: enterprise)?(?:[- ]linux)?(?:-gnu)?[-\/ ]?(?!chrom|package)([-\w\.]*)/i,/(hurd|linux) ?([\w\.]*)/i,/(gnu) ?([\w\.]*)/i,/\b([-frentopcghs]{0,5}bsd|dragonfly)[\/ ]?(?!amd|[ix346]{1,2}86)([\w\.]*)/i,/(haiku) (\w+)/i],[u,f],[/(sunos) ?([\w\.\d]*)/i],[[u,"Solaris"],f],[/((?:open)?solaris)[-\/ ]?([\w\.]*)/i,/(aix) ((\d)(?=\.|\)| )[\w\.])*/i,/\b(beos|os\/2|amigaos|morphos|openvms|fuchsia|hp-ux|serenityos)/i,/(unix) ?([\w\.]*)/i],[u,f]]};var UAParser=function(i,e){if(typeof i===w){e=i;i=a;}if(!(this instanceof UAParser)){return new UAParser(i,e).getResult()}var r=typeof o!==b&&o.navigator?o.navigator:a;var n=i||(r&&r.userAgent?r.userAgent:t);var v=r&&r.userAgentData?r.userAgentData:a;var x=e?extend(K,e):K;var _=r&&r.userAgent==n;this.getBrowser=function(){var i={};i[u]=a;i[f]=a;rgxMapper.call(i,n,x.browser);i[d]=majorize(i[f]);if(_&&r&&r.brave&&typeof r.brave.isBrave==s){i[u]="Brave";}return i};this.getCPU=function(){var i={};i[h]=a;rgxMapper.call(i,n,x.cpu);return i};this.getDevice=function(){var i={};i[m]=a;i[c]=a;i[p]=a;rgxMapper.call(i,n,x.device);if(_&&!i[p]&&v&&v.mobile){i[p]=g;}if(_&&i[c]=="Macintosh"&&r&&typeof r.standalone!==b&&r.maxTouchPoints&&r.maxTouchPoints>2){i[c]="iPad";i[p]=k;}return i};this.getEngine=function(){var i={};i[u]=a;i[f]=a;rgxMapper.call(i,n,x.engine);return i};this.getOS=function(){var i={};i[u]=a;i[f]=a;rgxMapper.call(i,n,x.os);if(_&&!i[u]&&v&&v.platform!="Unknown"){i[u]=v.platform.replace(/chrome os/i,L).replace(/macos/i,Z);}return i};this.getResult=function(){return {ua:this.getUA(),browser:this.getBrowser(),engine:this.getEngine(),os:this.getOS(),device:this.getDevice(),cpu:this.getCPU()}};this.getUA=function(){return n};this.setUA=function(i){n=typeof i===l&&i.length>q?trim(i,q):i;return this};this.setUA(n);return this};UAParser.VERSION=r;UAParser.BROWSER=enumerize([u,f,d]);UAParser.CPU=enumerize([h]);UAParser.DEVICE=enumerize([c,m,p,v,g,x,k,_,y]);UAParser.ENGINE=UAParser.OS=enumerize([u,f]);if(typeof e!==b){if(i.exports){e=i.exports=UAParser;}e.UAParser=UAParser;}else {if(typeof o!==b){o.UAParser=UAParser;}}var Q=typeof o!==b&&(o.jQuery||o.Zepto);if(Q&&!Q.ua){var Y=new UAParser;Q.ua=Y.getResult();Q.ua.get=function(){return Y.getUA()};Q.ua.set=function(i){Y.setUA(i);var e=Y.getResult();for(var o in e){Q.ua[o]=e[o];}};}})(typeof window==="object"?window:this);}};var e={};function __nccwpck_require__(o){var a=e[o];if(a!==undefined){return a.exports}var r=e[o]={exports:{}};var t=true;try{i[o].call(r.exports,r,r.exports,__nccwpck_require__);t=false;}finally{if(t)delete e[o];}return r.exports}if(typeof __nccwpck_require__!=="undefined")__nccwpck_require__.ab=__dirname+"/";var o=__nccwpck_require__(226);uaParser.exports=o;})();
-
-var uaParserExports = uaParser.exports;
-
-(function (exports) {
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	function _export(target, all) {
-	    for(var name in all)Object.defineProperty(target, name, {
-	        enumerable: true,
-	        get: all[name]
-	    });
-	}
-	_export(exports, {
-	    isBot: function() {
-	        return isBot;
-	    },
-	    userAgent: function() {
-	        return userAgent;
-	    },
-	    userAgentFromString: function() {
-	        return userAgentFromString;
-	    }
-	});
-	const _uaparserjs = /*#__PURE__*/ _interop_require_default(uaParserExports);
-	function _interop_require_default(obj) {
-	    return obj && obj.__esModule ? obj : {
-	        default: obj
-	    };
-	}
-	function isBot(input) {
-	    return /Googlebot|Mediapartners-Google|AdsBot-Google|googleweblight|Storebot-Google|Google-PageRenderer|Google-InspectionTool|Bingbot|BingPreview|Slurp|DuckDuckBot|baiduspider|yandex|sogou|LinkedInBot|bitlybot|tumblr|vkShare|quora link preview|facebookexternalhit|facebookcatalog|Twitterbot|applebot|redditbot|Slackbot|Discordbot|WhatsApp|SkypeUriPreview|ia_archiver/i.test(input);
-	}
-	function userAgentFromString(input) {
-	    return {
-	        ...(0, _uaparserjs.default)(input),
-	        isBot: input === undefined ? false : isBot(input)
-	    };
-	}
-	function userAgent({ headers }) {
-	    return userAgentFromString(headers.get("user-agent") || undefined);
-	}
-
-	
-} (userAgent));
-
-var urlPattern = {};
-
-(function (exports) {
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	Object.defineProperty(exports, "URLPattern", {
-	    enumerable: true,
-	    get: function() {
-	        return GlobalURLPattern;
-	    }
-	});
-	const GlobalURLPattern = // @ts-expect-error: URLPattern is not available in Node.js
-	typeof URLPattern === "undefined" ? undefined : URLPattern;
-
-	
-} (urlPattern));
-
-(function (module, exports) {
-	const serverExports = {
-	  NextRequest: request
-	    .NextRequest,
-	  NextResponse: response
-	    .NextResponse,
-	  ImageResponse: imageResponse
-	    .ImageResponse,
-	  userAgentFromString: userAgent
-	    .userAgentFromString,
-	  userAgent: userAgent
-	    .userAgent,
-	  URLPattern: urlPattern
-	    .URLPattern,
-	};
-
-	// https://nodejs.org/api/esm.html#commonjs-namespaces
-	// When importing CommonJS modules, the module.exports object is provided as the default export
-	module.exports = serverExports;
-
-	// make import { xxx } from 'next/server' work
-	exports.NextRequest = serverExports.NextRequest;
-	exports.NextResponse = serverExports.NextResponse;
-	exports.ImageResponse = serverExports.ImageResponse;
-	exports.userAgentFromString = serverExports.userAgentFromString;
-	exports.userAgent = serverExports.userAgent;
-	exports.URLPattern = serverExports.URLPattern; 
-} (server, server.exports));
-
-var serverExports = server.exports;
-
-function loginWithPasby(_req, options) {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, flowClient().begin(options)];
-                case 1: return [2 /*return*/, _a.sent()];
-            }
-        });
-    });
+function envMissing(env) {
+    return "The environment variable '".concat(env, "' is required. Set it in your .env file");
 }
-function tokenSwap(_req, params) {
+
+function loginLink(options) {
     return __awaiter(this, void 0, void 0, function () {
-        var clientID, consumerKey, consumer, postLoginFallbackURL, host, code, confirmed;
-        var _a, _b;
-        return __generator(this, function (_c) {
-            switch (_c.label) {
+        var consumerKey, secret, redirectUri, challenge, response, link;
+        var _a;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
                 case 0:
-                    clientID = config.clientID, consumerKey = config.consumerKey, consumer = config.consumer, postLoginFallbackURL = config.postLoginFallbackURL, host = config.host;
-                    if (!clientID)
-                        throw new Error(envMissing("PASBY_CLIENT_ID"));
-                    if (!consumerKey)
-                        throw new Error(envMissing("PASBY_CONSUMER_KEY"));
-                    if (!consumer)
-                        throw new Error(envMissing("PASBY_CONSUMER"));
-                    if (!postLoginFallbackURL)
-                        throw new Error(envMissing("PASBY_POST_LOGIN_FALLBACK"));
-                    if (!host)
-                        throw new Error(envMissing("PASBY_HOST_URL"));
-                    code = (_a = params.get('handshake')) !== null && _a !== void 0 ? _a : '';
-                    confirmed = ((_b = params.get('flow')) !== null && _b !== void 0 ? _b : '') === 'confirmed';
-                    if (!confirmed)
-                        return [2 /*return*/, serverExports.NextResponse.redirect(host)];
-                    // Add a slight delay if needed (useful for certain timing issues)
-                    return [4 /*yield*/, delay(1000)];
+                    consumerKey = config.consumerKey, secret = config.secret, redirectUri = config.redirectUri;
+                    if (!secret) {
+                        throw new Error(envMissing("PASBY_CLIENT_SECRET"));
+                    }
+                    if (!redirectUri) {
+                        throw new Error(envMissing("PASBY_REDIRECT_URI"));
+                    }
+                    return [4 /*yield*/, pkceChallenge()];
                 case 1:
-                    // Add a slight delay if needed (useful for certain timing issues)
-                    _c.sent();
-                    // Handle the callback and token exchange
-                    return [4 /*yield*/, flowClient().callback(code)];
+                    challenge = _b.sent();
+                    return [4 /*yield*/, callback(LOGIN_PATH, 'POST', {
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'x-api-key': consumerKey,
+                                'x-access-secret': secret,
+                            },
+                            body: {
+                                callback: "".concat(redirectUri),
+                                action: options.action,
+                                claims: (_a = options.claims) !== null && _a !== void 0 ? _a : [],
+                                challenge: challenge.challenge,
+                                payload: options.payload
+                            },
+                        })];
                 case 2:
-                    // Handle the callback and token exchange
-                    _c.sent();
-                    // Redirect to the post-login fallback URL after successful token swap
-                    return [2 /*return*/, serverExports.NextResponse.redirect(postLoginFallbackURL)];
+                    response = _b.sent();
+                    link = response.link;
+                    if (!link)
+                        throw new Error("Communication misconfigured");
+                    return [2 /*return*/, {
+                            url: link,
+                            pkce_verifier: challenge.verifier,
+                        }];
             }
         });
     });
 }
 
-export { loginWithPasby, tokenSwap, useAuth };
+export { AuthenticationButton, LOGIN_PATH, PasbyProvider, loginLink, pkceChallenge, usePasby };
 //# sourceMappingURL=index.js.map
