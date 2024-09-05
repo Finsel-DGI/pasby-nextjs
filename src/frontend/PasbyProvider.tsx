@@ -5,22 +5,23 @@ import callback from '../sdk/callback';
 
 interface AuthContextProps {
   isAuthenticated: boolean;
-  error?: string;
+  callbackError?: string;
   logout: () => void;
 }
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 
 
-export const PasbyProvider = ({ children, clientId, loginFallback, logoutPath, callbackPath }: {
+export const PasbyProvider = ({ children, clientId, loginFallback, logoutPath, callbackPath, pkceCookieKey }: {
   children: any,
   clientId: string;
   callbackPath: string;
+  pkceCookieKey: string;
   loginFallback: string;
   logoutPath: string;
 }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [error, setError] = useState<string | undefined>();
+  const [callbackError, setError] = useState<string | undefined>();
 
   useEffect(() => {
     const token = getCookie(SESSION_KEY);
@@ -28,17 +29,14 @@ export const PasbyProvider = ({ children, clientId, loginFallback, logoutPath, c
       setIsAuthenticated(true);
     }
   }, []);
-
   const handleCallback = async () => {
-    const verifier = getCookie(CHALLENGE_KEY);
-    if (!verifier) {
-      setError("No code verifier found for PKCE");
-      return;
-    }
-    await callback(verifier, clientId).then((c) => {
+    await callback(pkceCookieKey, clientId).then((c) => {
       if (!c) return;
       setIsAuthenticated(true);
       window.location.href = loginFallback;
+    }).catch((e) => {
+      const message = (e as Error).message;
+      window.location.href = `${window.location.host}/${logoutPath}?authError=${btoa(message)}`;
     });
   };
 
@@ -55,7 +53,7 @@ export const PasbyProvider = ({ children, clientId, loginFallback, logoutPath, c
   }, []);
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, logout, error }}>
+    <AuthContext.Provider value={{ isAuthenticated, logout, callbackError }}>
       {children}
     </AuthContext.Provider>
   );

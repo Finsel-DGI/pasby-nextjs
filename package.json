@@ -2,7 +2,8 @@
   "name": "@finsel-dgi/pasby-auth-nextjs",
   "version": "1.0.0",
   "description": "Next.js authentication with pasby",
-  "main": "dist/index.js",
+  "main": "dist/cjs/index.js",
+  "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
@@ -11,9 +12,9 @@
       "types": "./dist/index.d.ts"
     },
     "./server": {
-      "import": "./dist/server/index.js",
-      "require": "./dist/server/cjs/index.js",
-      "types": "./dist/types/server/index.d.ts"
+      "import": "./module/index.js",
+      "require": "./module/index.js",
+      "types": "./module/dist/server/index.d.ts"
     }
   },
   "files": [
@@ -22,7 +23,7 @@
   "type": "module",
   "scripts": {
     "build": "npm run rm && rollup -c",
-    "rm": "rm -rf dist"
+    "rm": "rm -rf dist rm -rf module"
   },
   "repository": {
     "type": "git",
@@ -53,6 +54,7 @@
     "@rollup/plugin-commonjs": "^26.0.1",
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-terser": "^0.4.4",
     "@rollup/plugin-typescript": "^11.1.6",
     "@types/node": "^22.5.1",
     "@types/react": "^18.3.4",
@@ -61,8 +63,8 @@
     "typescript": "^5.5.4"
   },
   "dependencies": {
-    "clsx": "^2.1.1",
     "axios": "^1.7.5",
+    "clsx": "^2.1.1",
     "cookies-next": "^4.2.1"
   }
 }

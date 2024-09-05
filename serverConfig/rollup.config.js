@@ -5,10 +5,11 @@ export default {
   plugins: [typescript()],
   output: [
     {
-      file: 'dist/server/cjs/index.js',
+      file: 'module/index.js',
       format: 'cjs',
       strict: false,
       sourcemap: true,
-    },
-  ]
+    }
+  ],
+  external: ['axios', 'cookies-next'],
 };

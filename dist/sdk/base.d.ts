@@ -1,6 +1,3 @@
-export declare const BASE_PATH: string;
-export declare const SESSION_KEY = "pni";
-export declare const CHALLENGE_KEY = "code-verifier";
 export declare const DEFAULT_ERROR: IResponseTemplate;
 export type status = 'successful' | 'handled' | 'mismatch' | 'token-mismatch' | 'unauthorized' | 'expiration' | 'failed' | 'extreme';
 export type replyType = 'api_error' | 'param_error' | 'db_error' | 'external_service_error' | 'session_cancel' | 'unknown_error' | 'session_required' | 'authorization_error' | 'session_expiry' | 'invalid_request';

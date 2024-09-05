@@ -1,11 +1,19 @@
-import { setCookie } from 'cookies-next';
+import { getCookie, setCookie } from 'cookies-next';
 import { HANDSHAKE_PATH } from '../utils/paths';
 import { SESSION_KEY } from '../utils/keys';
 import { unixTimestampToMaxAge } from '../utils/commons';
 
-const callback = async (verifier: string, clientId: string) => {
+const callback = async (pkceCookieKey: string, clientId: string) => {
   const params = new URLSearchParams(window.location.search);
   const code = params.get('handshake');
+  const status = params.get('flow');
+  if (status !== 'confirmed') {
+    throw new Error("Authentication with pasby eID failed");
+  }
+  const verifier = getCookie(pkceCookieKey);
+  if (!verifier) {
+    throw new Error("No code verifier found for PKCE");
+  }
   if (!code) return undefined;
   const response = await fetch(HANDSHAKE_PATH, {
     method: 'POST',

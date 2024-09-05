@@ -1,8 +1,8 @@
 import { useState } from "react";
 import Button, { ButtonType } from "./BrandButtons";
 import clsx from 'clsx'
-import { delay } from "../../sdk/common";
 import React from "react";
+import { delay } from "../../utils/commons";
 
 type variant = 'original' | 'dark' | 'light';
 

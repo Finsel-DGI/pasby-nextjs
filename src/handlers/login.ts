@@ -1,7 +1,7 @@
 import { config } from "../config";
 import { api } from "../sdk/api";
 import { AuthenticationParams } from "../sdk/auth.types";
-import { pkceChallenge } from "../sdk/pkce";
+import { pkceChallenge } from "../utils/pkce";
 import { envMissing } from "../sdk/strings";
 import { LOGIN_PATH } from "../utils/paths";
 

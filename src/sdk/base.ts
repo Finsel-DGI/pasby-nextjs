@@ -1,6 +1,3 @@
-export const BASE_PATH = "https://oauthn.web.app".replace(/\/+$/, "");
-export const SESSION_KEY = 'pni';
-export const CHALLENGE_KEY = 'code-verifier';
 export const DEFAULT_ERROR: IResponseTemplate = {
   status: 'failed',
   reason: 'Connection is improper and thus has been interrupted',
