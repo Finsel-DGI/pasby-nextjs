@@ -5512,12 +5512,7 @@ function handshake(req, cookieSetter, cookieGetter) {
                 case 2:
                     res = _e.sent();
                     console.log("About to set challenge --- ".concat(res.csrf));
-                    // setChallengeCookie(cookieSetter, {
-                    //   value: res.csrf,
-                    //   key: keys.csrf,
-                    //   expires: unixTimestampToMaxAge(res.exp),
-                    // });
-                    cookieSetter("csrf", res.csrf, build.unixTimestampToMaxAge(res.exp));
+                    cookieSetter("csrf", "mmywi_" + res.csrf, build.unixTimestampToMaxAge(res.exp));
                     cookieSetter(dist.keys.csrf, res.csrf, build.unixTimestampToMaxAge(res.exp));
                     _a = cookieSetter;
                     _b = [dist.keys.eid];
