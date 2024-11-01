@@ -1,22 +1,16 @@
 {
   "compilerOptions": {
-    "outDir": "./dist",
+    "outDir": "dist",
     "jsx": "react",
-    "moduleResolution": "node",
     "lib": ["dom", "esnext"],
-    "skipDefaultLibCheck": true,
-
+    "skipDefaultLibCheck": false,
     "allowSyntheticDefaultImports": true,
     "declaration": true,
     "esModuleInterop": true,
-    "rootDir": "./src",
-
   },
-  "include": ["src/**/*"],
-  "outDir": "./dist-types",
+  "include": ["src"],
   "exclude": [
     "node_modules",
     "dist",
-    "dist-types",
   ]
 }
