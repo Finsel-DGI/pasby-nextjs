@@ -3812,13 +3812,14 @@ var api = function (path, method, options) { return __awaiter$5(void 0, void 0, 
     });
 }); };
 
-var _a, _b, _c, _d, _e;
+var _a, _b, _c, _d, _e, _f;
 var config = {
     secret: (_a = process.env.PASBY_CLIENT_SECRET) !== null && _a !== void 0 ? _a : '',
     apikey: (_b = process.env.PASBY_CONSUMER_KEY) !== null && _b !== void 0 ? _b : '',
     appid: (_c = process.env.PASBY_CLIENT_ID) !== null && _c !== void 0 ? _c : '',
     gen: (_d = process.env.SECRET_GEN) !== null && _d !== void 0 ? _d : '',
     loginReturnPath: (_e = process.env.PASBY_LOGIN_REDIRECT) !== null && _e !== void 0 ? _e : '',
+    logoutReturnPath: (_f = process.env.PASBY_LOGOUT_REDIRECT) !== null && _f !== void 0 ? _f : '/',
 };
 
 const encoder = new TextEncoder();
@@ -5419,35 +5420,48 @@ var handler = (function (option, cookieSetter, cookieGetter) {
             return __generator$2(this, function (_d) {
                 switch (_d.label) {
                     case 0:
-                        _d.trys.push([0, 7, , 8]);
+                        _d.trys.push([0, 9, , 10]);
                         _c = params.auth;
                         switch (_c) {
                             case 'login': return [3 /*break*/, 1];
                             case 'handshake': return [3 /*break*/, 3];
+                            case 'logout': return [3 /*break*/, 5];
                         }
-                        return [3 /*break*/, 5];
+                        return [3 /*break*/, 7];
                     case 1: return [4 /*yield*/, login(req, option, cookieSetter)];
                     case 2: return [2 /*return*/, _d.sent()];
                     case 3: return [4 /*yield*/, handshake(req, cookieSetter, cookieGetter)];
                     case 4: return [2 /*return*/, _d.sent()];
-                    case 5: return [2 /*return*/, serverExports.NextResponse.json({ error: 'Method request not accepted' }, {
+                    case 5: return [4 /*yield*/, logout(req, cookieSetter)];
+                    case 6: return [2 /*return*/, _d.sent()];
+                    case 7: return [2 /*return*/, serverExports.NextResponse.json({ error: 'Method request not accepted' }, {
                             status: 400
                         })];
-                    case 6: return [3 /*break*/, 8];
-                    case 7:
+                    case 8: return [3 /*break*/, 10];
+                    case 9:
                         error_1 = _d.sent();
                         message = error_1.message;
-                        console.error("This happens: ".concat(message)); // make a pasby logger type here
+                        console.error("pasby eid error at route -- here the message: ".concat(message)); // make a pasby logger type here
                         return [2 /*return*/, serverExports.NextResponse.json({
                                 provider: "pasby authentication",
                                 error: message
                             })];
-                    case 8: return [2 /*return*/];
+                    case 10: return [2 /*return*/];
                 }
             });
         });
     };
 });
+function logout(req, cookieSetter) {
+    return __awaiter$5(this, void 0, void 0, function () {
+        return __generator$2(this, function (_a) {
+            cookieSetter(dist.keys.eid, '', 0);
+            cookieSetter(dist.keys.csrf, '', 0);
+            cookieSetter(dist.keys.pkce, '', 0);
+            return [2 /*return*/, serverExports.NextResponse.redirect(req.nextUrl.origin + config.logoutReturnPath)];
+        });
+    });
+}
 function login(req, options, cookieSetter) {
     return __awaiter$5(this, void 0, void 0, function () {
         var searchParams, state, redirect, res;

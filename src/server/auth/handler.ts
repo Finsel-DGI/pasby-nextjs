@@ -19,6 +19,8 @@ export default (option: AuthenticationParams,
           return await login(req, option, cookieSetter);
         case 'handshake':
           return await handshake(req, cookieSetter, cookieGetter);
+        case 'logout':
+          return await logout(req, cookieSetter);
         default:
           return NextResponse.json({ error: 'Method request not accepted' }, {
             status: 400
@@ -26,13 +28,20 @@ export default (option: AuthenticationParams,
       }
     } catch (error) {
       const message = (error as Error).message;
-      console.error(`This happens: ${message}`); // make a pasby logger type here
+      console.error(`pasby eid error at route -- here the message: ${message}`); // make a pasby logger type here
       return NextResponse.json({
         provider: "pasby authentication",
         error: message
       });
     }
   }
+
+async function logout(req: NextRequest, cookieSetter: setter) {
+  cookieSetter(keys.eid, '', 0);
+  cookieSetter(keys.csrf, '', 0);
+  cookieSetter(keys.pkce, '', 0);
+  return NextResponse.redirect(req.nextUrl.origin + config.logoutReturnPath);
+}
 
 async function login(req: NextRequest, options: AuthenticationParams, cookieSetter: setter) {
   const searchParams = req.nextUrl.searchParams;

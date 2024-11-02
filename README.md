@@ -38,6 +38,7 @@ PASBY_CLIENT_SECRET=<App secret>
 PASBY_CONSUMER_KEY=<organisations api key>
 PASBY_CLIENT_ID=<App id>
 PASBY_LOGIN_REDIRECT=<fallback path after authentication e.g /dashboard>
+PASBY_LOGOUT_REDIRECT=<fallback path after logout e.g /login>
 SECRET_GEN=<generated random 16 string>
 ```
 
@@ -158,10 +159,14 @@ interface User {
 }
 ```
 
+## End user session
+
+Simply have a button that makes a router push to `/api/eid/logout`. Before doing so ensure you have provided a fallback logout path at your env as `PASBY_LOGOUT_REDIRECT`
+
 ## Documentation
 
 For detailed documentation and advanced usage, visit:
-- [pasby Documentation](https://docs.pasby.africa)
+- [pasby documentation](https://docs.pasby.africa)
 - [Button Customization](https://docs.pasby.africa/buttons)
 
 ## License

@@ -4,4 +4,5 @@ export default {
   appid: process.env.PASBY_CLIENT_ID ?? '',
   gen: process.env.SECRET_GEN ?? '',
   loginReturnPath: process.env.PASBY_LOGIN_REDIRECT ?? '',
+  logoutReturnPath: process.env.PASBY_LOGOUT_REDIRECT ?? '/',
 }

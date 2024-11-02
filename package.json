@@ -1,6 +1,6 @@
 {
   "name": "@finsel-dgi/pasby-next",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Next.js authentication with pasby",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -20,9 +20,7 @@
   "type": "module",
   "scripts": {
     "build": "npm run clean && tsc",
-    "rollup": "npm run clean && rollup -c",
-    "link:sdk": "npm link /Users/jackmay/Github/packages/pasby-auth-react",
-    "unlink:sdk": "npm unlink /Users/jackmay/Github/packages/pasby-auth-react",
+    "bundle": "npm run clean && rollup -c",
     "clean": "rm -rf dist"
   },
   "repository": {
