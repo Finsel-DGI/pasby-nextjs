@@ -5412,10 +5412,10 @@ function requestToNextSever(path, body, options) {
 	Object.defineProperty(exports, "PollEIDComponent", { enumerable: true, get: function () { return Poller_1.PollEIDComponent; } }); 
 } (dist));
 
-var handler = (function (option, cookieSetter, cookieGetter) {
+var handler = (function (option, cookieSetter, cookieGetter, errorFallbackPath) {
     return function handler(req_1, _a) {
         return __awaiter$5(this, arguments, void 0, function (req, _b) {
-            var _c, error_1, message;
+            var _c, error_1, searchParams, redirect, message;
             var params = _b.params;
             return __generator$2(this, function (_d) {
                 switch (_d.label) {
@@ -5440,12 +5440,19 @@ var handler = (function (option, cookieSetter, cookieGetter) {
                     case 8: return [3 /*break*/, 10];
                     case 9:
                         error_1 = _d.sent();
+                        searchParams = req.nextUrl.searchParams;
+                        redirect = (searchParams.get('redirect'));
                         message = error_1.message;
                         console.error("pasby eid error at route -- here the message: ".concat(message)); // make a pasby logger type here
-                        return [2 /*return*/, serverExports.NextResponse.json({
-                                provider: "pasby authentication",
-                                error: message
-                            })];
+                        if (redirect === "true" || redirect === null || redirect === undefined) {
+                            return [2 /*return*/, serverExports.NextResponse.redirect(req.nextUrl.origin + errorFallbackPath + "?eidreject=" + btoa((message)))];
+                        }
+                        else {
+                            return [2 /*return*/, serverExports.NextResponse.json({
+                                    provider: "pasby authentication",
+                                    error: message
+                                })];
+                        }
                     case 10: return [2 /*return*/];
                 }
             });
@@ -5525,7 +5532,6 @@ function handshake(req, cookieSetter, cookieGetter) {
                         })];
                 case 2:
                     res = _e.sent();
-                    console.log("About to set challenge --- ".concat(res.csrf));
                     cookieSetter("csrf", "mmywi_" + res.csrf, build.unixTimestampToMaxAge(res.exp));
                     cookieSetter(dist.keys.csrf, res.csrf, build.unixTimestampToMaxAge(res.exp));
                     _a = cookieSetter;

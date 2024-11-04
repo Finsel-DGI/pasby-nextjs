@@ -10,7 +10,7 @@ type setter = (key: string, value: string, exp?: number) => void;
 type getter = (key: string) => Promise<string | undefined>;
 
 export default (option: AuthenticationParams, 
-  cookieSetter: setter, cookieGetter: getter
+  cookieSetter: setter, cookieGetter: getter, errorFallbackPath: string
 ) =>
   async function handler(req: NextRequest, { params }: { params: { auth: string } }) {
     try {
@@ -27,12 +27,19 @@ export default (option: AuthenticationParams,
           });
       }
     } catch (error) {
+      const searchParams = req.nextUrl.searchParams;
+      const redirect = (searchParams.get('redirect'));
       const message = (error as Error).message;
       console.error(`pasby eid error at route -- here the message: ${message}`); // make a pasby logger type here
-      return NextResponse.json({
-        provider: "pasby authentication",
-        error: message
-      });
+      
+      if (redirect === "true" || redirect === null || redirect === undefined) {
+        return NextResponse.redirect(req.nextUrl.origin + errorFallbackPath + "?eidreject=" + btoa((message)));
+      } else {
+        return NextResponse.json({
+          provider: "pasby authentication",
+          error: message
+        });
+      }
     }
   }
 
@@ -78,7 +85,6 @@ async function handshake(req: NextRequest, cookieSetter: setter, cookieGetter: g
     code: code,
     verifier: verifier,
   });
-  console.log(`About to set challenge --- ${res.csrf}`);
   cookieSetter("csrf", "mmywi_"+res.csrf, unixTimestampToMaxAge(res.exp));
   cookieSetter(keys.csrf, res.csrf, unixTimestampToMaxAge(res.exp));
   cookieSetter(keys.eid, await encrypt(res.access), unixTimestampToMaxAge(res.exp));

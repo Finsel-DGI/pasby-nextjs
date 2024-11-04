@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { AuthenticationParams } from "../types";
 type setter = (key: string, value: string, exp?: number) => void;
 type getter = (key: string) => Promise<string | undefined>;
-declare const _default: (option: AuthenticationParams, cookieSetter: setter, cookieGetter: getter) => (req: NextRequest, { params }: {
+declare const _default: (option: AuthenticationParams, cookieSetter: setter, cookieGetter: getter, errorFallbackPath: string) => (req: NextRequest, { params }: {
     params: {
         auth: string;
     };

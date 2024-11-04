@@ -34,6 +34,7 @@ type ButtonProps = ({
   action: ButtonType;
   variant: pasbyStyling;
   className?: string;
+  logoStyling?: string;
   onClick?: () => Promise<void>
 })
 
@@ -48,16 +49,24 @@ function Spinner({ className }: {
   );
 }
 
-export function PasbyButton({ type, action, variant, onClick, className }: ButtonProps) {
+export function PasbyButton({ type, action, variant, onClick, className, logoStyling, justAction, onError }: ButtonProps & {
+  justAction?: boolean;
+  onError?: (e: string) => void;
+}) {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleClick = async () => {
     setIsLoading(true);
-    if (!onClick) {
-      setIsLoading(false);
-      return;
+    try {
+      if (!onClick) {
+        setIsLoading(false);
+        return;
+      }
+      await onClick();
+    } catch (error) {
+      console.error("Spiked -- ", error);
+      onError((error as Error).message);
     }
-    await onClick();
     setIsLoading(false);
   };
 
@@ -65,21 +74,23 @@ export function PasbyButton({ type, action, variant, onClick, className }: Butto
     <button
       type={type ?? "button"}
       onClick={handleClick}
-      className={clsx('relative flex justify-center items-center rounded-lg gap-2 px-8 py-2 text-sm',
+      className={clsx('flex justify-center items-center rounded-lg gap-2 px-8 py-2 text-sm',
         `${baseStyle[variant].text} ${baseStyle[variant].bgk} hover:${baseStyle[variant].bgk}/[2.5%] focus:${baseStyle[variant].bgk}/[5%]`,
         'focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 hover:shadow-md focus:shadow-md',
         isLoading ? 'brightness-75' : '',
         className)}>
       {
         isLoading ?
-          <Spinner className="absolute right-2 w-5 h-5" />
+          <div className="text-lg font-medium">....</div>
           : null
       }
-      <Logo className="w-8 h-8" coloring={{
-        text: baseStyle[variant].logo,
-        fill: baseStyle[variant].logoBgk
-      }} />
-      {capitalizeWords(action)} with pasby
+      {!isLoading && <>
+        <Logo className={logoStyling ?? "w-8 h-8"} coloring={{
+          text: baseStyle[variant].logo,
+          fill: baseStyle[variant].logoBgk
+        }} />
+        {capitalizeWords(action)} {justAction ? "" : "with pasby"}
+      </>}
     </button>
   );
 }
