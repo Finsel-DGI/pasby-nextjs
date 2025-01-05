@@ -22,6 +22,7 @@ declare const Claims: {
     "contact.phoneVerified": "contact.phoneVerified";
     "address.city": "address.city";
     "address.postcode": "address.postcode";
+    "address.state": "address.state";
     "address.country": "address.country";
     "address.place": "address.place";
     "address.formatted": "address.formatted";

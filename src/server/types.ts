@@ -28,6 +28,7 @@ const Claims = strEnum([
   'contact.phoneVerified',
   'address.city',
   'address.postcode',
+  'address.state',
   'address.country',
   'address.place',
   'address.formatted',

@@ -2379,7 +2379,6 @@ function PasbyButton(_a) {
     }); };
     return (React__default.createElement("button", { type: type !== null && type !== void 0 ? type : "button", onClick: handleClick, className: clsx('flex justify-center items-center rounded-lg gap-2 px-8 py-2 text-sm', "".concat(baseStyle[variant].text, " ").concat(baseStyle[variant].bgk, " hover:").concat(baseStyle[variant].bgk, "/[2.5%] focus:").concat(baseStyle[variant].bgk, "/[5%]"), 'focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 hover:shadow-md focus:shadow-md', isLoading ? 'brightness-75' : '', className) },
         isLoading ?
-            // <Spinner className="right-2 w-5 h-5" />
             React__default.createElement("div", { className: "text-lg font-medium" }, "....")
             : null,
         !isLoading && React__default.createElement(React__default.Fragment, null,
