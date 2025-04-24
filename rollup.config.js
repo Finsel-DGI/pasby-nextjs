@@ -1,5 +1,11 @@
+import { readFileSync } from 'fs';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const pkg = JSON.parse(readFileSync(`${__dirname}/package.json`, 'utf-8'));
+
 import typescript from '@rollup/plugin-typescript';
-import pkg from './package.json' assert {type: "json"};
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import json from '@rollup/plugin-json';

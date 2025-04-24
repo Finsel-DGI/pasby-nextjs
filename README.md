@@ -25,7 +25,7 @@ pnpm add @finsel-dgi/pasby-next
 
 ## Requirements
 
-- Next.js 13.4 or higher
+- Next.js 14 or higher preferably Next.js 15 onward
 - React 18 or higher
 - Node.js 16 or higher
 
@@ -50,21 +50,12 @@ Create a new API route at `app/api/eid/[auth]/route.ts`:
 
 ```typescript
 import { handler } from "@finsel-dgi/pasby-next/server";
-import { cookies } from "next/headers";
 
 export const GET = handler({
   claims: ["naming.given", "naming.family", "contact.email"], // Add required claims
   action: 'signup', // login | signup | link
   payload: "User registration request" // describe action intent
-}, (key, value, exp) => {
-  cookies().set(key, value, { 
-    secure: true, 
-    sameSite: true, 
-    maxAge: (exp) 
-  });
-}, async (key) => {
-  return cookies().get(key)?.value;
-});
+},"/error-fallback-path");
 ```
 
 ### 2. Add Authentication Button

@@ -105,7 +105,7 @@ var __awaiter$2 = (commonjsGlobal && commonjsGlobal.__awaiter) || function (this
     });
 };
 Object.defineProperty(general, "__esModule", { value: true });
-general.strEnum = general.roundTo = general.getDifferenceInSeconds = general.getDifferenceInMinutes = general.getDifferenceInHours = general.getRandomInteger = general.getMonthName = general.getLastDayOfMonth = general.calculateDaysBetweenTimestamps = general.calculatePercentage = general.obscureString = general.formatDate = general.recordToArray = general.isValidURL = general.getValueByQuery = general.isEven = general.isOdd = general.expiresAt = general.parseInterface = general.unixTimestampToMaxAge = general.getRandomUnixTimestamp = general.formatNumber = general.formatCash = general.formatCurrency = general.getRandomInt = general.removeTrailingSlash = general.generateRandomAlphaNumeric = general.convertUnixToDate = general.unixTimeStampNow = general.convertDateToUnix = general.isThisAWord = general.createInitials = general.delay = void 0;
+general.strEnum = general.roundTo = general.getDifferenceInSeconds = general.getDifferenceInMinutes = general.getDifferenceInHours = general.getRandomInteger = general.getMonthName = general.getLastDayOfMonth = general.calculateDaysBetweenTimestamps = general.calculatePercentage = general.dateFormatter = general.obscureString = general.formatDate = general.recordToArray = general.isValidURL = general.getValueByQuery = general.isEven = general.isOdd = general.expiresAt = general.parseInterface = general.unixTimestampToMaxAge = general.getRandomUnixTimestamp = general.formatNumber = general.formatCash = general.formatCurrency = general.getRandomInt = general.removeAllIdentifiers = general.removeTrailingSlash = general.generateRandomAlphaNumeric = general.generateDocumentUUID = general.convertUnixToDate = general.unixTimeStampNow = general.convertDateToUnix = general.compareEqualsTo = general.equalToIgnoreCase = general.isThisAWord = general.createInitials = general.delay = void 0;
 /**
  * custom delay function
  * @param ms time
@@ -129,6 +129,36 @@ function isThisAWord(value) {
     return value.length > 1 ? value : undefined;
 }
 general.isThisAWord = isThisAWord;
+/**
+ * Check if string is equalToIgnoreCase
+  * @param {string} comparingAgainst
+ * @param {string} comparingTo
+ * @return {boolean} bool item
+ */
+function equalToIgnoreCase(comparingAgainst, comparingTo) {
+    if (comparingAgainst.toUpperCase() ===
+        comparingTo.toUpperCase()) {
+        return true;
+    }
+    else if (comparingAgainst.toLowerCase() ===
+        comparingTo.toLowerCase()) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+general.equalToIgnoreCase = equalToIgnoreCase;
+/**
+ * Check if string is equalToIgnoreCase
+  * @param {string} comparingAgainst
+ * @param {string} comparingTo
+ * @return {boolean} bool item
+ */
+function compareEqualsTo(comparingAgainst, comparingTo) {
+    return comparingAgainst.localeCompare(comparingTo, undefined, { sensitivity: "base" }) === 1;
+}
+general.compareEqualsTo = compareEqualsTo;
 /**
  * converts date to unix timestamp
   * @param {Date} date value
@@ -158,6 +188,20 @@ function convertUnixToDate(timestamp) {
 }
 general.convertUnixToDate = convertUnixToDate;
 /**
+ * Generates a UUID v4 string.
+ * Compatible with environments without crypto.randomUUID().
+ *
+ * @returns {string} A unique UUID string.
+ */
+function generateDocumentUUID() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (char) => {
+        const random = (Math.random() * 16) | 0; // Generate random 0-15
+        const value = char === 'x' ? random : (random & 0x3) | 0x8; // Set bits for 'y'
+        return value.toString(16); // Convert to hexadecimal
+    });
+}
+general.generateDocumentUUID = generateDocumentUUID;
+/**
  * Random string generator helper
  * @param {number} length
  * @return {string} value
@@ -178,6 +222,12 @@ const removeTrailingSlash = function (url) {
     return url.replace(/\/$/, "");
 };
 general.removeTrailingSlash = removeTrailingSlash;
+const removeAllIdentifiers = function (url) {
+    if (url === undefined || url === null || !url.includes("_"))
+        return '';
+    return url.split("_")[1];
+};
+general.removeAllIdentifiers = removeAllIdentifiers;
 function getRandomInt(max) {
     return Math.floor(Math.random() * max);
 }
@@ -286,6 +336,59 @@ function obscureString(input) {
     return input.replace(/./g, '•');
 }
 general.obscureString = obscureString;
+function dateFormatter(date, options = { showDate: true, showTime: true }) {
+    const parseDate = (input) => {
+        if (input instanceof Date) {
+            return input;
+        }
+        else if (typeof input === "string" || typeof input === "number") {
+            const parsed = new Date(input);
+            if (isNaN(parsed.getTime())) {
+                throw new Error("Invalid date format");
+            }
+            return parsed;
+        }
+        throw new Error("Unsupported date type");
+    };
+    const parsedDate = parseDate(date);
+    const getDayOfMonthSuffix = (day) => {
+        if (day >= 11 && day <= 13) {
+            return "th";
+        }
+        switch (day % 10) {
+            case 1: return "st";
+            case 2: return "nd";
+            case 3: return "rd";
+            default: return "th";
+        }
+    };
+    const months = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+    ];
+    const day = parsedDate.getDate();
+    const daySuffix = getDayOfMonthSuffix(day);
+    const month = months[parsedDate.getMonth()];
+    const year = parsedDate.getFullYear();
+    const hours = parsedDate.getHours();
+    const minutes = parsedDate.getMinutes();
+    const period = hours >= 12 ? "pm" : "am";
+    const formattedTime = `${(hours % 12 || 12).toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")} ${period}`;
+    const datePart = `${day}${daySuffix} ${month} ${year}`;
+    if (options.showDate && options.showTime) {
+        return `${datePart}, at ${formattedTime}`;
+    }
+    else if (options.showDate) {
+        return datePart;
+    }
+    else if (options.showTime) {
+        return formattedTime;
+    }
+    else {
+        return "";
+    }
+}
+general.dateFormatter = dateFormatter;
 function calculatePercentage(amount, percentage) {
     return (amount * percentage) / 100;
 }
@@ -2239,19 +2342,32 @@ Object.defineProperty(labs_client, "__esModule", { value: true });
 labs_client.requester = void 0;
 const axios_1 = __importDefault(require$$0);
 const types_1 = types;
+/**
+ * Use this on sever side only
+ * Sends an HTTP request using Axios and returns the response data.
+ *
+ * @param url - The URL to which the request is sent.
+ * @param method - The HTTP method to use for the request (e.g., 'GET', 'POST').
+ * @param param - An object containing request parameters such as headers and body.
+ * @returns A promise that resolves to the response data or an error response template.
+ */
 function requester(url, method, param) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
+            // Prepare Axios request options, including headers and body if applicable
             const axiosOptions = Object.assign({ headers: param.headers
-                    ? JSON.parse(JSON.stringify(param.headers))
+                    ? JSON.parse(JSON.stringify(param.headers)) // Clone headers to avoid mutation
                     : { 'Accept': 'application/json' } }, ((method === 'POST' || method === 'PUT' || method === 'PATCH') && { data: param.body }));
+            // Send the request using Axios and await the response
             const response = yield axios_1.default.request(Object.assign({ url,
                 method }, axiosOptions));
+            // Return the response data
             return response.data;
         }
         catch (error) {
+            // Handle Axios errors with a response
             if (axios_1.default.isAxiosError(error) && error.response) {
-                // console.error(`Axios error --- ${JSON.stringify(error.response.data)}`);
+                console.error(`Requester axios error --- ${JSON.stringify(error.response.data)}`);
                 const errorResponse = error.response.data;
                 return {
                     status: errorResponse.status,
@@ -2260,6 +2376,7 @@ function requester(url, method, param) {
                 };
             }
             else {
+                // Return a default error if no response is available
                 return types_1.DEFAULT_ERROR;
             }
         }

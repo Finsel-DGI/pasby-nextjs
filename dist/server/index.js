@@ -1,7 +1,7 @@
 import require$$0 from 'axios';
 import { Buffer as Buffer$1 } from 'node:buffer';
 import * as crypto$1 from 'node:crypto';
-import { KeyObject, createPrivateKey, createPublicKey, constants, createSecretKey } from 'node:crypto';
+import { KeyObject, createPrivateKey, createPublicKey, constants as constants$1, createSecretKey } from 'node:crypto';
 import * as util from 'node:util';
 import { promisify } from 'node:util';
 import require$$0$1 from 'react';
@@ -22,6 +22,29 @@ PERFORMANCE OF THIS SOFTWARE.
 ***************************************************************************** */
 /* global Reflect, Promise, SuppressedError, Symbol, Iterator */
 
+
+var __assign$2 = function() {
+    __assign$2 = Object.assign || function __assign(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign$2.apply(this, arguments);
+};
+
+function __rest(s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+}
 
 function __awaiter$5(thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -662,6 +685,295 @@ var removePathPrefix = {};
 
 var utils = {};
 
+var constants = {};
+
+(function (exports) {
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	function _export(target, all) {
+	    for(var name in all)Object.defineProperty(target, name, {
+	        enumerable: true,
+	        get: all[name]
+	    });
+	}
+	_export(exports, {
+	    ACTION_SUFFIX: function() {
+	        return ACTION_SUFFIX;
+	    },
+	    APP_DIR_ALIAS: function() {
+	        return APP_DIR_ALIAS;
+	    },
+	    CACHE_ONE_YEAR: function() {
+	        return CACHE_ONE_YEAR;
+	    },
+	    DOT_NEXT_ALIAS: function() {
+	        return DOT_NEXT_ALIAS;
+	    },
+	    ESLINT_DEFAULT_DIRS: function() {
+	        return ESLINT_DEFAULT_DIRS;
+	    },
+	    GSP_NO_RETURNED_VALUE: function() {
+	        return GSP_NO_RETURNED_VALUE;
+	    },
+	    GSSP_COMPONENT_MEMBER_ERROR: function() {
+	        return GSSP_COMPONENT_MEMBER_ERROR;
+	    },
+	    GSSP_NO_RETURNED_VALUE: function() {
+	        return GSSP_NO_RETURNED_VALUE;
+	    },
+	    INSTRUMENTATION_HOOK_FILENAME: function() {
+	        return INSTRUMENTATION_HOOK_FILENAME;
+	    },
+	    MIDDLEWARE_FILENAME: function() {
+	        return MIDDLEWARE_FILENAME;
+	    },
+	    MIDDLEWARE_LOCATION_REGEXP: function() {
+	        return MIDDLEWARE_LOCATION_REGEXP;
+	    },
+	    NEXT_BODY_SUFFIX: function() {
+	        return NEXT_BODY_SUFFIX;
+	    },
+	    NEXT_CACHE_IMPLICIT_TAG_ID: function() {
+	        return NEXT_CACHE_IMPLICIT_TAG_ID;
+	    },
+	    NEXT_CACHE_REVALIDATED_TAGS_HEADER: function() {
+	        return NEXT_CACHE_REVALIDATED_TAGS_HEADER;
+	    },
+	    NEXT_CACHE_REVALIDATE_TAG_TOKEN_HEADER: function() {
+	        return NEXT_CACHE_REVALIDATE_TAG_TOKEN_HEADER;
+	    },
+	    NEXT_CACHE_SOFT_TAGS_HEADER: function() {
+	        return NEXT_CACHE_SOFT_TAGS_HEADER;
+	    },
+	    NEXT_CACHE_SOFT_TAG_MAX_LENGTH: function() {
+	        return NEXT_CACHE_SOFT_TAG_MAX_LENGTH;
+	    },
+	    NEXT_CACHE_TAGS_HEADER: function() {
+	        return NEXT_CACHE_TAGS_HEADER;
+	    },
+	    NEXT_CACHE_TAG_MAX_ITEMS: function() {
+	        return NEXT_CACHE_TAG_MAX_ITEMS;
+	    },
+	    NEXT_CACHE_TAG_MAX_LENGTH: function() {
+	        return NEXT_CACHE_TAG_MAX_LENGTH;
+	    },
+	    NEXT_DATA_SUFFIX: function() {
+	        return NEXT_DATA_SUFFIX;
+	    },
+	    NEXT_INTERCEPTION_MARKER_PREFIX: function() {
+	        return NEXT_INTERCEPTION_MARKER_PREFIX;
+	    },
+	    NEXT_META_SUFFIX: function() {
+	        return NEXT_META_SUFFIX;
+	    },
+	    NEXT_QUERY_PARAM_PREFIX: function() {
+	        return NEXT_QUERY_PARAM_PREFIX;
+	    },
+	    NON_STANDARD_NODE_ENV: function() {
+	        return NON_STANDARD_NODE_ENV;
+	    },
+	    PAGES_DIR_ALIAS: function() {
+	        return PAGES_DIR_ALIAS;
+	    },
+	    PRERENDER_REVALIDATE_HEADER: function() {
+	        return PRERENDER_REVALIDATE_HEADER;
+	    },
+	    PRERENDER_REVALIDATE_ONLY_GENERATED_HEADER: function() {
+	        return PRERENDER_REVALIDATE_ONLY_GENERATED_HEADER;
+	    },
+	    PUBLIC_DIR_MIDDLEWARE_CONFLICT: function() {
+	        return PUBLIC_DIR_MIDDLEWARE_CONFLICT;
+	    },
+	    ROOT_DIR_ALIAS: function() {
+	        return ROOT_DIR_ALIAS;
+	    },
+	    RSC_ACTION_CLIENT_WRAPPER_ALIAS: function() {
+	        return RSC_ACTION_CLIENT_WRAPPER_ALIAS;
+	    },
+	    RSC_ACTION_ENCRYPTION_ALIAS: function() {
+	        return RSC_ACTION_ENCRYPTION_ALIAS;
+	    },
+	    RSC_ACTION_PROXY_ALIAS: function() {
+	        return RSC_ACTION_PROXY_ALIAS;
+	    },
+	    RSC_ACTION_VALIDATE_ALIAS: function() {
+	        return RSC_ACTION_VALIDATE_ALIAS;
+	    },
+	    RSC_MOD_REF_PROXY_ALIAS: function() {
+	        return RSC_MOD_REF_PROXY_ALIAS;
+	    },
+	    RSC_PREFETCH_SUFFIX: function() {
+	        return RSC_PREFETCH_SUFFIX;
+	    },
+	    RSC_SUFFIX: function() {
+	        return RSC_SUFFIX;
+	    },
+	    SERVER_PROPS_EXPORT_ERROR: function() {
+	        return SERVER_PROPS_EXPORT_ERROR;
+	    },
+	    SERVER_PROPS_GET_INIT_PROPS_CONFLICT: function() {
+	        return SERVER_PROPS_GET_INIT_PROPS_CONFLICT;
+	    },
+	    SERVER_PROPS_SSG_CONFLICT: function() {
+	        return SERVER_PROPS_SSG_CONFLICT;
+	    },
+	    SERVER_RUNTIME: function() {
+	        return SERVER_RUNTIME;
+	    },
+	    SSG_FALLBACK_EXPORT_ERROR: function() {
+	        return SSG_FALLBACK_EXPORT_ERROR;
+	    },
+	    SSG_GET_INITIAL_PROPS_CONFLICT: function() {
+	        return SSG_GET_INITIAL_PROPS_CONFLICT;
+	    },
+	    STATIC_STATUS_PAGE_GET_INITIAL_PROPS_ERROR: function() {
+	        return STATIC_STATUS_PAGE_GET_INITIAL_PROPS_ERROR;
+	    },
+	    UNSTABLE_REVALIDATE_RENAME_ERROR: function() {
+	        return UNSTABLE_REVALIDATE_RENAME_ERROR;
+	    },
+	    WEBPACK_LAYERS: function() {
+	        return WEBPACK_LAYERS;
+	    },
+	    WEBPACK_RESOURCE_QUERIES: function() {
+	        return WEBPACK_RESOURCE_QUERIES;
+	    }
+	});
+	const NEXT_QUERY_PARAM_PREFIX = "nxtP";
+	const NEXT_INTERCEPTION_MARKER_PREFIX = "nxtI";
+	const PRERENDER_REVALIDATE_HEADER = "x-prerender-revalidate";
+	const PRERENDER_REVALIDATE_ONLY_GENERATED_HEADER = "x-prerender-revalidate-if-generated";
+	const RSC_PREFETCH_SUFFIX = ".prefetch.rsc";
+	const RSC_SUFFIX = ".rsc";
+	const ACTION_SUFFIX = ".action";
+	const NEXT_DATA_SUFFIX = ".json";
+	const NEXT_META_SUFFIX = ".meta";
+	const NEXT_BODY_SUFFIX = ".body";
+	const NEXT_CACHE_TAGS_HEADER = "x-next-cache-tags";
+	const NEXT_CACHE_SOFT_TAGS_HEADER = "x-next-cache-soft-tags";
+	const NEXT_CACHE_REVALIDATED_TAGS_HEADER = "x-next-revalidated-tags";
+	const NEXT_CACHE_REVALIDATE_TAG_TOKEN_HEADER = "x-next-revalidate-tag-token";
+	const NEXT_CACHE_TAG_MAX_ITEMS = 128;
+	const NEXT_CACHE_TAG_MAX_LENGTH = 256;
+	const NEXT_CACHE_SOFT_TAG_MAX_LENGTH = 1024;
+	const NEXT_CACHE_IMPLICIT_TAG_ID = "_N_T_";
+	const CACHE_ONE_YEAR = 31536000;
+	const MIDDLEWARE_FILENAME = "middleware";
+	const MIDDLEWARE_LOCATION_REGEXP = `(?:src/)?${MIDDLEWARE_FILENAME}`;
+	const INSTRUMENTATION_HOOK_FILENAME = "instrumentation";
+	const PAGES_DIR_ALIAS = "private-next-pages";
+	const DOT_NEXT_ALIAS = "private-dot-next";
+	const ROOT_DIR_ALIAS = "private-next-root-dir";
+	const APP_DIR_ALIAS = "private-next-app-dir";
+	const RSC_MOD_REF_PROXY_ALIAS = "private-next-rsc-mod-ref-proxy";
+	const RSC_ACTION_VALIDATE_ALIAS = "private-next-rsc-action-validate";
+	const RSC_ACTION_PROXY_ALIAS = "private-next-rsc-server-reference";
+	const RSC_ACTION_ENCRYPTION_ALIAS = "private-next-rsc-action-encryption";
+	const RSC_ACTION_CLIENT_WRAPPER_ALIAS = "private-next-rsc-action-client-wrapper";
+	const PUBLIC_DIR_MIDDLEWARE_CONFLICT = `You can not have a '_next' folder inside of your public folder. This conflicts with the internal '/_next' route. https://nextjs.org/docs/messages/public-next-folder-conflict`;
+	const SSG_GET_INITIAL_PROPS_CONFLICT = `You can not use getInitialProps with getStaticProps. To use SSG, please remove your getInitialProps`;
+	const SERVER_PROPS_GET_INIT_PROPS_CONFLICT = `You can not use getInitialProps with getServerSideProps. Please remove getInitialProps.`;
+	const SERVER_PROPS_SSG_CONFLICT = `You can not use getStaticProps or getStaticPaths with getServerSideProps. To use SSG, please remove getServerSideProps`;
+	const STATIC_STATUS_PAGE_GET_INITIAL_PROPS_ERROR = `can not have getInitialProps/getServerSideProps, https://nextjs.org/docs/messages/404-get-initial-props`;
+	const SERVER_PROPS_EXPORT_ERROR = `pages with \`getServerSideProps\` can not be exported. See more info here: https://nextjs.org/docs/messages/gssp-export`;
+	const GSP_NO_RETURNED_VALUE = "Your `getStaticProps` function did not return an object. Did you forget to add a `return`?";
+	const GSSP_NO_RETURNED_VALUE = "Your `getServerSideProps` function did not return an object. Did you forget to add a `return`?";
+	const UNSTABLE_REVALIDATE_RENAME_ERROR = "The `unstable_revalidate` property is available for general use.\n" + "Please use `revalidate` instead.";
+	const GSSP_COMPONENT_MEMBER_ERROR = `can not be attached to a page's component and must be exported from the page. See more info here: https://nextjs.org/docs/messages/gssp-component-member`;
+	const NON_STANDARD_NODE_ENV = `You are using a non-standard "NODE_ENV" value in your environment. This creates inconsistencies in the project and is strongly advised against. Read more: https://nextjs.org/docs/messages/non-standard-node-env`;
+	const SSG_FALLBACK_EXPORT_ERROR = `Pages with \`fallback\` enabled in \`getStaticPaths\` can not be exported. See more info here: https://nextjs.org/docs/messages/ssg-fallback-true-export`;
+	const ESLINT_DEFAULT_DIRS = [
+	    "app",
+	    "pages",
+	    "components",
+	    "lib",
+	    "src"
+	];
+	const SERVER_RUNTIME = {
+	    edge: "edge",
+	    experimentalEdge: "experimental-edge",
+	    nodejs: "nodejs"
+	};
+	/**
+	 * The names of the webpack layers. These layers are the primitives for the
+	 * webpack chunks.
+	 */ const WEBPACK_LAYERS_NAMES = {
+	    /**
+	   * The layer for the shared code between the client and server bundles.
+	   */ shared: "shared",
+	    /**
+	   * React Server Components layer (rsc).
+	   */ reactServerComponents: "rsc",
+	    /**
+	   * Server Side Rendering layer for app (ssr).
+	   */ serverSideRendering: "ssr",
+	    /**
+	   * The browser client bundle layer for actions.
+	   */ actionBrowser: "action-browser",
+	    /**
+	   * The layer for the API routes.
+	   */ api: "api",
+	    /**
+	   * The layer for the middleware code.
+	   */ middleware: "middleware",
+	    /**
+	   * The layer for the instrumentation hooks.
+	   */ instrument: "instrument",
+	    /**
+	   * The layer for assets on the edge.
+	   */ edgeAsset: "edge-asset",
+	    /**
+	   * The browser client bundle layer for App directory.
+	   */ appPagesBrowser: "app-pages-browser",
+	    /**
+	   * The server bundle layer for metadata routes.
+	   */ appMetadataRoute: "app-metadata-route",
+	    /**
+	   * The layer for the server bundle for App Route handlers.
+	   */ appRouteHandler: "app-route-handler"
+	};
+	const WEBPACK_LAYERS = {
+	    ...WEBPACK_LAYERS_NAMES,
+	    GROUP: {
+	        serverOnly: [
+	            WEBPACK_LAYERS_NAMES.reactServerComponents,
+	            WEBPACK_LAYERS_NAMES.actionBrowser,
+	            WEBPACK_LAYERS_NAMES.appMetadataRoute,
+	            WEBPACK_LAYERS_NAMES.appRouteHandler,
+	            WEBPACK_LAYERS_NAMES.instrument
+	        ],
+	        clientOnly: [
+	            WEBPACK_LAYERS_NAMES.serverSideRendering,
+	            WEBPACK_LAYERS_NAMES.appPagesBrowser
+	        ],
+	        nonClientServerTarget: [
+	            // middleware and pages api
+	            WEBPACK_LAYERS_NAMES.middleware,
+	            WEBPACK_LAYERS_NAMES.api
+	        ],
+	        app: [
+	            WEBPACK_LAYERS_NAMES.reactServerComponents,
+	            WEBPACK_LAYERS_NAMES.actionBrowser,
+	            WEBPACK_LAYERS_NAMES.appMetadataRoute,
+	            WEBPACK_LAYERS_NAMES.appRouteHandler,
+	            WEBPACK_LAYERS_NAMES.serverSideRendering,
+	            WEBPACK_LAYERS_NAMES.appPagesBrowser,
+	            WEBPACK_LAYERS_NAMES.shared,
+	            WEBPACK_LAYERS_NAMES.instrument
+	        ]
+	    }
+	};
+	const WEBPACK_RESOURCE_QUERIES = {
+	    edgeSSREntry: "__next_edge_ssr_entry__",
+	    metadata: "__next_metadata__",
+	    metadataRoute: "__next_metadata_route__",
+	    metadataImageMeta: "__next_metadata_image_meta__"
+	};
+
+	
+} (constants));
+
 (function (exports) {
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -676,6 +988,9 @@ var utils = {};
 	    fromNodeOutgoingHttpHeaders: function() {
 	        return fromNodeOutgoingHttpHeaders;
 	    },
+	    normalizeNextQueryParam: function() {
+	        return normalizeNextQueryParam;
+	    },
 	    splitCookiesString: function() {
 	        return splitCookiesString;
 	    },
@@ -686,6 +1001,7 @@ var utils = {};
 	        return validateURL;
 	    }
 	});
+	const _constants = constants;
 	function fromNodeOutgoingHttpHeaders(nodeHeaders) {
 	    const headers = new Headers();
 	    for (let [key, value] of Object.entries(nodeHeaders)){
@@ -782,6 +1098,18 @@ var utils = {};
 	        throw new Error(`URL is malformed "${String(url)}". Please use only absolute URLs - https://nextjs.org/docs/messages/middleware-relative-urls`, {
 	            cause: error
 	        });
+	    }
+	}
+	function normalizeNextQueryParam(key, onKeyNormalized) {
+	    const prefixes = [
+	        _constants.NEXT_QUERY_PARAM_PREFIX,
+	        _constants.NEXT_INTERCEPTION_MARKER_PREFIX
+	    ];
+	    for (const prefix of prefixes){
+	        if (key !== prefix && key.startsWith(prefix)) {
+	            const normalizedKey = key.substring(prefix.length);
+	            onKeyNormalized(normalizedKey);
+	        }
 	    }
 	}
 
@@ -1601,7 +1929,7 @@ var __awaiter$4 = (commonjsGlobal && commonjsGlobal.__awaiter) || function (this
     });
 };
 Object.defineProperty(general, "__esModule", { value: true });
-general.strEnum = general.roundTo = general.getDifferenceInSeconds = general.getDifferenceInMinutes = general.getDifferenceInHours = general.getRandomInteger = general.getMonthName = general.getLastDayOfMonth = general.calculateDaysBetweenTimestamps = general.calculatePercentage = general.obscureString = general.formatDate = general.recordToArray = general.isValidURL = general.getValueByQuery = general.isEven = general.isOdd = general.expiresAt = general.parseInterface = general.unixTimestampToMaxAge = general.getRandomUnixTimestamp = general.formatNumber = general.formatCash = general.formatCurrency = general.getRandomInt = general.removeTrailingSlash = general.generateRandomAlphaNumeric = general.convertUnixToDate = general.unixTimeStampNow = general.convertDateToUnix = general.isThisAWord = general.createInitials = general.delay = void 0;
+general.strEnum = general.roundTo = general.getDifferenceInSeconds = general.getDifferenceInMinutes = general.getDifferenceInHours = general.getRandomInteger = general.getMonthName = general.getLastDayOfMonth = general.calculateDaysBetweenTimestamps = general.calculatePercentage = general.dateFormatter = general.obscureString = general.formatDate = general.recordToArray = general.isValidURL = general.getValueByQuery = general.isEven = general.isOdd = general.expiresAt = general.parseInterface = general.unixTimestampToMaxAge = general.getRandomUnixTimestamp = general.formatNumber = general.formatCash = general.formatCurrency = general.getRandomInt = general.removeAllIdentifiers = general.removeTrailingSlash = general.generateRandomAlphaNumeric = general.generateDocumentUUID = general.convertUnixToDate = general.unixTimeStampNow = general.convertDateToUnix = general.compareEqualsTo = general.equalToIgnoreCase = general.isThisAWord = general.createInitials = general.delay = void 0;
 /**
  * custom delay function
  * @param ms time
@@ -1625,6 +1953,36 @@ function isThisAWord(value) {
     return value.length > 1 ? value : undefined;
 }
 general.isThisAWord = isThisAWord;
+/**
+ * Check if string is equalToIgnoreCase
+  * @param {string} comparingAgainst
+ * @param {string} comparingTo
+ * @return {boolean} bool item
+ */
+function equalToIgnoreCase(comparingAgainst, comparingTo) {
+    if (comparingAgainst.toUpperCase() ===
+        comparingTo.toUpperCase()) {
+        return true;
+    }
+    else if (comparingAgainst.toLowerCase() ===
+        comparingTo.toLowerCase()) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+general.equalToIgnoreCase = equalToIgnoreCase;
+/**
+ * Check if string is equalToIgnoreCase
+  * @param {string} comparingAgainst
+ * @param {string} comparingTo
+ * @return {boolean} bool item
+ */
+function compareEqualsTo(comparingAgainst, comparingTo) {
+    return comparingAgainst.localeCompare(comparingTo, undefined, { sensitivity: "base" }) === 1;
+}
+general.compareEqualsTo = compareEqualsTo;
 /**
  * converts date to unix timestamp
   * @param {Date} date value
@@ -1654,6 +2012,20 @@ function convertUnixToDate(timestamp) {
 }
 general.convertUnixToDate = convertUnixToDate;
 /**
+ * Generates a UUID v4 string.
+ * Compatible with environments without crypto.randomUUID().
+ *
+ * @returns {string} A unique UUID string.
+ */
+function generateDocumentUUID() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (char) => {
+        const random = (Math.random() * 16) | 0; // Generate random 0-15
+        const value = char === 'x' ? random : (random & 0x3) | 0x8; // Set bits for 'y'
+        return value.toString(16); // Convert to hexadecimal
+    });
+}
+general.generateDocumentUUID = generateDocumentUUID;
+/**
  * Random string generator helper
  * @param {number} length
  * @return {string} value
@@ -1674,6 +2046,12 @@ const removeTrailingSlash = function (url) {
     return url.replace(/\/$/, "");
 };
 general.removeTrailingSlash = removeTrailingSlash;
+const removeAllIdentifiers = function (url) {
+    if (url === undefined || url === null || !url.includes("_"))
+        return '';
+    return url.split("_")[1];
+};
+general.removeAllIdentifiers = removeAllIdentifiers;
 function getRandomInt(max) {
     return Math.floor(Math.random() * max);
 }
@@ -1782,6 +2160,59 @@ function obscureString(input) {
     return input.replace(/./g, '•');
 }
 general.obscureString = obscureString;
+function dateFormatter(date, options = { showDate: true, showTime: true }) {
+    const parseDate = (input) => {
+        if (input instanceof Date) {
+            return input;
+        }
+        else if (typeof input === "string" || typeof input === "number") {
+            const parsed = new Date(input);
+            if (isNaN(parsed.getTime())) {
+                throw new Error("Invalid date format");
+            }
+            return parsed;
+        }
+        throw new Error("Unsupported date type");
+    };
+    const parsedDate = parseDate(date);
+    const getDayOfMonthSuffix = (day) => {
+        if (day >= 11 && day <= 13) {
+            return "th";
+        }
+        switch (day % 10) {
+            case 1: return "st";
+            case 2: return "nd";
+            case 3: return "rd";
+            default: return "th";
+        }
+    };
+    const months = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+    ];
+    const day = parsedDate.getDate();
+    const daySuffix = getDayOfMonthSuffix(day);
+    const month = months[parsedDate.getMonth()];
+    const year = parsedDate.getFullYear();
+    const hours = parsedDate.getHours();
+    const minutes = parsedDate.getMinutes();
+    const period = hours >= 12 ? "pm" : "am";
+    const formattedTime = `${(hours % 12 || 12).toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")} ${period}`;
+    const datePart = `${day}${daySuffix} ${month} ${year}`;
+    if (options.showDate && options.showTime) {
+        return `${datePart}, at ${formattedTime}`;
+    }
+    else if (options.showDate) {
+        return datePart;
+    }
+    else if (options.showTime) {
+        return formattedTime;
+    }
+    else {
+        return "";
+    }
+}
+general.dateFormatter = dateFormatter;
 function calculatePercentage(amount, percentage) {
     return (amount * percentage) / 100;
 }
@@ -3735,19 +4166,32 @@ Object.defineProperty(labs_client, "__esModule", { value: true });
 labs_client.requester = void 0;
 const axios_1 = __importDefault$1(require$$0);
 const types_1 = types$1;
+/**
+ * Use this on sever side only
+ * Sends an HTTP request using Axios and returns the response data.
+ *
+ * @param url - The URL to which the request is sent.
+ * @param method - The HTTP method to use for the request (e.g., 'GET', 'POST').
+ * @param param - An object containing request parameters such as headers and body.
+ * @returns A promise that resolves to the response data or an error response template.
+ */
 function requester(url, method, param) {
     return __awaiter$2(this, void 0, void 0, function* () {
         try {
+            // Prepare Axios request options, including headers and body if applicable
             const axiosOptions = Object.assign({ headers: param.headers
-                    ? JSON.parse(JSON.stringify(param.headers))
+                    ? JSON.parse(JSON.stringify(param.headers)) // Clone headers to avoid mutation
                     : { 'Accept': 'application/json' } }, ((method === 'POST' || method === 'PUT' || method === 'PATCH') && { data: param.body }));
+            // Send the request using Axios and await the response
             const response = yield axios_1.default.request(Object.assign({ url,
                 method }, axiosOptions));
+            // Return the response data
             return response.data;
         }
         catch (error) {
+            // Handle Axios errors with a response
             if (axios_1.default.isAxiosError(error) && error.response) {
-                // console.error(`Axios error --- ${JSON.stringify(error.response.data)}`);
+                console.error(`Requester axios error --- ${JSON.stringify(error.response.data)}`);
                 const errorResponse = error.response.data;
                 return {
                     status: errorResponse.status,
@@ -3756,6 +4200,7 @@ function requester(url, method, param) {
                 };
             }
             else {
+                // Return a default error if no response is available
                 return types_1.DEFAULT_ERROR;
             }
         }
@@ -3987,6 +4432,11 @@ function checkSigCryptoKey(key, alg, ...usages) {
             }
             break;
         }
+        case 'Ed25519': {
+            if (!isAlgorithm(key.algorithm, 'Ed25519'))
+                throw unusable('Ed25519');
+            break;
+        }
         case 'ES256':
         case 'ES384':
         case 'ES512': {
@@ -4176,7 +4626,7 @@ async function importJWK(jwk, alg) {
             }
             return decode(jwk.k);
         case 'RSA':
-            if (jwk.oth !== undefined) {
+            if ('oth' in jwk && jwk.oth !== undefined) {
                 throw new JOSENotSupported('RSA JWK "oth" (Other Primes Info) Parameter value is not supported');
             }
         case 'EC':
@@ -4321,6 +4771,7 @@ function dsaDigest(alg) {
         case 'RS512':
         case 'ES512':
             return 'sha512';
+        case 'Ed25519':
         case 'EdDSA':
             return undefined;
         default:
@@ -4368,6 +4819,11 @@ function keyForCrypto(alg, key) {
     }
     let options;
     switch (alg) {
+        case 'Ed25519':
+            if (asymmetricKeyType !== 'ed25519') {
+                throw new TypeError(`Invalid key for this operation, its asymmetricKeyType must be ed25519`);
+            }
+            break;
         case 'EdDSA':
             if (!['ed25519', 'ed448'].includes(asymmetricKeyType)) {
                 throw new TypeError('Invalid key for this operation, its asymmetricKeyType must be ed25519 or ed448');
@@ -4400,8 +4856,8 @@ function keyForCrypto(alg, key) {
             }
             checkKeyLength(key, alg);
             options = {
-                padding: constants.RSA_PKCS1_PSS_PADDING,
-                saltLength: constants.RSA_PSS_SALTLEN_DIGEST,
+                padding: constants$1.RSA_PKCS1_PSS_PADDING,
+                saltLength: constants$1.RSA_PSS_SALTLEN_DIGEST,
             };
             break;
         case 'ES256':
@@ -5412,64 +5868,80 @@ function requestToNextSever(path, body, options) {
 	Object.defineProperty(exports, "PollEIDComponent", { enumerable: true, get: function () { return Poller_1.PollEIDComponent; } }); 
 } (dist));
 
-var handler = (function (option, cookieSetter, cookieGetter, errorFallbackPath) {
-    return function handler(req_1, _a) {
-        return __awaiter$5(this, arguments, void 0, function (req, _b) {
-            var _c, error_1, searchParams, redirect, message;
-            var params = _b.params;
-            return __generator$2(this, function (_d) {
-                switch (_d.label) {
-                    case 0:
-                        _d.trys.push([0, 9, , 10]);
-                        _c = params.auth;
-                        switch (_c) {
-                            case 'login': return [3 /*break*/, 1];
-                            case 'handshake': return [3 /*break*/, 3];
-                            case 'logout': return [3 /*break*/, 5];
-                        }
-                        return [3 /*break*/, 7];
-                    case 1: return [4 /*yield*/, login(req, option, cookieSetter)];
-                    case 2: return [2 /*return*/, _d.sent()];
-                    case 3: return [4 /*yield*/, handshake(req, cookieSetter, cookieGetter)];
-                    case 4: return [2 /*return*/, _d.sent()];
-                    case 5: return [4 /*yield*/, logout(req, cookieSetter)];
-                    case 6: return [2 /*return*/, _d.sent()];
-                    case 7: return [2 /*return*/, serverExports.NextResponse.json({ error: 'Method request not accepted' }, {
-                            status: 400
-                        })];
-                    case 8: return [3 /*break*/, 10];
-                    case 9:
-                        error_1 = _d.sent();
-                        searchParams = req.nextUrl.searchParams;
-                        redirect = (searchParams.get('redirect'));
-                        message = error_1.message;
-                        console.error("pasby eid error at route -- here the message: ".concat(message)); // make a pasby logger type here
-                        if (redirect === "true" || redirect === null || redirect === undefined) {
-                            return [2 /*return*/, serverExports.NextResponse.redirect(req.nextUrl.origin + errorFallbackPath + "?eidreject=" + btoa((message)))];
-                        }
-                        else {
-                            return [2 /*return*/, serverExports.NextResponse.json({
-                                    provider: "pasby authentication",
-                                    error: message
-                                })];
-                        }
-                    case 10: return [2 /*return*/];
-                }
-            });
+var handler = (function (option, errorFallbackPath) { return function handler(req_1, _a) {
+    return __awaiter$5(this, arguments, void 0, function (req, _b) {
+        var response_1, cookieSetter, cookieGetter, _c, error_1, searchParams, redirect, message;
+        var _this = this;
+        var params = _b.params;
+        return __generator$2(this, function (_d) {
+            switch (_d.label) {
+                case 0:
+                    _d.trys.push([0, 9, , 10]);
+                    response_1 = new serverExports.NextResponse();
+                    cookieSetter = function (key, value, options) {
+                        if (options === void 0) { options = {}; }
+                        var expires = options.expires, maxAge = options.maxAge, restOptions = __rest(options, ["expires", "maxAge"]);
+                        var cookieOptions = __assign$2(__assign$2(__assign$2(__assign$2({}, restOptions), { secure: true, sameSite: 'lax', path: '/' }), (expires && { expires: new Date(expires * 1000) })), (maxAge && { maxAge: maxAge }));
+                        response_1.cookies.set(key, value, cookieOptions);
+                    };
+                    cookieGetter = function (key) { return __awaiter$5(_this, void 0, void 0, function () {
+                        var _a;
+                        return __generator$2(this, function (_b) {
+                            return [2 /*return*/, (_a = req.cookies.get(key)) === null || _a === void 0 ? void 0 : _a.value];
+                        });
+                    }); };
+                    _c = params.auth;
+                    switch (_c) {
+                        case 'login': return [3 /*break*/, 1];
+                        case 'handshake': return [3 /*break*/, 3];
+                        case 'logout': return [3 /*break*/, 5];
+                    }
+                    return [3 /*break*/, 7];
+                case 1: return [4 /*yield*/, login(req, option, cookieSetter, response_1)];
+                case 2: return [2 /*return*/, _d.sent()];
+                case 3: return [4 /*yield*/, handshake(req, cookieSetter, cookieGetter, response_1)];
+                case 4: return [2 /*return*/, _d.sent()];
+                case 5: return [4 /*yield*/, logout(req, cookieSetter, response_1)];
+                case 6: return [2 /*return*/, _d.sent()];
+                case 7: return [2 /*return*/, serverExports.NextResponse.json({ error: 'Method request not accepted' }, {
+                        status: 400
+                    })];
+                case 8: return [3 /*break*/, 10];
+                case 9:
+                    error_1 = _d.sent();
+                    searchParams = req.nextUrl.searchParams;
+                    redirect = (searchParams.get('redirect'));
+                    message = error_1.message;
+                    console.error("pasby eid error at route -- here the message: ".concat(message));
+                    if (redirect === "true" || redirect === null || redirect === undefined) {
+                        return [2 /*return*/, serverExports.NextResponse.redirect(req.nextUrl.origin + errorFallbackPath + "?eidreject=" + encodeURIComponent(message))];
+                    }
+                    else {
+                        return [2 /*return*/, serverExports.NextResponse.json({
+                                provider: "pasby authentication",
+                                error: message
+                            })];
+                    }
+                case 10: return [2 /*return*/];
+            }
         });
-    };
-});
-function logout(req, cookieSetter) {
+    });
+}; });
+function logout(req, cookieSetter, response) {
     return __awaiter$5(this, void 0, void 0, function () {
         return __generator$2(this, function (_a) {
-            cookieSetter(dist.keys.eid, '', 0);
-            cookieSetter(dist.keys.csrf, '', 0);
-            cookieSetter(dist.keys.pkce, '', 0);
-            return [2 /*return*/, serverExports.NextResponse.redirect(req.nextUrl.origin + config.logoutReturnPath)];
+            cookieSetter(dist.keys.eid, '', { maxAge: 0 });
+            cookieSetter(dist.keys.csrf, '', { maxAge: 0 });
+            cookieSetter(dist.keys.pkce, '', { maxAge: 0 });
+            response.headers.set('Location', req.nextUrl.origin + config.logoutReturnPath);
+            return [2 /*return*/, new serverExports.NextResponse(null, {
+                    status: 302,
+                    headers: response.headers
+                })];
         });
     });
 }
-function login(req, options, cookieSetter) {
+function login(req, options, cookieSetter, response) {
     return __awaiter$5(this, void 0, void 0, function () {
         var searchParams, state, redirect, res;
         var _a, _b;
@@ -5503,18 +5975,24 @@ function login(req, options, cookieSetter) {
                     _c.label = 4;
                 case 4:
                     if (redirect) {
-                        return [2 /*return*/, serverExports.NextResponse.redirect(res.link)];
+                        response.headers.set('Location', res.link);
+                        return [2 /*return*/, new serverExports.NextResponse(null, {
+                                status: 302,
+                                headers: response.headers
+                            })];
                     }
                     else {
-                        return [2 /*return*/, serverExports.NextResponse.json({ url: res.link })];
+                        return [2 /*return*/, serverExports.NextResponse.json({ url: res.link }, {
+                                headers: response.headers
+                            })];
                     }
             }
         });
     });
 }
-function handshake(req, cookieSetter, cookieGetter) {
+function handshake(req, cookieSetter, cookieGetter, response) {
     return __awaiter$5(this, void 0, void 0, function () {
-        var searchParams, code, flow, verifier, res, _a, _b, state;
+        var searchParams, code, flow, verifier, res, maxAge, _a, _b, state;
         var _c, _d;
         return __generator$2(this, function (_e) {
             switch (_e.label) {
@@ -5532,18 +6010,22 @@ function handshake(req, cookieSetter, cookieGetter) {
                         })];
                 case 2:
                     res = _e.sent();
-                    cookieSetter("csrf", "mmywi_" + res.csrf, build.unixTimestampToMaxAge(res.exp));
-                    cookieSetter(dist.keys.csrf, res.csrf, build.unixTimestampToMaxAge(res.exp));
+                    maxAge = build.unixTimestampToMaxAge(res.exp);
+                    cookieSetter("csrf", "mmywi_" + res.csrf, { maxAge: maxAge });
+                    cookieSetter(dist.keys.csrf, res.csrf, { maxAge: maxAge });
                     _a = cookieSetter;
                     _b = [dist.keys.eid];
                     return [4 /*yield*/, encrypt(res.access)];
                 case 3:
-                    _a.apply(void 0, _b.concat([_e.sent(), build.unixTimestampToMaxAge(res.exp)]));
+                    _a.apply(void 0, _b.concat([_e.sent(), { maxAge: maxAge }]));
                     return [4 /*yield*/, cookieGetter(dist.keys.state)];
                 case 4:
                     state = _e.sent();
-                    return [2 /*return*/, serverExports.NextResponse.redirect("".concat(req.nextUrl.origin).concat(state ? state :
-                            config.loginReturnPath))];
+                    response.headers.set('Location', "".concat(req.nextUrl.origin).concat(state ? state : config.loginReturnPath));
+                    return [2 /*return*/, new serverExports.NextResponse(null, {
+                            status: 302,
+                            headers: response.headers
+                        })];
             }
         });
     });
@@ -5554,7 +6036,7 @@ function setChallengeCookie(cookieSetter_1, _a) {
         var value = _b.value, expires = _b.expires, key = _b.key;
         return __generator$2(this, function (_c) {
             exp = expires !== null && expires !== void 0 ? expires : build.expiresAt(10, 'm');
-            cookieSetter(key !== null && key !== void 0 ? key : dist.keys.pkce, value, build.unixTimestampToMaxAge(exp));
+            cookieSetter(key !== null && key !== void 0 ? key : dist.keys.pkce, value, { maxAge: build.unixTimestampToMaxAge(exp) });
             return [2 /*return*/];
         });
     });
@@ -5565,7 +6047,7 @@ function setRedirectState(cookieSetter_1, _a) {
         var value = _b.value;
         return __generator$2(this, function (_c) {
             exp = build.expiresAt(10, 'm');
-            cookieSetter(dist.keys.state, value, build.unixTimestampToMaxAge(exp));
+            cookieSetter(dist.keys.state, value, { maxAge: build.unixTimestampToMaxAge(exp) });
             return [2 /*return*/];
         });
     });
