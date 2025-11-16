@@ -9,6 +9,7 @@ declare const identificationActionType: {
     readonly login: "login";
     readonly signup: "signup";
     readonly link: "link";
+    readonly confirm: "confirm";
 };
 declare const Claims: {
     "bio.birthplace": "bio.birthplace";
