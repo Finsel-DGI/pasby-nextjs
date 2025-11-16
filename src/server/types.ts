@@ -12,7 +12,8 @@ type actions = keyof typeof identificationActionType;
 const identificationActionType = {
   login: 'login',
   signup: 'signup',
-  link: 'link'
+  link: 'link',
+  confirm: 'confirm',
 } as const;
 
 
