@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { AuthenticationParams } from "../types";
+import type { AuthenticationParams } from "../types";
 import { Flow } from "./flow";
 import { keys } from "@finsel-dgi/pasby-react";
 import { expiresAt, unixTimestampToMaxAge } from "@rebatlabs/ui-funs";
@@ -20,16 +20,40 @@ export type PasbyHandlerRequest = {
   };
 };
 
+/** Per-tenant overrides for the Pasby login request (merged over `createPasbyHandler` defaults). */
+export type PasbyLoginOverride = Partial<
+  Pick<AuthenticationParams, "claims" | "action" | "payload">
+>;
+
 export type PasbyHandlerContext = {
   config: PasbyRuntimeConfig;
   /** When set at login, stored in httpOnly cookie for handshake/logout tenant resolution. */
   tenantId?: string;
+  /**
+   * Applied during the **login** phase only. When `claims` / `action` / `payload` are set here,
+   * they override the static options passed to `createPasbyHandler` for that request.
+   */
+  login?: PasbyLoginOverride;
 };
 
 export type ResolvePasbyContext = (
   req: PasbyHandlerRequest,
   phase: "login" | "handshake" | "logout",
 ) => Promise<PasbyHandlerContext | null>;
+
+function mergeLoginParams(
+  defaults: AuthenticationParams,
+  override?: PasbyLoginOverride,
+): AuthenticationParams {
+  return {
+    claims:
+      override?.claims !== undefined
+        ? override.claims
+        : (defaults.claims ?? []),
+    action: override?.action ?? defaults.action,
+    payload: override?.payload ?? defaults.payload,
+  };
+}
 
 type CookieSetter = (
   key: string,
@@ -192,11 +216,13 @@ async function login(
   const state = stateFromLoginQuery(searchParams.get("state"));
   const redirect = (searchParams.get("redirect") ?? "") === "true";
 
+  const loginParams = mergeLoginParams(options, ctx.login);
+
   const res = await Flow.login(
     {
-      claims: options.claims ?? [],
-      action: options.action,
-      payload: options.payload,
+      claims: loginParams.claims ?? [],
+      action: loginParams.action,
+      payload: loginParams.payload,
       redirect,
       redirect_uri: req.nextUrl.origin + "/api/eid/handshake",
       state: state ?? undefined,

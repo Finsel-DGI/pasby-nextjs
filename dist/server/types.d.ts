@@ -1,16 +1,5 @@
-export type claims = keyof typeof Claims;
-export type AuthenticationParams = {
-    claims?: Array<claims>;
-    payload: string;
-    action: actions;
-};
-type actions = keyof typeof identificationActionType;
-declare const identificationActionType: {
-    readonly login: "login";
-    readonly signup: "signup";
-    readonly link: "link";
-    readonly confirm: "confirm";
-};
+/** Canonical list of Pasby identification claim keys (single source of truth). */
+export declare const PASBY_IDENTIFICATION_CLAIMS: readonly ["bio.birthplace", "bio.birthdate", "bio.gender", "bio.maritalstatus", "bio.birthnumber", "contact.email", "contact.emailVerified", "contact.phone", "contact.phoneVerified", "address.city", "address.postcode", "address.state", "address.country", "address.place", "address.formatted", "address.longitude", "address.latitude", "naming.family", "naming.given", "naming.title", "naming.name", "naming.middle", "naming.titlePrefix", "naming.titleSuffix", "naming.nickname", "nationality.nationalities", "nationality.pep", "nationality.primary", "nationality.residence", "nationality.watchListed", "idcards.passport", "financial.bvn", "financial.bvnBank", "financial.bvnLevel", "financial.bvnIAT"];
 declare const Claims: {
     "bio.birthplace": "bio.birthplace";
     "bio.birthdate": "bio.birthdate";
@@ -48,4 +37,21 @@ declare const Claims: {
     "financial.bvnLevel": "financial.bvnLevel";
     "financial.bvnIAT": "financial.bvnIAT";
 };
+export type claims = keyof typeof Claims;
+/** Keep only strings that are valid Pasby identification claim keys. */
+export declare function filterPasbyIdentificationClaims(input: readonly string[]): claims[];
+export type AuthenticationParams = {
+    claims?: Array<claims>;
+    payload: string;
+    action: actions;
+};
+type actions = keyof typeof identificationActionType;
+declare const identificationActionType: {
+    readonly login: "login";
+    readonly signup: "signup";
+    readonly link: "link";
+    readonly confirm: "confirm";
+};
+export type PasbyIdentificationAction = actions;
+export declare const PASBY_IDENTIFICATION_ACTIONS: readonly PasbyIdentificationAction[];
 export {};

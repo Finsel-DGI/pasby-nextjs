@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-04-05
+
+### Added
+
+- **`PasbyHandlerContext.login`** — optional **`PasbyLoginOverride`** (`claims`, `action`, `payload`) merged over the static options passed to **`createPasbyHandler`** during the **login** phase (per-tenant / per-request Pasby identification params).
+- **`filterPasbyIdentificationClaims`**, **`PASBY_IDENTIFICATION_CLAIMS`**, **`PASBY_IDENTIFICATION_ACTIONS`**, **`PasbyIdentificationAction`**, **`AuthenticationParams`** (re-exported from `./server`) — helpers and types to validate tenant-stored claim keys and type hub defaults.
+
 ## [1.1.0] - 2026-04-05
 
 ### Added
