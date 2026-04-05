@@ -1,9 +1,2 @@
-declare const _default: {
-    secret: string;
-    apikey: string;
-    appid: string;
-    gen: string;
-    loginReturnPath: string;
-    logoutReturnPath: string;
-};
+declare const _default: import("./runtime-config").PasbyRuntimeConfig;
 export default _default;

@@ -3,6 +3,7 @@
     "outDir": "dist",
     "jsx": "react",
     "lib": ["dom", "esnext"],
+    "skipLibCheck": true,
     "skipDefaultLibCheck": false,
     "allowSyntheticDefaultImports": true,
     "declaration": true,

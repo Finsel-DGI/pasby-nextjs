@@ -1,6 +1,6 @@
 {
   "name": "@finsel-dgi/pasby-next",
-  "version": "1.0.6",
+  "version": "1.1.0",
   "description": "Next.js authentication with pasby",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -10,14 +10,15 @@
       "default": "./dist/index.js"
     },
     "./server": {
-      "types": "./dist/server/server/index.d.ts",
+      "types": "./dist/server/index.d.ts",
       "default": "./dist/server/index.js"
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "CHANGELOG.md",
+    "README.md"
   ],
-  "type": "module",
   "scripts": {
     "build": "npm run clean && tsc",
     "bundle": "npm run clean && rollup -c",
