@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.1] - 2026-04-05
+
+### Changed
+
+- **Pasby handler errors:** clearer messages when `resolveContext` returns null for **login** / **handshake**; **development** logs include `origin`, query param keys, and (for handshake) whether `pasby_tenant` / PKCE cookies exist. Top-level catch logs `[pasby-next] eid/{phase} error: …`.
+
 ## [1.2.0] - 2026-04-05
 
 ### Added

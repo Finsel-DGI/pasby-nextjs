@@ -1,6 +1,6 @@
 {
   "name": "@finsel-dgi/pasby-next",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Next.js authentication with pasby",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

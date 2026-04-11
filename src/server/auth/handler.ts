@@ -144,7 +144,15 @@ export function createPasbyHandler(
       const searchParams = req.nextUrl.searchParams;
       const redirect = searchParams.get("redirect");
       const message = (error as Error).message;
-      console.error(`pasby eid error at route -- here the message: ${message}`);
+      const phase = params.auth;
+      if (process.env.NODE_ENV === "development") {
+        console.error(`[pasby-next] eid/${phase} error: ${message}`, {
+          origin: req.nextUrl.origin,
+          searchKeys: Array.from(req.nextUrl.searchParams.keys()),
+        });
+      } else {
+        console.error(`[pasby-next] eid/${phase} error: ${message}`);
+      }
 
       if (redirect === "true" || redirect === null || redirect === undefined) {
         return NextResponse.redirect(
@@ -209,7 +217,9 @@ async function login(
 ) {
   const ctx = await resolveContext(req, "login");
   if (!ctx) {
-    throw new Error("Pasby login is not available (missing tenant or configuration).");
+    throw new Error(
+      "Pasby login: resolveContext returned null — your createPasbyHandler resolver must return { config, tenantId? } for phase \"login\" (hub: see /api/eid route; often missing ?tenant= or tenant/Infisical load failed).",
+    );
   }
 
   const searchParams = req.nextUrl.searchParams;
@@ -267,12 +277,26 @@ async function handshake(
   response: NextResponse,
   resolveContext: ResolvePasbyContext,
 ) {
+  const searchParams = req.nextUrl.searchParams;
   const ctx = await resolveContext(req, "handshake");
   if (!ctx) {
-    throw new Error("Pasby handshake failed (missing tenant session or configuration).");
+    const hasTenantCookie = Boolean(
+      req.cookies.get(PASBY_TENANT_COOKIE)?.value?.trim(),
+    );
+    if (process.env.NODE_ENV === "development") {
+      const pkce = await cookieGetter(keys.pkce);
+      console.error("[pasby-next/handshake] resolveContext returned null", {
+        origin: req.nextUrl.origin,
+        [`cookie_${PASBY_TENANT_COOKIE}`]: hasTenantCookie,
+        hasPkceCookie: Boolean(pkce),
+        flow: searchParams.get("flow") ?? "",
+      });
+    }
+    throw new Error(
+      `Pasby handshake: resolveContext returned null — usually the httpOnly tenant cookie (${PASBY_TENANT_COOKIE}) is missing, tenant secrets could not be reloaded, or Pasby config is incomplete. Same origin + fresh login within ~10m required. hasTenantCookie=${hasTenantCookie}`,
+    );
   }
 
-  const searchParams = req.nextUrl.searchParams;
   const code = searchParams.get("handshake") ?? "";
   const flow = searchParams.get("flow") ?? "";
   const verifier = await cookieGetter(keys.pkce);
